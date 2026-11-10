@@ -44,6 +44,48 @@
   border-radius: 999px;
 }
 
+.lb-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lb-reset-mini-btn {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.lb-reset-mini-btn:hover {
+  background: rgba(239, 68, 68, 0.35);
+  border-color: #ef4444;
+  color: #fff;
+  transform: scale(1.04);
+}
+
+.lb-reset-btn {
+  background: #dc2626;
+  border: 1px solid #ef4444;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+}
+.lb-reset-btn:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.6);
+}
+
 /* =========================================================
    PÓDIO ESTILO OLIMPÍADAS (2º Esquerda, 1º Meio, 3º Direita)
    ========================================================= */
@@ -315,6 +357,34 @@
   width: 110px;
   text-align: right;
   letter-spacing: -0.3px;
+}
+
+/* Linhas vazias na tabela 4-10 */
+.lb-row.empty-row {
+  opacity: 0.72;
+}
+.lb-row.empty-row:hover {
+  opacity: 0.92;
+  background: rgba(124, 58, 237, 0.1);
+}
+.lb-row.empty-row .lb-rank {
+  color: #7c5c9a;
+}
+.lb-row.empty-row .lb-avatar.empty-slot {
+  border: 2px dashed rgba(216, 180, 254, 0.35) !important;
+  background: rgba(45, 12, 85, 0.4) !important;
+  color: rgba(216, 180, 254, 0.45) !important;
+  font-size: 15px;
+  box-shadow: none;
+}
+.lb-row.empty-row .lb-nick.empty {
+  color: #7c5c9a !important;
+  font-style: italic;
+  font-weight: 600;
+}
+.lb-row.empty-row .lb-score.empty {
+  color: #5c3f78 !important;
+  font-weight: 600;
 }
 
 /* =========================================================

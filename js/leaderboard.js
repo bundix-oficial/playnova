@@ -1,15 +1,16 @@
 /**
  * FRIV DIGITAL — Slope Olympic Leaderboard (js/leaderboard.js)
  * Weekly Olympic Podium [ 2º Prata ] [ 👑 1º Ouro ] [ 3º Bronze ]
+ * Lower Table: Ranks 4 to 10 (#4, #5, #6, #7, #8, #9, #10) always visible!
  * Auto-captures match score on Game Over (for logged in AND guest players).
  * Zero fake users: truly real & clean weekly leaderboard!
  */
 (function () {
   'use strict';
 
-  // Chave limpa e definitiva
-  const SCORES_KEY = 'friv_slope_scores_v3';
-  const MAX_SCORE = 99999;
+  // Chave limpa e definitiva v4 (zera o score anterior automaticamente)
+  const SCORES_KEY = 'friv_slope_scores_v4';
+  const MAX_SCORE = 3000; // Limite realista do Slope 3D (evita offsets de memória ou bugs)
   const TOP_N = 10;
 
   // Lista de nicks testes antigos para banir e garantir que NUNCA apareçam
@@ -27,11 +28,12 @@
      1. STORAGE & LIMPEZA DE LEGADOS
      ===================================================== */
 
-  // Limpa imediatamente qualquer resquício de fakes em versões anteriores
+  // Limpa imediatamente qualquer resquício de versões anteriores ou scores bugados
   try {
     localStorage.removeItem('friv_slope_scores');
     localStorage.removeItem('friv_slope_scores_v1');
     localStorage.removeItem('friv_slope_scores_v2');
+    localStorage.removeItem('friv_slope_scores_v3');
   } catch (e) {}
 
   function getWeekStart() {
@@ -51,9 +53,10 @@
       let list = JSON.parse(stored);
       if (!Array.isArray(list)) return [];
 
-      // Filtra estritamente removendo qualquer nick fake antigo
+      // Filtra estritamente: nicks proibidos, scores irreais (> 3000 ou 55961) e dados inválidos
       return list.filter(item => {
         if (!item || !item.nick || typeof item.score !== 'number') return false;
+        if (item.score <= 0 || item.score > MAX_SCORE || item.score === 55961) return false;
         const clean = item.nick.toLowerCase().trim();
         return !BANNED_TEST_NICKS.includes(clean);
       });
@@ -66,6 +69,17 @@
     try {
       localStorage.setItem(SCORES_KEY, JSON.stringify(arr));
     } catch (e) {}
+  }
+
+  function resetAllScores() {
+    try {
+      localStorage.removeItem(SCORES_KEY);
+      localStorage.removeItem('friv_slope_scores_v3');
+    } catch (e) {}
+    lastRegisteredScore = 0;
+    const container = document.getElementById('slope-leaderboard');
+    if (container) renderLeaderboard(container);
+    showBanner('🧹 Placar 100% zerado com sucesso! Todos os recordes foram limpos.');
   }
 
   function getWeeklyScores() {
@@ -90,18 +104,12 @@
      2. SUBMISSÃO DE SCORE (LOGADO OU VISITANTE/GUEST)
      ===================================================== */
 
-  let sessionSubmissions = 0;
-  const MAX_SUBMISSIONS = 10;
-
   function submitScore(nick, avatarData, score, isAuto) {
     if (typeof score !== 'number' || isNaN(score) || score <= 0) {
       return { ok: false, msg: 'Pontuação inválida.' };
     }
     if (score > MAX_SCORE) {
-      return { ok: false, msg: `Pontuação máxima permitida: ${MAX_SCORE.toLocaleString('pt-BR')}.` };
-    }
-    if (!isAuto && sessionSubmissions >= MAX_SUBMISSIONS) {
-      return { ok: false, msg: 'Limite de envios manuais atingido.' };
+      return { ok: false, msg: `Pontuação máxima realista: ${MAX_SCORE.toLocaleString('pt-BR')} pts.` };
     }
 
     const cleanNick = (nick || 'Visitante').trim();
@@ -121,7 +129,6 @@
     const trimmed = all.filter(s => s.weekStart >= twoWeeksAgo);
     saveAllScores(trimmed);
 
-    if (!isAuto) sessionSubmissions++;
     return { ok: true, msg: 'Pontuação salva no ranking! 🏆' };
   }
 
@@ -156,7 +163,7 @@
   }
 
   /* =====================================================
-     4. RENDERIZAÇÃO DO PÓDIO OLÍMPICO
+     4. RENDERIZAÇÃO DO PÓDIO OLÍMPICO & TABELA (4º AO 10º)
      ===================================================== */
 
   function renderLeaderboard(container) {
@@ -237,41 +244,42 @@
       </div>
     `;
 
-    // Tabela para 4º ao 10º Lugar
-    const remaining = scores.slice(3);
-    let tableHtml = '';
-    if (remaining.length > 0) {
-      const rows = remaining.map((e, idx) => {
-        const rank = idx + 4;
+    // Tabela dos demais jogadores (4º ao 10º Lugar — SEMPRE EXIBE AS 7 POSIÇÕES #4 A #10)
+    const tableRows = [];
+    for (let rank = 4; rank <= 10; rank++) {
+      const e = scores[rank - 1] || null;
+      if (e) {
         const isMe = myNick && e.nick.toLowerCase() === myNick.toLowerCase();
-        return `
+        tableRows.push(`
           <div class="lb-row${isMe ? ' my-score' : ''}">
             <span class="lb-rank">#${rank}</span>
             <div class="lb-avatar">${avatarImgTag(e, 38)}</div>
             <span class="lb-nick">${escHtml(e.nick)}${isMe ? ' <span style="font-size:11px;color:#ffdd00;font-weight:800;margin-left:4px;">(VOCÊ)</span>' : ''}</span>
             <span class="lb-score">${e.score.toLocaleString('pt-BR')} pts</span>
           </div>
-        `;
-      }).join('');
-
-      tableHtml = `
-        <div class="leaderboard-table">
-          <div class="lb-table-header">
-            <span class="lb-th-rank">Pos</span>
-            <span class="lb-th-player">Jogador</span>
-            <span class="lb-th-score">Pontuação</span>
+        `);
+      } else {
+        tableRows.push(`
+          <div class="lb-row empty-row">
+            <span class="lb-rank">#${rank}</span>
+            <div class="lb-avatar empty-slot">?</div>
+            <span class="lb-nick empty">${rank}º Lugar Vago</span>
+            <span class="lb-score empty">— pts</span>
           </div>
-          ${rows}
-        </div>
-      `;
-    } else if (scores.length === 0) {
-      tableHtml = `
-        <div class="lb-empty-notice">
-          🎮 <strong>Pódio 100% zerado e livre!</strong><br>
-          Jogue uma partida no Slope 3D e conquiste o topo do pódio olímpico 👑
-        </div>
-      `;
+        `);
+      }
     }
+
+    const tableHtml = `
+      <div class="leaderboard-table">
+        <div class="lb-table-header">
+          <span class="lb-th-rank">Posição</span>
+          <span class="lb-th-player">Jogador</span>
+          <span class="lb-th-score">Pontuação</span>
+        </div>
+        ${tableRows.join('')}
+      </div>
+    `;
 
     // Área 100% automática & Anti-Trapaça (sem digitação manual)
     const currentNickDisplay = session ? session.nick : 'Visitante';
@@ -290,8 +298,9 @@
           <button class="lb-guest-btn" id="lb-guest-login-btn">Entrar / Criar Conta</button>
         </div>
       ` : `
-        <div class="lb-guest-invite" style="border-color:rgba(16,185,129,0.4);background:rgba(16,185,129,0.08);color:#a7f3d0;">
+        <div class="lb-guest-invite" style="border-color:rgba(16,185,129,0.4);background:rgba(16,185,129,0.08);color:#a7f3d0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
           <span>✅ Conectado como <strong>${escHtml(session.nick)}</strong> — Seus recordes são creditados com sua foto!</span>
+          <button id="lb-reset-btn" class="lb-reset-btn" title="Zerar todos os recordes do placar">🗑️ Zerar Placar</button>
         </div>
       `}
     `;
@@ -299,7 +308,10 @@
     container.innerHTML = `
       <div class="leaderboard-header">
         <h2 class="leaderboard-title">🏆 Ranking Slope 3D — Semana Atual</h2>
-        <span class="leaderboard-reset-note">🔄 Reseta toda segunda-feira</span>
+        <div class="lb-header-actions">
+          <span class="leaderboard-reset-note">🔄 Reseta toda segunda-feira</span>
+          <button id="lb-reset-btn-top" class="lb-reset-mini-btn" title="Zerar placar e reiniciar recordes">🗑️ Zerar</button>
+        </div>
       </div>
       <div id="lb-live-banner" class="lb-live-banner" style="display:none;"></div>
       ${podiumHtml}
@@ -316,6 +328,17 @@
         }
       });
     }
+
+    // Botões de Zerar Placar
+    const resetBtn1 = document.getElementById('lb-reset-btn');
+    const resetBtn2 = document.getElementById('lb-reset-btn-top');
+    function onResetClick() {
+      if (confirm('Deseja realmente ZERAR todos os recordes do placar agora?')) {
+        resetAllScores();
+      }
+    }
+    if (resetBtn1) resetBtn1.addEventListener('click', onResetClick);
+    if (resetBtn2) resetBtn2.addEventListener('click', onResetClick);
   }
 
   function showBanner(text) {
@@ -331,7 +354,8 @@
     banner.style.textAlign = 'center';
     banner.style.marginBottom = '16px';
     banner.style.boxShadow = '0 4px 18px rgba(16, 185, 129, 0.4)';
-    setTimeout(() => {
+    clearTimeout(banner._bannerTimer);
+    banner._bannerTimer = setTimeout(() => {
       if (banner) banner.style.display = 'none';
     }, 6000);
   }
@@ -389,12 +413,10 @@
             if (val && val.contents) {
               try {
                 const str = new TextDecoder('utf-8').decode(val.contents);
-                const m = str.match(/name="[^"]*(?:score|high|points|best)[^"]*"[^>]*>(\d+)</i);
-                const m2 = str.match(/(?:HighScore|LastScore|CurrentScore|Total\s*Score|points)[^\d]*(\d+)/i);
-                const found = m ? m[1] : (m2 ? m2[1] : null);
-                if (found) {
-                  const s = parseInt(found, 10);
-                  if (s > 0 && s < MAX_SCORE) {
+                const m = str.match(/name="[^"]*(?:high|score|best)[^"]*"[^>]*>(\d+)</i);
+                if (m) {
+                  const s = parseInt(m[1], 10);
+                  if (s > 0 && s <= MAX_SCORE) {
                     handleAutoScore(s);
                   }
                 }
@@ -443,5 +465,5 @@
   }
 
   // API Pública
-  window.FrivLeaderboard = { submitScore, getWeeklyScores, renderLeaderboard };
+  window.FrivLeaderboard = { submitScore, getWeeklyScores, renderLeaderboard, resetAll: resetAllScores };
 })();

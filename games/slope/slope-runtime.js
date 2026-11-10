@@ -17,9 +17,11 @@
      ========================================================= */
   var bestReportedScore = 0;
 
+  var MAX_SLOPE_SCORE = 3000;
+
   function notifyParentScore(score) {
     score = parseInt(score, 10);
-    if (!score || isNaN(score) || score <= 0 || score > 99999) return;
+    if (!score || isNaN(score) || score <= 0 || score > MAX_SLOPE_SCORE) return;
     if (score <= bestReportedScore) return; // avoid duplicate notifications
     bestReportedScore = score;
     try {
@@ -80,11 +82,12 @@
               var bytes = fs.readFile(full);
               if (bytes && bytes.length > 0) {
                 var str = new TextDecoder('utf-8').decode(bytes);
-                // Procura tags de PlayerPrefs: <pref name="HighScore" type="int">123</pref>
-                var m = str.match(/name="[^"]*(?:score|high|points|best)[^"]*"[^>]*>(\d+)</i);
-                if (m) notifyParentScore(m[1]);
-                var m2 = str.match(/(?:HighScore|LastScore|CurrentScore|Total\s*Score|points)[^\d]*(\d+)/i);
-                if (m2) notifyParentScore(m2[1]);
+                // Procura tags de PlayerPrefs oficiais do Unity: <pref name="HighScore" type="int">123</pref>
+                var m = str.match(/name="[^"]*(?:high|score|best)[^"]*"[^>]*>(\d+)</i);
+                if (m) {
+                  var s = parseInt(m[1], 10);
+                  if (s > 0 && s <= MAX_SLOPE_SCORE) notifyParentScore(s);
+                }
               }
             }
           } catch (err) {}
