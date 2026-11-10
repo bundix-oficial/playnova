@@ -28,3 +28,4 @@ CREATE TABLE IF NOT EXISTS slope_scores (
 CREATE INDEX IF NOT EXISTS idx_users_nick ON users(nick);
 CREATE INDEX IF NOT EXISTS idx_scores_week ON slope_scores(week_start, score DESC);
 CREATE INDEX IF NOT EXISTS idx_scores_user_week ON slope_scores(user_id, week_start);
+

@@ -1,24 +1,24 @@
 /**
- * FRIV DIGITAL — Slope Leaderboard (js/leaderboard.js)
- * Weekly leaderboard with podium, localStorage scores, score submission
- * Depends on: js/auth.js (must be loaded first)
+ * FRIV DIGITAL — Slope Olympic Leaderboard (js/leaderboard.js)
+ * Weekly Olympic Podium [ 2º Prata ] [ 👑 1º Ouro ] [ 3º Bronze ]
+ * Table for ranks 4–10 below.
+ * Pure real scores (no fake data), weekly Monday reset, anti-cheat limits.
  */
 (function () {
   'use strict';
 
-  const SCORES_KEY = 'friv_slope_scores';
+  const SCORES_KEY = 'friv_slope_scores_v2';
   const MAX_SCORE = 99999;
   const TOP_N = 10;
 
   /* =====================================================
-     1. WEEK HELPERS
+     1. WEEK & STORAGE HELPERS
      ===================================================== */
 
   function getWeekStart() {
     const now = new Date();
-    // Monday 00:00
-    const day = now.getDay(); // 0=Sun
-    const diff = (day === 0) ? 6 : day - 1;
+    const day = now.getDay(); // 0 = Sun
+    const diff = (day === 0) ? 6 : day - 1; // Monday of current week
     const mon = new Date(now);
     mon.setHours(0, 0, 0, 0);
     mon.setDate(mon.getDate() - diff);
@@ -27,21 +27,16 @@
 
   function getAllScores() {
     try {
+      // Remove any old mock key to keep board 100% clean
+      localStorage.removeItem('friv_slope_scores');
       const stored = localStorage.getItem(SCORES_KEY);
       if (stored) return JSON.parse(stored);
-      // Scores iniciais da semana para o ranking começar animado!
-      const w = getWeekStart();
-      const initial = [
-        { nick: 'Davi (Criador)', avatarData: null, score: 1450, weekStart: w, timestamp: Date.now() - 3600000 },
-        { nick: 'Samuel VIP', avatarData: null, score: 1120, weekStart: w, timestamp: Date.now() - 7200000 },
-        { nick: 'SlopeMaster', avatarData: null, score: 890, weekStart: w, timestamp: Date.now() - 14400000 },
-        { nick: 'CyberBall', avatarData: null, score: 620, weekStart: w, timestamp: Date.now() - 28800000 },
-        { nick: 'Astro3D', avatarData: null, score: 480, weekStart: w, timestamp: Date.now() - 43200000 }
-      ];
-      saveAllScores(initial);
-      return initial;
-    } catch { return []; }
+      return []; // Truly empty: zero fakes!
+    } catch {
+      return [];
+    }
   }
+
   function saveAllScores(arr) {
     localStorage.setItem(SCORES_KEY, JSON.stringify(arr));
   }
@@ -49,26 +44,36 @@
   function getWeeklyScores() {
     const weekStart = getWeekStart();
     const all = getAllScores();
-    // Keep only current week; best score per nick
+    // Keep only current week scores
     const thisWeek = all.filter(s => s.weekStart === weekStart);
+    // Best score per player nick
     const best = {};
     thisWeek.forEach(s => {
-      if (!best[s.nick] || s.score > best[s.nick].score) best[s.nick] = s;
+      const lower = s.nick.toLowerCase();
+      if (!best[lower] || s.score > best[lower].score) {
+        best[lower] = s;
+      }
     });
     return Object.values(best).sort((a, b) => b.score - a.score).slice(0, TOP_N);
   }
 
   /* =====================================================
-     2. SUBMISSION (rate limit per session)
+     2. SCORE SUBMISSION
      ===================================================== */
 
   let sessionSubmissions = 0;
   const MAX_SUBMISSIONS = 3;
 
   function submitScore(nick, avatarData, score) {
-    if (typeof score !== 'number' || isNaN(score) || score <= 0) return { ok: false, msg: 'Score inválido.' };
-    if (score > MAX_SCORE) return { ok: false, msg: `Score máximo permitido: ${MAX_SCORE}.` };
-    if (sessionSubmissions >= MAX_SUBMISSIONS) return { ok: false, msg: 'Limite de envios desta sessão atingido (3).' };
+    if (typeof score !== 'number' || isNaN(score) || score <= 0) {
+      return { ok: false, msg: 'Score inválido.' };
+    }
+    if (score > MAX_SCORE) {
+      return { ok: false, msg: `Score máximo permitido: ${MAX_SCORE.toLocaleString('pt-BR')}.` };
+    }
+    if (sessionSubmissions >= MAX_SUBMISSIONS) {
+      return { ok: false, msg: 'Limite de envios desta sessão atingido (3).' };
+    }
 
     const entry = {
       nick,
@@ -77,40 +82,42 @@
       weekStart: getWeekStart(),
       timestamp: Date.now()
     };
+
     const all = getAllScores();
     all.push(entry);
-    // Keep only scores from last 2 weeks to avoid bloat
+
+    // Keep up to 2 weeks of history
     const twoWeeksAgo = getWeekStart() - 7 * 24 * 60 * 60 * 1000;
     const trimmed = all.filter(s => s.weekStart >= twoWeeksAgo);
     saveAllScores(trimmed);
+
     sessionSubmissions++;
-    return { ok: true, msg: 'Score enviado! 🎉' };
+    return { ok: true, msg: 'Score registrado com sucesso! 🏆' };
   }
 
   /* =====================================================
-     3. AVATAR RENDER HELPER (reuse FrivAuth if available)
+     3. AVATAR HELPERS
      ===================================================== */
 
-  function getLetterAvatar(nick) {
+  function getLetterAvatar(nick, size) {
     if (window.FrivAuth && window.FrivAuth.generateLetterAvatar) {
-      return window.FrivAuth.generateLetterAvatar(nick, 56);
+      return window.FrivAuth.generateLetterAvatar(nick, size);
     }
-    // Fallback: simple colored square
     const c = document.createElement('canvas');
-    c.width = c.height = 56;
+    c.width = c.height = size;
     const ctx = c.getContext('2d');
     ctx.fillStyle = '#7c3aed';
-    ctx.fillRect(0, 0, 56, 56);
+    ctx.fillRect(0, 0, size, size);
     ctx.fillStyle = '#fff';
-    ctx.font = 'bold 24px system-ui';
+    ctx.font = `bold ${Math.floor(size * 0.45)}px system-ui`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText((nick[0] || '?').toUpperCase(), 28, 30);
+    ctx.fillText((nick[0] || '?').toUpperCase(), size / 2, size / 2 + 2);
     return c.toDataURL('image/png');
   }
 
   function avatarImgTag(entry, size) {
-    const src = entry.avatarData || getLetterAvatar(entry.nick);
+    const src = entry.avatarData || getLetterAvatar(entry.nick, size);
     return `<img src="${src}" alt="${escHtml(entry.nick)}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;display:block;">`;
   }
 
@@ -119,7 +126,7 @@
   }
 
   /* =====================================================
-     4. RENDER LEADERBOARD
+     4. RENDER OLYMPIC LEADERBOARD
      ===================================================== */
 
   function renderLeaderboard(container) {
@@ -128,64 +135,134 @@
     const session = window.FrivAuth ? window.FrivAuth.getSession() : null;
     const myNick = session ? session.nick : null;
 
-    const medals = ['🥇','🥈','🥉'];
-    const podiumColors = ['gold','silver','#cd7f32'];
+    // Slots do Pódio Olímpico:
+    // scores[0] = 1º Lugar (Ouro)
+    // scores[1] = 2º Lugar (Prata)
+    // scores[2] = 3º Lugar (Bronze)
+    const p1 = scores[0] || null;
+    const p2 = scores[1] || null;
+    const p3 = scores[2] || null;
 
-    // Build podium HTML (top 3)
-    let podiumHtml = '';
-    if (scores.length > 0) {
-      // Reorder for display: 2nd, 1st, 3rd
-      const display = [];
-      if (scores[1]) display.push({ ...scores[1], medal: medals[1] });
-      if (scores[0]) display.push({ ...scores[0], medal: medals[0] });
-      if (scores[2]) display.push({ ...scores[2], medal: medals[2] });
+    // 1º Lugar (Centro com Coroa 👑)
+    const p1Html = p1 ? `
+      <div class="podium-item podium-first">
+        <div class="podium-crown" title="Campeão">👑</div>
+        <div class="podium-medal">🥇</div>
+        <div class="podium-avatar">${avatarImgTag(p1, 70)}</div>
+        <div class="podium-nick" title="${escHtml(p1.nick)}">${escHtml(p1.nick)}</div>
+        <div class="podium-score">${p1.score.toLocaleString('pt-BR')} pts</div>
+        <div class="podium-block"><span class="podium-rank-num">1</span></div>
+      </div>
+    ` : `
+      <div class="podium-item podium-first empty">
+        <div class="podium-crown" title="Coroa de Campeão">👑</div>
+        <div class="podium-medal">🥇</div>
+        <div class="podium-avatar empty-slot">?</div>
+        <div class="podium-nick empty">1º Lugar Vago</div>
+        <div class="podium-score empty">— pts</div>
+        <div class="podium-block"><span class="podium-rank-num">1</span></div>
+      </div>
+    `;
 
-      podiumHtml = `<div class="leaderboard-podium">` +
-        display.map(e => `
-          <div class="podium-item">
-            <div class="podium-medal">${e.medal}</div>
-            <div class="podium-avatar">${avatarImgTag(e, 56)}</div>
-            <div class="podium-nick">${escHtml(e.nick)}</div>
-            <div class="podium-score">${e.score.toLocaleString('pt-BR')}</div>
-            <div class="podium-block"></div>
+    // 2º Lugar (Esquerda - Prata)
+    const p2Html = p2 ? `
+      <div class="podium-item podium-second">
+        <div class="podium-medal">🥈</div>
+        <div class="podium-avatar">${avatarImgTag(p2, 58)}</div>
+        <div class="podium-nick" title="${escHtml(p2.nick)}">${escHtml(p2.nick)}</div>
+        <div class="podium-score">${p2.score.toLocaleString('pt-BR')} pts</div>
+        <div class="podium-block"><span class="podium-rank-num">2</span></div>
+      </div>
+    ` : `
+      <div class="podium-item podium-second empty">
+        <div class="podium-medal">🥈</div>
+        <div class="podium-avatar empty-slot">?</div>
+        <div class="podium-nick empty">2º Lugar Vago</div>
+        <div class="podium-score empty">— pts</div>
+        <div class="podium-block"><span class="podium-rank-num">2</span></div>
+      </div>
+    `;
+
+    // 3º Lugar (Direita - Bronze)
+    const p3Html = p3 ? `
+      <div class="podium-item podium-third">
+        <div class="podium-medal">🥉</div>
+        <div class="podium-avatar">${avatarImgTag(p3, 54)}</div>
+        <div class="podium-nick" title="${escHtml(p3.nick)}">${escHtml(p3.nick)}</div>
+        <div class="podium-score">${p3.score.toLocaleString('pt-BR')} pts</div>
+        <div class="podium-block"><span class="podium-rank-num">3</span></div>
+      </div>
+    ` : `
+      <div class="podium-item podium-third empty">
+        <div class="podium-medal">🥉</div>
+        <div class="podium-avatar empty-slot">?</div>
+        <div class="podium-nick empty">3º Lugar Vago</div>
+        <div class="podium-score empty">— pts</div>
+        <div class="podium-block"><span class="podium-rank-num">3</span></div>
+      </div>
+    `;
+
+    // Pódio Visual em ordem Olímpica: [ 2º Prata ] [ 👑 1º Ouro ] [ 3º Bronze ]
+    const podiumHtml = `
+      <div class="leaderboard-podium">
+        ${p2Html}
+        ${p1Html}
+        ${p3Html}
+      </div>
+    `;
+
+    // Tabela para 4º ao 10º Lugar
+    const remaining = scores.slice(3);
+    let tableHtml = '';
+    if (remaining.length > 0) {
+      const rows = remaining.map((e, idx) => {
+        const rank = idx + 4;
+        const isMe = myNick && e.nick.toLowerCase() === myNick.toLowerCase();
+        return `
+          <div class="lb-row${isMe ? ' my-score' : ''}">
+            <span class="lb-rank">#${rank}</span>
+            <div class="lb-avatar">${avatarImgTag(e, 38)}</div>
+            <span class="lb-nick">${escHtml(e.nick)}${isMe ? ' <span style="font-size:11px;color:#ffdd00;font-weight:800;margin-left:4px;">(VOCÊ)</span>' : ''}</span>
+            <span class="lb-score">${e.score.toLocaleString('pt-BR')} pts</span>
           </div>
-        `).join('') +
-        `</div>`;
-    }
+        `;
+      }).join('');
 
-    // Build table HTML (ranks 4–10)
-    const tableRows = scores.slice(3).map((e, i) => {
-      const rank = i + 4;
-      const isMe = myNick && e.nick.toLowerCase() === myNick.toLowerCase();
-      return `
-        <div class="lb-row${isMe ? ' my-score' : ''}">
-          <span class="lb-rank">${rank}</span>
-          <div class="lb-avatar">${avatarImgTag(e, 36)}</div>
-          <span class="lb-nick">${escHtml(e.nick)}${isMe ? ' <span style="font-size:10px;color:#9b59b6;">▶ você</span>' : ''}</span>
-          <span class="lb-score">${e.score.toLocaleString('pt-BR')}</span>
+      tableHtml = `
+        <div class="leaderboard-table">
+          <div class="lb-table-header">
+            <span class="lb-th-rank">Pos</span>
+            <span class="lb-th-player">Jogador</span>
+            <span class="lb-th-score">Pontuação</span>
+          </div>
+          ${rows}
         </div>
       `;
-    }).join('');
+    } else if (scores.length === 0) {
+      tableHtml = `
+        <div class="lb-empty-notice">
+          🎮 <strong>Pódio zerado para a semana atual!</strong><br>
+          Jogue o Slope 3D agora e seja o primeiro a conquistar a Coroa de Campeão 👑
+        </div>
+      `;
+    }
 
-    // Also highlight user in top 3 within podium (via CSS or inline note)
-    // We handle highlight via CSS class .my-score only in table
-
-    // Guest notice / submit area
+    // Formulário de Envio ou Convite de Login
     let submitHtml = '';
     if (!session || session.isGuest) {
       submitHtml = `
         <div class="lb-guest-notice">
-          <span>👻 Faça login ou crie sua conta para salvar seu recorde no ranking semanal!</span>
+          <span>👻 Faça login ou crie sua conta para registrar seu recorde no ranking semanal!</span>
           <button class="lb-guest-btn" id="lb-guest-login-btn">👤 Entrar / Criar Conta</button>
         </div>
       `;
     } else {
       submitHtml = `
         <div class="leaderboard-submit-area">
-          <p class="lb-submit-title">📤 Enviar meu score</p>
+          <p class="lb-submit-title">📤 Salvar meu recorde no Slope</p>
           <div class="lb-submit-row">
-            <input type="number" class="lb-score-input" id="lb-score-input" placeholder="Seu score..." min="1" max="${MAX_SCORE}">
-            <button class="lb-submit-btn" id="lb-submit-btn">Enviar</button>
+            <input type="number" class="lb-score-input" id="lb-score-input" placeholder="Pontuação obtida..." min="1" max="${MAX_SCORE}">
+            <button class="lb-submit-btn" id="lb-submit-btn">Salvar Score</button>
           </div>
           <div class="lb-submit-msg" id="lb-submit-msg">Envios restantes nesta sessão: ${MAX_SUBMISSIONS - sessionSubmissions}</div>
         </div>
@@ -194,15 +271,15 @@
 
     container.innerHTML = `
       <div class="leaderboard-header">
-        <h2 class="leaderboard-title">🏆 Ranking Slope — Semana Atual</h2>
+        <h2 class="leaderboard-title">🏆 Ranking Slope 3D — Semana Atual</h2>
         <span class="leaderboard-reset-note">🔄 Reseta toda segunda-feira</span>
       </div>
-      ${scores.length === 0 ? '<div class="lb-empty">Nenhum score ainda esta semana. Seja o primeiro! 🎮</div>' : podiumHtml}
-      ${scores.length > 3 ? `<div class="leaderboard-table">${tableRows}</div>` : ''}
+      ${podiumHtml}
+      ${tableHtml}
       ${submitHtml}
     `;
 
-    // Bind submit button
+    // Bind evento do botão de envio
     const submitBtn = document.getElementById('lb-submit-btn');
     const scoreInput = document.getElementById('lb-score-input');
     const msgEl = document.getElementById('lb-submit-msg');
@@ -211,7 +288,7 @@
       submitBtn.addEventListener('click', function () {
         const val = parseInt(scoreInput.value, 10);
         if (!val || isNaN(val) || val <= 0) {
-          msgEl.textContent = 'Digite um score válido.';
+          msgEl.textContent = 'Digite uma pontuação válida acima de 0.';
           msgEl.className = 'lb-submit-msg err';
           return;
         }
@@ -228,7 +305,7 @@
       });
     }
 
-    // Bind guest login button
+    // Bind botão de login para visitante
     const guestLoginBtn = document.getElementById('lb-guest-login-btn');
     if (guestLoginBtn) {
       guestLoginBtn.addEventListener('click', function () {
@@ -240,7 +317,7 @@
   }
 
   /* =====================================================
-     5. LISTEN FOR POSTMESSAGE FROM SLOPE IFRAME
+     5. CAPTURA AUTOMÁTICA DE SCORE VIA POSTMESSAGE
      ===================================================== */
 
   window.addEventListener('message', function (e) {
@@ -259,11 +336,11 @@
   });
 
   /* =====================================================
-     6. AUTH EVENT LISTENERS — refresh on login/logout/avatar
+     6. ATUALIZAÇÃO REATIVA DE AUTENTICAÇÃO
      ===================================================== */
 
   window.addEventListener('friv:login', function () {
-    sessionSubmissions = 0; // reset on new login
+    sessionSubmissions = 0;
     const container = document.getElementById('slope-leaderboard');
     if (container) renderLeaderboard(container);
   });
@@ -277,7 +354,7 @@
   });
 
   /* =====================================================
-     7. INIT
+     7. INICIALIZAÇÃO
      ===================================================== */
 
   function init() {
@@ -291,6 +368,6 @@
     init();
   }
 
-  // Public API
+  // API Pública
   window.FrivLeaderboard = { submitScore, getWeeklyScores, renderLeaderboard };
 })();

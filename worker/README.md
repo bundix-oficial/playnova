@@ -26,3 +26,4 @@ npx wrangler deploy
 ```
 
 Seu backend estará no ar em: `https://friv-api.<seu-subdominio>.workers.dev`!
+
