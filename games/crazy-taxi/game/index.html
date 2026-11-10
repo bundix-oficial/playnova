@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Crazy Taxi — Arcade Edition</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+  body, html { width: 100%; height: 100%; overflow: hidden; background: #000; font-family: Impact, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  #canvas-container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+  canvas { display: block; width: 100%; height: 100%; object-fit: contain; background: #1e293b; }
+
+  /* CRAZY HUD */
+  #hud {
+    position: absolute;
+    top: 14px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    pointer-events: none;
+    text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
+  }
+  .hud-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hud-title { font-size: 14px; color: #facc15; letter-spacing: 1px; font-family: sans-serif; font-weight: 900; }
+  .hud-fare { font-size: 38px; color: #4ade80; letter-spacing: 2px; }
+  .hud-timer-box { align-items: center; }
+  .hud-timer { font-size: 46px; color: #ef4444; }
+  .hud-pass-timer { font-size: 20px; color: #38bdf8; font-family: sans-serif; font-weight: 800; }
+
+  /* Giant Destination Arrow */
+  #arrow-box {
+    position: absolute;
+    top: 76px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  #dest-arrow {
+    width: 60px;
+    height: 60px;
+    font-size: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #22c55e;
+    filter: drop-shadow(0 0 10px #22c55e);
+    animation: bounceArr 0.6s infinite alternate;
+  }
+  @keyframes bounceArr { 0% { transform: translateY(0); } 100% { transform: translateY(-8px); } }
+  #dest-label {
+    background: rgba(0,0,0,0.8);
+    border: 2px solid #22c55e;
+    color: #fff;
+    padding: 3px 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-family: sans-serif;
+    font-weight: 900;
+  }
+
+  /* Stunt popups */
+  #stunt-banner {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 36px;
+    color: #facc15;
+    text-shadow: 3px 3px 0 #000, 0 0 20px #eab308;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    letter-spacing: 2px;
+  }
+
+  /* Controls Hint */
+  #controls-info {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.7);
+    color: #cbd5e1;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-family: sans-serif;
+    font-weight: 600;
+    pointer-events: none;
+  }
+  #controls-info kbd { background: #334155; padding: 2px 6px; border-radius: 4px; color: #fff; font-weight: bold; }
+
+  /* Mobile Touch */
+  #touch-controls {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    display: none;
+  }
+  .t-btn {
+    pointer-events: auto;
+    position: absolute;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.4);
+    color: #fff;
+    font-size: 24px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .t-btn:active { background: rgba(255,255,255,0.5); }
+  #btn-gas { bottom: 25px; right: 25px; background: rgba(34,197,94,0.35); border-color: #22c55e; }
+  #btn-brake { bottom: 25px; right: 105px; background: rgba(239,68,68,0.35); border-color: #ef4444; }
+  #btn-drift { bottom: 105px; right: 25px; background: rgba(234,179,8,0.35); border-color: #eab308; font-size: 16px; }
+  #btn-steer-left { bottom: 25px; left: 25px; }
+  #btn-steer-right { bottom: 25px; left: 105px; }
+
+  /* Game Over Modal */
+  #gameover-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(15, 23, 42, 0.95);
+    border: 4px solid #facc15;
+    border-radius: 20px;
+    padding: 30px 48px;
+    text-align: center;
+    color: #fff;
+    display: none;
+    z-index: 50;
+    box-shadow: 0 10px 50px rgba(0,0,0,0.85);
+  }
+  #gameover-modal h2 { font-size: 42px; color: #ef4444; margin-bottom: 6px; }
+  #gameover-modal .license { font-size: 28px; color: #facc15; margin: 12px 0; }
+  #gameover-modal p { font-size: 18px; color: #94a3b8; font-family: sans-serif; margin-bottom: 20px; }
+  #gameover-modal button {
+    background: #facc15;
+    color: #000;
+    border: none;
+    font-size: 18px;
+    font-weight: 900;
+    padding: 12px 30px;
+    border-radius: 30px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div id="canvas-container">
+  <canvas id="gameCanvas"></canvas>
+
+  <div id="hud">
+    <div class="hud-box">
+      <span class="hud-title">LUCRO TOTAL</span>
+      <span class="hud-fare" id="hud-money">$0.00</span>
+    </div>
+    <div class="hud-box hud-timer-box">
+      <span class="hud-title">TEMPO</span>
+      <span class="hud-timer" id="hud-clock">50</span>
+      <span class="hud-pass-timer" id="hud-pass-time"></span>
+    </div>
+  </div>
+
+  <div id="arrow-box">
+    <div id="dest-arrow">▲</div>
+    <div id="dest-label">PRAIA DE SANTA MONICA</div>
+  </div>
+
+  <div id="stunt-banner">CRAZY DRIFT! +$25</div>
+
+  <div id="controls-info">
+    <kbd>W</kbd> / <kbd>▲</kbd>: Acelerar · <kbd>S</kbd> / <kbd>▼</kbd>: Freio/Ré · <kbd>A</kbd> <kbd>D</kbd>: Virar · <kbd>Espaço</kbd>: Crazy Drift!
+  </div>
+
+  <div id="touch-controls">
+    <button class="t-btn" id="btn-steer-left">◀</button>
+    <button class="t-btn" id="btn-steer-right">▶</button>
+    <button class="t-btn" id="btn-gas">GAS</button>
+    <button class="t-btn" id="btn-brake">RÉ</button>
+    <button class="t-btn" id="btn-drift">DRIFT</button>
+  </div>
+
+  <div id="gameover-modal">
+    <h2>TEMPO ESGOTADO!</h2>
+    <div class="license" id="final-license">LICENÇA CLASSE A</div>
+    <p id="final-stats">Total arrecadado: $2,450 (4 Passageiros)</p>
+    <button id="btn-play-again">JOGAR NOVAMENTE</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  if (('ontouchstart' in window) || navigator.maxTouchPoints > 0) {
+    document.getElementById('touch-controls').style.display = 'block';
+  }
+
+  // Audio Engine
+  const AudioEngine = {
+    ctx: null,
+    init() {
+      if (!this.ctx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) this.ctx = new AudioCtx();
+      }
+      if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+    },
+    playTone(freq, type, dur, vol = 0.2, slide = null) {
+      if (!this.ctx) return;
+      try {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+        if (slide) osc.frequency.exponentialRampToValueAtTime(slide, this.ctx.currentTime + dur);
+        gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + dur);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + dur);
+      } catch(e) {}
+    },
+    cash() {
+      this.init();
+      this.playTone(987, 'triangle', 0.1, 0.3);
+      setTimeout(() => this.playTone(1318, 'triangle', 0.15, 0.35), 80);
+      setTimeout(() => this.playTone(1760, 'triangle', 0.2, 0.4), 160);
+    },
+    stunt() {
+      this.init();
+      this.playTone(523, 'sawtooth', 0.08, 0.25, 880);
+    },
+    drift() {
+      this.init();
+      this.playTone(320, 'sawtooth', 0.08, 0.12, 180);
+    },
+    pickup() {
+      this.init();
+      this.playTone(440, 'sine', 0.12, 0.3);
+      setTimeout(() => this.playTone(660, 'sine', 0.15, 0.35), 100);
+    },
+    jump() {
+      this.init();
+      this.playTone(300, 'sine', 0.3, 0.3, 700);
+    },
+    crash() {
+      this.init();
+      this.playTone(160, 'square', 0.15, 0.4, 40);
+    }
+  };
+
+  // Keyboard
+  const keys = {};
+  window.addEventListener('keydown', e => {
+    AudioEngine.init();
+    keys[e.key.toLowerCase()] = true;
+    keys[e.code] = true;
+  });
+  window.addEventListener('keyup', e => {
+    keys[e.key.toLowerCase()] = false;
+    keys[e.code] = false;
+  });
+
+  // Touch binding
+  function bindT(id, k) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('touchstart', e => { e.preventDefault(); AudioEngine.init(); keys[k] = true; });
+    el.addEventListener('touchend', e => { e.preventDefault(); keys[k] = false; });
+  }
+  bindT('btn-steer-left', 'arrowleft');
+  bindT('btn-steer-right', 'arrowright');
+  bindT('btn-gas', 'arrowup');
+  bindT('btn-brake', 'arrowdown');
+  bindT('btn-drift', ' ');
+
+  // Stunt banner popup
+  function showStunt(txt) {
+    const b = document.getElementById('stunt-banner');
+    b.textContent = txt;
+    b.style.opacity = '1';
+    b.style.transform = 'translate(-50%, -50%) scale(1.15)';
+    clearTimeout(b._timer);
+    b._timer = setTimeout(() => {
+      b.style.opacity = '0';
+      b.style.transform = 'translate(-50%, -50%) scale(1.0)';
+    }, 1200);
+  }
+
+  // World Layout (Boulevards, Palm Trees, Beach, Ramps)
+  const WORLD_WIDTH = 4000;
+  const WORLD_HEIGHT = 4000;
+
+  // The Yellow Cab (Crazy Taxi)
+  const taxi = {
+    x: 2000,
+    y: 2000,
+    vx: 0,
+    vy: 0,
+    angle: 0,
+    speed: 0,
+    topSpeed: 10.5,
+    accel: 0.26,
+    brake: 0.4,
+    turnSpeed: 0.055,
+    w: 44,
+    h: 84,
+    z: 0,
+    vz: 0,
+    isJumping: false
+  };
+
+  // Passenger & Destinations
+  const DESTINATIONS = [
+    { name: 'PRAIA DE SANTA MONICA', x: 700, y: 700, color: '#38bdf8' },
+    { name: 'BURGER QUEEN RESTAURANT', x: 3300, y: 800, color: '#ef4444' },
+    { name: 'SHOPPING MALL ARCADE', x: 3200, y: 3200, color: '#a855f7' },
+    { name: 'HOTEL BEVERLY HILLS', x: 800, y: 3300, color: '#facc15' },
+    { name: 'AEROPORTO INTERNACIONAL', x: 2000, y: 700, color: '#22c55e' }
+  ];
+
+  let currentPassenger = null;
+  let totalEarnings = 0;
+  let passengersDelivered = 0;
+  let masterTimer = 50; // seconds
+  let passengerTimer = 0;
+  let isGameOver = false;
+
+  // Prospective Passengers waiting on streets
+  const waitingPassengers = [];
+  function spawnPassenger() {
+    const dIdx = Math.floor(Math.random() * DESTINATIONS.length);
+    const dest = DESTINATIONS[dIdx];
+
+    // Pick roadside position far from dest
+    const px = 400 + Math.random() * (WORLD_WIDTH - 800);
+    const py = 400 + Math.random() * (WORLD_HEIGHT - 800);
+
+    const dist = Math.hypot(dest.x - px, dest.y - py);
+    const fare = Math.floor(dist * 0.45);
+    const timeLimit = Math.floor(dist / 65) + 12;
+
+    waitingPassengers.push({
+      x: px, y: py,
+      dest: dest,
+      fare: fare,
+      timeLimit: timeLimit,
+      type: dist > 2000 ? 'green' : dist > 1200 ? 'yellow' : 'red'
+    });
+  }
+
+  for (let i = 0; i < 8; i++) spawnPassenger();
+
+  // Traffic Civilian Cars
+  const traffic = [];
+  const TRAFFIC_COLORS = ['#3b82f6', '#ef4444', '#10b981', '#f97316', '#64748b', '#8b5cf6'];
+  for (let i = 0; i < 22; i++) {
+    traffic.push({
+      x: 300 + Math.random() * (WORLD_WIDTH - 600),
+      y: 300 + Math.random() * (WORLD_HEIGHT - 600),
+      angle: Math.random() > 0.5 ? 0 : Math.PI / 2,
+      speed: 3.5 + Math.random() * 2,
+      color: TRAFFIC_COLORS[Math.floor(Math.random() * TRAFFIC_COLORS.length)],
+      w: 42,
+      h: 76
+    });
+  }
+
+  // Stunt Ramps
+  const ramps = [
+    { x: 1400, y: 2000, w: 60, h: 40, angle: 0 },
+    { x: 2600, y: 2000, w: 60, h: 40, angle: 0 },
+    { x: 2000, y: 1400, w: 40, h: 60, angle: Math.PI/2 },
+    { x: 2000, y: 2600, w: 40, h: 60, angle: Math.PI/2 },
+    { x: 1200, y: 1200, w: 60, h: 40, angle: 0 },
+    { x: 2800, y: 2800, w: 60, h: 40, angle: 0 }
+  ];
+
+  // Tire Skid marks
+  const skids = [];
+
+  // 1-second master clock ticker
+  setInterval(() => {
+    if (isGameOver) return;
+    masterTimer--;
+    document.getElementById('hud-clock').textContent = Math.max(0, masterTimer);
+
+    if (currentPassenger) {
+      passengerTimer--;
+      document.getElementById('hud-pass-time').textContent = `PASSAGEIRO: ${passengerTimer}s`;
+      if (passengerTimer <= 0) {
+        // Passenger gets angry and leaves!
+        AudioEngine.crash();
+        showStunt('TEMPO DO PASSAGEIRO ESGOTADO!');
+        currentPassenger = null;
+        document.getElementById('hud-pass-time').textContent = '';
+        document.getElementById('arrow-box').style.opacity = '0';
+        spawnPassenger();
+      }
+    }
+
+    if (masterTimer <= 0) {
+      endGame();
+    }
+  }, 1000);
+
+  function endGame() {
+    isGameOver = true;
+    let license = 'LICENÇA CLASSE C';
+    if (totalEarnings > 4000) license = '🏆 LICENÇA CRAZY CLASSE S';
+    else if (totalEarnings > 2500) license = '⭐ LICENÇA CLASSE A';
+    else if (totalEarnings > 1200) license = '🚙 LICENÇA CLASSE B';
+
+    document.getElementById('final-license').textContent = license;
+    document.getElementById('final-stats').textContent = `Total arrecadado: $${totalEarnings} (${passengersDelivered} Passageiros)`;
+    document.getElementById('gameover-modal').style.display = 'block';
+  }
+
+  document.getElementById('btn-play-again').addEventListener('click', () => {
+    document.getElementById('gameover-modal').style.display = 'none';
+    masterTimer = 50;
+    totalEarnings = 0;
+    passengersDelivered = 0;
+    currentPassenger = null;
+    isGameOver = false;
+    document.getElementById('hud-money').textContent = '$0.00';
+    document.getElementById('hud-clock').textContent = '50';
+    document.getElementById('hud-pass-time').textContent = '';
+    document.getElementById('arrow-box').style.opacity = '0';
+  });
+
+  // Main Update
+  let driftTime = 0;
+
+  function update() {
+    if (isGameOver) return;
+
+    // Driving Physics
+    const isDrifting = keys[' '] || keys['shift'];
+
+    if (keys['w'] || keys['arrowup']) {
+      taxi.speed = Math.min(taxi.topSpeed, taxi.speed + taxi.accel);
+    } else if (keys['s'] || keys['arrowdown']) {
+      taxi.speed = Math.max(-taxi.topSpeed * 0.4, taxi.speed - taxi.brake);
+    } else {
+      taxi.speed *= 0.96;
+    }
+
+    // Steering
+    if (Math.abs(taxi.speed) > 0.2) {
+      const dir = taxi.speed > 0 ? 1 : -1;
+      const tMult = isDrifting ? 1.6 : 1.0;
+      if (keys['a'] || keys['arrowleft']) taxi.angle -= taxi.turnSpeed * dir * tMult;
+      if (keys['d'] || keys['arrowright']) taxi.angle += taxi.turnSpeed * dir * tMult;
+    }
+
+    // Drift Stunt
+    if (isDrifting && Math.abs(taxi.speed) > 4 && (keys['a'] || keys['d'] || keys['arrowleft'] || keys['arrowright'])) {
+      driftTime++;
+      AudioEngine.drift();
+      skids.push({ x: taxi.x, y: taxi.y, angle: taxi.angle, alpha: 0.7 });
+      if (skids.length > 150) skids.shift();
+
+      if (driftTime === 35) {
+        const bonus = 25;
+        totalEarnings += bonus;
+        document.getElementById('hud-money').textContent = `$${totalEarnings.toFixed(2)}`;
+        showStunt('CRAZY DRIFT! +$25');
+        AudioEngine.stunt();
+      }
+    } else {
+      driftTime = 0;
+    }
+
+    // Jump Physics (Ramps)
+    if (taxi.z > 0 || taxi.vz !== 0) {
+      taxi.z += taxi.vz;
+      taxi.vz -= 0.6;
+      if (taxi.z <= 0) {
+        taxi.z = 0;
+        taxi.vz = 0;
+        taxi.isJumping = false;
+        AudioEngine.crash();
+      }
+    }
+
+    // Check ramp hits
+    for (let rm of ramps) {
+      if (Math.hypot(taxi.x - rm.x, taxi.y - rm.y) < 40 && !taxi.isJumping && Math.abs(taxi.speed) > 5) {
+        taxi.isJumping = true;
+        taxi.vz = 9.5;
+        AudioEngine.jump();
+        showStunt('CRAZY JUMP! +$50');
+        totalEarnings += 50;
+        document.getElementById('hud-money').textContent = `$${totalEarnings.toFixed(2)}`;
+      }
+    }
+
+    taxi.vx = Math.cos(taxi.angle) * taxi.speed;
+    taxi.vy = Math.sin(taxi.angle) * taxi.speed;
+
+    taxi.x = Math.max(80, Math.min(WORLD_WIDTH - 80, taxi.x + taxi.vx));
+    taxi.y = Math.max(80, Math.min(WORLD_HEIGHT - 80, taxi.y + taxi.vy));
+
+    // Traffic Update & Near Miss check
+    for (let car of traffic) {
+      car.x += Math.cos(car.angle) * car.speed;
+      car.y += Math.sin(car.angle) * car.speed;
+
+      // Wrap bounds
+      if (car.x < 100) car.x = WORLD_WIDTH - 200;
+      if (car.x > WORLD_WIDTH - 100) car.x = 200;
+      if (car.y < 100) car.y = WORLD_HEIGHT - 200;
+      if (car.y > WORLD_HEIGHT - 100) car.y = 200;
+
+      // Collision with Taxi
+      const dist = Math.hypot(taxi.x - car.x, taxi.y - car.y);
+      if (dist < 46 && taxi.z < 15) {
+        // Crash
+        taxi.speed *= -0.4;
+        car.speed *= 0.5;
+        AudioEngine.crash();
+      } else if (dist < 75 && Math.abs(taxi.speed) > 7 && !car.nearMissed) {
+        // Near Miss Bonus!
+        car.nearMissed = true;
+        totalEarnings += 20;
+        document.getElementById('hud-money').textContent = `$${totalEarnings.toFixed(2)}`;
+        showStunt('CRAZY NEAR MISS! +$20');
+        AudioEngine.stunt();
+        setTimeout(() => car.nearMissed = false, 3000);
+      }
+    }
+
+    // Passenger Pickup
+    if (!currentPassenger) {
+      for (let i = waitingPassengers.length - 1; i >= 0; i--) {
+        const p = waitingPassengers[i];
+        if (Math.hypot(taxi.x - p.x, taxi.y - p.y) < 65 && Math.abs(taxi.speed) < 2.5) {
+          // Pick up passenger!
+          currentPassenger = p;
+          passengerTimer = p.timeLimit;
+          waitingPassengers.splice(i, 1);
+          AudioEngine.pickup();
+          showStunt(`LEVE PARA: ${p.dest.name}!`);
+
+          document.getElementById('arrow-box').style.opacity = '1';
+          document.getElementById('dest-label').textContent = p.dest.name;
+          spawnPassenger();
+          break;
+        }
+      }
+    } else {
+      // Passenger Delivery at destination zone
+      const dest = currentPassenger.dest;
+      if (Math.hypot(taxi.x - dest.x, taxi.y - dest.y) < 95 && Math.abs(taxi.speed) < 3.0) {
+        // Success Dropoff!
+        const tip = Math.floor(currentPassenger.fare * (passengerTimer / currentPassenger.timeLimit));
+        const total = currentPassenger.fare + tip;
+        totalEarnings += total;
+        passengersDelivered++;
+
+        // Add extra time to master clock!
+        const bonusSec = Math.floor(passengerTimer * 0.4) + 6;
+        masterTimer += bonusSec;
+
+        AudioEngine.cash();
+        showStunt(`DROP-OFF PERFEITO! +$${total} (+${bonusSec}s)`);
+
+        document.getElementById('hud-money').textContent = `$${totalEarnings.toFixed(2)}`;
+        document.getElementById('hud-pass-time').textContent = '';
+        document.getElementById('arrow-box').style.opacity = '0';
+        currentPassenger = null;
+      }
+
+      // Update Destination Compass Arrow
+      if (currentPassenger) {
+        const dest = currentPassenger.dest;
+        const targetAng = Math.atan2(dest.y - taxi.y, dest.x - taxi.x);
+        const relAng = targetAng - taxi.angle + Math.PI/2;
+        document.getElementById('dest-arrow').style.transform = `rotate(${relAng}rad)`;
+      }
+    }
+  }
+
+  // Draw Game
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const camX = canvas.width / 2 - taxi.x;
+    const camY = canvas.height / 2 - taxi.y;
+
+    ctx.save();
+    ctx.translate(camX, camY);
+
+    // City ground
+    ctx.fillStyle = '#334155';
+    ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+
+    // Road Grid
+    ctx.fillStyle = '#1e293b';
+    for (let x = 400; x < WORLD_WIDTH; x += 800) {
+      ctx.fillRect(x, 0, 180, WORLD_HEIGHT);
+    }
+    for (let y = 400; y < WORLD_HEIGHT; y += 800) {
+      ctx.fillRect(0, y, WORLD_WIDTH, 180);
+    }
+
+    // Skid marks
+    for (let s of skids) {
+      ctx.save();
+      ctx.translate(s.x, s.y);
+      ctx.rotate(s.angle);
+      ctx.fillStyle = `rgba(15, 23, 42, ${s.alpha})`;
+      ctx.fillRect(-16, -14, 12, 5);
+      ctx.fillRect(-16, 10, 12, 5);
+      ctx.restore();
+      s.alpha *= 0.996;
+    }
+
+    // Ramps
+    for (let rm of ramps) {
+      ctx.save();
+      ctx.translate(rm.x, rm.y);
+      ctx.rotate(rm.angle);
+      ctx.fillStyle = '#eab308';
+      ctx.fillRect(-rm.w/2, -rm.h/2, rm.w, rm.h);
+      ctx.fillStyle = '#000';
+      ctx.font = 'bold 12px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('RAMPA', 0, 4);
+      ctx.restore();
+    }
+
+    // Destinations (Glowing Drop Zones)
+    for (let d of DESTINATIONS) {
+      const isTarget = currentPassenger && currentPassenger.dest === d;
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, 85, 0, Math.PI * 2);
+      ctx.fillStyle = isTarget ? 'rgba(34, 197, 94, 0.35)' : 'rgba(255, 255, 255, 0.1)';
+      ctx.fill();
+      ctx.lineWidth = isTarget ? 5 : 2;
+      ctx.strokeStyle = isTarget ? '#22c55e' : 'rgba(255,255,255,0.3)';
+      ctx.stroke();
+
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 14px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(d.name, d.x, d.y + 5);
+    }
+
+    // Waiting Passengers
+    for (let p of waitingPassengers) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 45, 0, Math.PI * 2);
+      ctx.fillStyle = p.type === 'green' ? 'rgba(34, 197, 94, 0.25)' : p.type === 'yellow' ? 'rgba(234, 179, 8, 0.25)' : 'rgba(239, 68, 68, 0.25)';
+      ctx.fill();
+
+      // Floating Dollar Icon
+      const floatY = p.y - 30 + Math.sin(Date.now() * 0.006) * 5;
+      ctx.fillStyle = p.type === 'green' ? '#22c55e' : p.type === 'yellow' ? '#eab308' : '#ef4444';
+      ctx.font = 'bold 24px Impact, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('$', p.x, floatY);
+
+      // Person
+      ctx.fillStyle = '#f8fafc';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 8, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Traffic Cars
+    for (let c of traffic) {
+      ctx.save();
+      ctx.translate(c.x, c.y);
+      ctx.rotate(c.angle);
+      ctx.fillStyle = c.color;
+      ctx.beginPath();
+      ctx.roundRect(-c.w/2, -c.h/2, c.w, c.h, 6);
+      ctx.fill();
+      // Windshield
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(-c.w/2 + 4, 8, c.w - 8, 14);
+      ctx.fillRect(-c.w/2 + 4, -c.h/2 + 8, c.w - 8, 10);
+      ctx.restore();
+    }
+
+    // The Yellow Crazy Taxi
+    ctx.save();
+    ctx.translate(taxi.x, taxi.y);
+    ctx.rotate(taxi.angle);
+
+    // Scale up slightly during jumps for 3D altitude illusion
+    const jumpScale = 1 + taxi.z * 0.02;
+    ctx.scale(jumpScale, jumpScale);
+
+    // Drop shadow
+    ctx.fillStyle = `rgba(0,0,0,${Math.max(0.1, 0.5 - taxi.z * 0.015)})`;
+    ctx.fillRect(-taxi.w/2 + 6 + taxi.z * 0.4, -taxi.h/2 + 6 + taxi.z * 0.4, taxi.w, taxi.h);
+
+    // Yellow Body
+    ctx.fillStyle = '#facc15';
+    ctx.beginPath();
+    ctx.roundRect(-taxi.w/2, -taxi.h/2, taxi.w, taxi.h, 8);
+    ctx.fill();
+
+    // Checkered Racing Stripes
+    ctx.fillStyle = '#000';
+    for (let cx = -taxi.w/2 + 4; cx < taxi.w/2 - 4; cx += 10) {
+      ctx.fillRect(cx, -6, 5, 12);
+    }
+
+    // Open-top Convertible Cockpit
+    ctx.fillStyle = '#78350f'; // Leather seats
+    ctx.fillRect(-taxi.w/2 + 6, -18, taxi.w - 12, 34);
+
+    // Driver & Passenger Heads
+    ctx.fillStyle = '#fbcfe8';
+    ctx.beginPath();
+    ctx.arc(-8, -4, 6, 0, Math.PI * 2); // Driver Axel
+    ctx.fill();
+    ctx.fillStyle = '#ef4444'; // Red bandanna
+    ctx.fillRect(-12, -9, 8, 4);
+
+    if (currentPassenger) {
+      ctx.fillStyle = '#fed7aa';
+      ctx.beginPath();
+      ctx.arc(8, 6, 6, 0, Math.PI * 2); // Passenger
+      ctx.fill();
+    }
+
+    // Taxi Roof Sign ("TAXI")
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(-14, -taxi.h/2 + 10, 28, 8);
+    ctx.fillStyle = '#000000';
+    ctx.font = 'bold 7px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('TAXI', 0, -taxi.h/2 + 16);
+
+    // Headlights
+    ctx.fillStyle = '#fef08a';
+    ctx.fillRect(-taxi.w/2 + 4, taxi.h/2 - 4, 8, 4);
+    ctx.fillRect(taxi.w/2 - 12, taxi.h/2 - 4, 8, 4);
+
+    ctx.restore();
+
+    ctx.restore(); // camera
+  }
+
+  function loop() {
+    update();
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+})();
+</script>
+</body>
+</html>

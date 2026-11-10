@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Crash Bandicoot — Wumpa Island</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+  body, html { width: 100%; height: 100%; overflow: hidden; background: #0c1a2e; font-family: 'Trebuchet MS', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  #canvas-container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+  canvas { display: block; width: 100%; height: 100%; object-fit: contain; background: #1e3a5f; }
+
+  /* HUD */
+  #hud {
+    position: absolute;
+    top: 14px;
+    left: 18px;
+    right: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    pointer-events: none;
+    font-weight: 900;
+    text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000;
+  }
+  .hud-left {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .hud-stat-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,0,0,0.65);
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 2px solid rgba(255,255,255,0.2);
+    color: #fff;
+    font-size: 18px;
+  }
+  .stat-wumpa { color: #f97316; }
+  .stat-lives { color: #38bdf8; }
+  .stat-crates { color: #facc15; }
+
+  /* Aku Aku display */
+  #aku-status {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.7);
+    padding: 6px 18px;
+    border-radius: 20px;
+    border: 2px solid #ca8a04;
+    color: #fef08a;
+    font-size: 14px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  /* Overlay Message */
+  #center-msg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(15, 23, 42, 0.92);
+    border: 3px solid #f97316;
+    border-radius: 16px;
+    padding: 24px 36px;
+    text-align: center;
+    color: #fff;
+    display: none;
+    z-index: 50;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+  }
+  #center-msg h2 { font-size: 32px; color: #f97316; margin-bottom: 8px; text-transform: uppercase; }
+  #center-msg p { font-size: 16px; color: #cbd5e1; margin-bottom: 18px; }
+  #center-msg button {
+    background: #f97316;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    font-weight: 900;
+    padding: 10px 24px;
+    border-radius: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+  }
+
+  /* Mobile Controls */
+  #touch-bar {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    display: none;
+    justify-content: space-between;
+    pointer-events: none;
+    z-index: 20;
+  }
+  .touch-dpad {
+    display: flex;
+    gap: 12px;
+  }
+  .t-btn {
+    pointer-events: auto;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.5);
+    color: #fff;
+    font-size: 20px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .t-btn:active { background: rgba(255,255,255,0.5); }
+  .t-btn-spin { background: rgba(249, 115, 22, 0.4); border-color: #f97316; }
+  .t-btn-jump { background: rgba(56, 189, 248, 0.4); border-color: #38bdf8; }
+
+  /* Hints */
+  #controls-info {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.65);
+    color: #cbd5e1;
+    padding: 4px 14px;
+    border-radius: 12px;
+    font-size: 12px;
+    pointer-events: none;
+  }
+  #controls-info kbd { background: #334155; padding: 2px 6px; border-radius: 4px; color: #fff; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<div id="canvas-container">
+  <canvas id="gameCanvas"></canvas>
+
+  <div id="hud">
+    <div class="hud-left">
+      <div class="hud-stat-pill"><span class="stat-wumpa">🥭</span> <span id="val-wumpa">00</span></div>
+      <div class="hud-stat-pill"><span class="stat-crates">📦</span> <span id="val-crates">0 / 28</span></div>
+    </div>
+    <div class="hud-stat-pill"><span class="stat-lives">❤️ VIDAS:</span> <span id="val-lives">4</span></div>
+  </div>
+
+  <div id="aku-status">🎭 AKU AKU PROTEGENDO VOCÊ!</div>
+
+  <div id="controls-info">
+    <kbd>A</kbd> / <kbd>D</kbd> ou <kbd>Setas</kbd>: Correr · <kbd>Espaço</kbd> ou <kbd>Cima</kbd>: Pular · <kbd>X</kbd> ou <kbd>Baixo</kbd>: Giro Tornado!
+  </div>
+
+  <div id="center-msg">
+    <h2 id="msg-title">FASE CONCLUÍDA!</h2>
+    <p id="msg-sub">Você quebrou todas as caixas e ganhou a Joia de Cristal! 💎</p>
+    <button id="btn-restart">JOGAR NOVAMENTE</button>
+  </div>
+
+  <div id="touch-bar">
+    <div class="touch-dpad">
+      <button class="t-btn" id="btn-left">◀</button>
+      <button class="t-btn" id="btn-right">▶</button>
+    </div>
+    <div class="touch-dpad">
+      <button class="t-btn t-btn-spin" id="btn-spin">🌀</button>
+      <button class="t-btn t-btn-jump" id="btn-jump">▲</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+
+  const VIEW_WIDTH = 960;
+  const VIEW_HEIGHT = 540;
+
+  function resize() {
+    canvas.width = VIEW_WIDTH;
+    canvas.height = VIEW_HEIGHT;
+  }
+  resize();
+
+  if (('ontouchstart' in window) || navigator.maxTouchPoints > 0) {
+    document.getElementById('touch-bar').style.display = 'flex';
+  }
+
+  // Audio Engine
+  const AudioEngine = {
+    ctx: null,
+    init() {
+      if (!this.ctx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) this.ctx = new AudioCtx();
+      }
+      if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+    },
+    playTone(freq, type, dur, vol = 0.2, slide = null) {
+      if (!this.ctx) return;
+      try {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+        if (slide) osc.frequency.exponentialRampToValueAtTime(slide, this.ctx.currentTime + dur);
+        gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + dur);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + dur);
+      } catch(e) {}
+    },
+    jump() {
+      this.init();
+      this.playTone(280, 'sine', 0.15, 0.25, 580);
+    },
+    spin() {
+      this.init();
+      this.playTone(400, 'sawtooth', 0.2, 0.2, 180);
+    },
+    wumpa() {
+      this.init();
+      this.playTone(740, 'triangle', 0.08, 0.25, 920);
+    },
+    crateSmash() {
+      this.init();
+      this.playTone(180, 'sawtooth', 0.12, 0.35, 60);
+      this.playTone(80, 'square', 0.18, 0.3, 30);
+    },
+    tntTick() {
+      this.init();
+      this.playTone(880, 'square', 0.05, 0.3);
+    },
+    explosion() {
+      this.init();
+      this.playTone(200, 'sawtooth', 0.4, 0.5, 30);
+      this.playTone(60, 'square', 0.5, 0.6, 20);
+    },
+    akuAku() {
+      this.init();
+      // "Ooga-Booga" chord
+      this.playTone(220, 'triangle', 0.2, 0.3);
+      setTimeout(() => this.playTone(330, 'triangle', 0.25, 0.35), 100);
+      setTimeout(() => this.playTone(440, 'triangle', 0.3, 0.4), 220);
+    },
+    woah() {
+      this.init();
+      this.playTone(420, 'sine', 0.4, 0.4, 140);
+    },
+    gemWin() {
+      this.init();
+      const notes = [523, 659, 784, 1046];
+      notes.forEach((f, i) => setTimeout(() => this.playTone(f, 'triangle', 0.2, 0.3), i * 120));
+    }
+  };
+
+  // Input Handling
+  const keys = {};
+  window.addEventListener('keydown', e => {
+    AudioEngine.init();
+    keys[e.key.toLowerCase()] = true;
+    keys[e.code] = true;
+    if (e.key.toLowerCase() === 'x' || e.key.toLowerCase() === 's' || e.key === 'ArrowDown' || e.key === 'Shift') {
+      doSpin();
+    }
+    if (e.key === ' ' || e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') {
+      doJump();
+    }
+  });
+  window.addEventListener('keyup', e => {
+    keys[e.key.toLowerCase()] = false;
+    keys[e.code] = false;
+  });
+
+  // Touch controls binding
+  function bindTouch(btnId, downKey, upKey) {
+    const el = document.getElementById(btnId);
+    if (!el) return;
+    el.addEventListener('touchstart', e => { e.preventDefault(); AudioEngine.init(); keys[downKey] = true; });
+    el.addEventListener('touchend', e => { e.preventDefault(); keys[downKey] = false; });
+  }
+  bindTouch('btn-left', 'arrowleft', 'arrowleft');
+  bindTouch('btn-right', 'arrowright', 'arrowright');
+  document.getElementById('btn-spin').addEventListener('touchstart', e => { e.preventDefault(); AudioEngine.init(); doSpin(); });
+  document.getElementById('btn-jump').addEventListener('touchstart', e => { e.preventDefault(); AudioEngine.init(); doJump(); });
+
+  // Game State
+  const LEVEL_WIDTH = 4800;
+  let wumpaCount = 0;
+  let lives = 4;
+  let cratesTotal = 0;
+  let cratesSmashed = 0;
+  let akuAkuLevel = 0; // 0: None, 1: Normal, 2: Gold, 3: Invincible
+  let akuTimer = 0;
+  let screenShake = 0;
+  let gameOver = false;
+
+  // Crash Bandicoot Player
+  const crash = {
+    x: 100,
+    y: 350,
+    w: 36,
+    h: 52,
+    vx: 0,
+    vy: 0,
+    onGround: false,
+    facing: 1, // 1: right, -1: left
+    isSpinning: false,
+    spinTimer: 0,
+    runFrame: 0,
+    dead: false,
+    deadTimer: 0
+  };
+
+  function doJump() {
+    if (crash.dead || gameOver) return;
+    if (crash.onGround) {
+      crash.vy = -13.5;
+      crash.onGround = false;
+      AudioEngine.jump();
+    }
+  }
+
+  function doSpin() {
+    if (crash.dead || gameOver || crash.isSpinning) return;
+    crash.isSpinning = true;
+    crash.spinTimer = 22; // spin duration in frames
+    AudioEngine.spin();
+  }
+
+  // Crates
+  // Types: 'wood', 'question', 'tnt', 'nitro', 'bounce', 'aku'
+  const crates = [];
+  function addCrate(x, y, type) {
+    crates.push({
+      x, y, w: 40, h: 40,
+      type,
+      bouncesLeft: type === 'bounce' ? 5 : 1,
+      tntTimer: -1,
+      active: true
+    });
+  }
+
+  // Wumpa Fruits
+  const wumpas = [];
+  function addWumpa(x, y) {
+    wumpas.push({ x, y, baseY: y, floatOffset: Math.random() * Math.PI * 2, collected: false });
+  }
+
+  // Enemies (Crabs, Spiked Lizards)
+  const enemies = [];
+  function addEnemy(x, y, type = 'crab') {
+    enemies.push({
+      x, y, w: 38, h: 28,
+      type,
+      vx: -1.2,
+      startX: x - 120,
+      endX: x + 120,
+      active: true,
+      defeated: false
+    });
+  }
+
+  // Platforms / Ground
+  const platforms = [
+    // Starting beach & jungle floor
+    { x: 0, y: 440, w: 750, h: 100 },
+    { x: 830, y: 440, w: 600, h: 100 },
+    { x: 1520, y: 440, w: 700, h: 100 },
+    { x: 2320, y: 440, w: 900, h: 100 },
+    { x: 3320, y: 440, w: 1500, h: 100 },
+
+    // Floating wooden platforms
+    { x: 320, y: 320, w: 120, h: 24 },
+    { x: 500, y: 240, w: 140, h: 24 },
+    { x: 740, y: 340, w: 80, h: 24 }, // bridge step
+    { x: 1050, y: 320, w: 130, h: 24 },
+    { x: 1250, y: 220, w: 140, h: 24 },
+    { x: 1430, y: 330, w: 80, h: 24 },
+    { x: 1750, y: 310, w: 160, h: 24 },
+    { x: 2000, y: 220, w: 150, h: 24 },
+    { x: 2500, y: 310, w: 180, h: 24 },
+    { x: 2800, y: 220, w: 160, h: 24 },
+    { x: 3100, y: 310, w: 160, h: 24 },
+    { x: 3500, y: 320, w: 180, h: 24 },
+    { x: 3800, y: 230, w: 200, h: 24 }
+  ];
+
+  // Splinters & Effects
+  const particles = [];
+  function addSplinters(x, y, color = '#b45309') {
+    for (let i = 0; i < 14; i++) {
+      const ang = Math.random() * Math.PI * 2;
+      const spd = 2 + Math.random() * 6;
+      particles.push({
+        x, y,
+        vx: Math.cos(ang) * spd,
+        vy: Math.sin(ang) * spd - 3,
+        color,
+        size: 3 + Math.random() * 4,
+        rot: Math.random() * Math.PI,
+        rotSpd: (Math.random() - 0.5) * 0.3,
+        life: 25 + Math.random() * 20
+      });
+    }
+  }
+
+  // Level Generator
+  function buildLevel() {
+    crates.length = 0;
+    wumpas.length = 0;
+    enemies.length = 0;
+
+    // Crates
+    addCrate(240, 400, 'wood');
+    addCrate(280, 400, 'wood');
+    addCrate(360, 280, 'question');
+    addCrate(550, 200, 'aku');
+    addCrate(620, 400, 'bounce');
+
+    addCrate(920, 400, 'wood');
+    addCrate(960, 400, 'tnt');
+    addCrate(1000, 400, 'wood');
+    addCrate(1100, 280, 'question');
+    addCrate(1300, 180, 'aku');
+
+    addCrate(1600, 400, 'wood');
+    addCrate(1640, 400, 'wood');
+    addCrate(1680, 400, 'nitro');
+    addCrate(1800, 270, 'question');
+    addCrate(2050, 180, 'bounce');
+
+    addCrate(2400, 400, 'tnt');
+    addCrate(2440, 400, 'wood');
+    addCrate(2480, 400, 'wood');
+    addCrate(2560, 270, 'aku');
+
+    addCrate(2880, 180, 'question');
+    addCrate(2950, 400, 'nitro');
+    addCrate(3180, 270, 'wood');
+    addCrate(3220, 270, 'wood');
+
+    addCrate(3600, 280, 'question');
+    addCrate(3700, 400, 'bounce');
+    addCrate(3900, 190, 'wood');
+    addCrate(4100, 400, 'tnt');
+    addCrate(4140, 400, 'wood');
+
+    cratesTotal = crates.length;
+    cratesSmashed = 0;
+    document.getElementById('val-crates').textContent = `0 / ${cratesTotal}`;
+
+    // Wumpas on paths
+    for (let x = 180; x < 4400; x += 110) {
+      if (Math.random() < 0.6) addWumpa(x, 380);
+      if (Math.random() < 0.3) addWumpa(x + 40, 280);
+    }
+
+    // Enemies
+    addEnemy(450, 412, 'crab');
+    addEnemy(1000, 412, 'crab');
+    addEnemy(1850, 412, 'crab');
+    addEnemy(2650, 412, 'turtle');
+    addEnemy(3400, 412, 'crab');
+    addEnemy(4000, 412, 'turtle');
+  }
+
+  buildLevel();
+
+  // Reset Crash position
+  function resetCrash() {
+    crash.x = 100;
+    crash.y = 350;
+    crash.vx = 0;
+    crash.vy = 0;
+    crash.onGround = false;
+    crash.isSpinning = false;
+    crash.dead = false;
+    crash.deadTimer = 0;
+    akuAkuLevel = 0;
+    updateAkuHUD();
+  }
+
+  function killCrash() {
+    if (crash.dead || gameOver) return;
+
+    if (akuAkuLevel > 0) {
+      // Aku Aku absorbs the hit!
+      akuAkuLevel--;
+      updateAkuHUD();
+      AudioEngine.woah();
+      addSplinters(crash.x, crash.y, '#eab308');
+      crash.vy = -6;
+      return;
+    }
+
+    crash.dead = true;
+    crash.deadTimer = 70;
+    crash.vy = -12;
+    lives--;
+    document.getElementById('val-lives').textContent = lives;
+    AudioEngine.woah();
+
+    if (lives <= 0) {
+      setTimeout(() => {
+        gameOver = true;
+        showCenterMsg('GAME OVER', 'Suas vidas acabaram! Tente novamente.', 'RECOMEÇAR');
+      }, 1200);
+    }
+  }
+
+  function updateAkuHUD() {
+    const el = document.getElementById('aku-status');
+    if (akuAkuLevel === 0) {
+      el.style.opacity = '0';
+    } else if (akuAkuLevel === 1) {
+      el.textContent = '🎭 AKU AKU: 1 PROTEÇÃO!';
+      el.style.borderColor = '#ca8a04';
+      el.style.opacity = '1';
+    } else if (akuAkuLevel === 2) {
+      el.textContent = '✨ AKU AKU DOURADO: 2 PROTEÇÕES!';
+      el.style.borderColor = '#eab308';
+      el.style.opacity = '1';
+    } else if (akuAkuLevel >= 3) {
+      el.textContent = '⚡ AKU AKU INVENCÍVEL!';
+      el.style.borderColor = '#38bdf8';
+      el.style.opacity = '1';
+    }
+  }
+
+  function showCenterMsg(title, sub, btnText) {
+    const msg = document.getElementById('center-msg');
+    document.getElementById('msg-title').textContent = title;
+    document.getElementById('msg-sub').textContent = sub;
+    document.getElementById('btn-restart').textContent = btnText;
+    msg.style.display = 'block';
+  }
+
+  document.getElementById('btn-restart').addEventListener('click', () => {
+    document.getElementById('center-msg').style.display = 'none';
+    lives = 4;
+    document.getElementById('val-lives').textContent = lives;
+    wumpaCount = 0;
+    document.getElementById('val-wumpa').textContent = '00';
+    gameOver = false;
+    buildLevel();
+    resetCrash();
+  });
+
+  // Game Loop Update
+  function update() {
+    if (screenShake > 0) screenShake--;
+
+    if (crash.dead) {
+      crash.vy += 0.6;
+      crash.y += crash.vy;
+      crash.deadTimer--;
+      if (crash.deadTimer <= 0 && lives > 0) {
+        resetCrash();
+      }
+      return;
+    }
+
+    // Horizontal Movement
+    const speed = akuAkuLevel >= 3 ? 6.2 : 4.4;
+    if (keys['a'] || keys['arrowleft']) {
+      crash.vx = -speed;
+      crash.facing = -1;
+      crash.runFrame++;
+    } else if (keys['d'] || keys['arrowright']) {
+      crash.vx = speed;
+      crash.facing = 1;
+      crash.runFrame++;
+    } else {
+      crash.vx *= 0.6;
+    }
+
+    // Gravity
+    crash.vy += 0.65;
+    if (crash.vy > 14) crash.vy = 14;
+
+    // Spin Attack
+    if (crash.isSpinning) {
+      crash.spinTimer--;
+      if (crash.spinTimer <= 0) crash.isSpinning = false;
+    }
+
+    // Platform Collisions
+    const nextX = crash.x + crash.vx;
+    const nextY = crash.y + crash.vy;
+
+    crash.onGround = false;
+
+    for (let p of platforms) {
+      if (nextX + crash.w/2 > p.x && nextX - crash.w/2 < p.x + p.w) {
+        // Landing on top
+        if (crash.y + crash.h <= p.y + 4 && nextY + crash.h >= p.y) {
+          crash.y = p.y - crash.h;
+          crash.vy = 0;
+          crash.onGround = true;
+          break;
+        }
+      }
+    }
+
+    if (!crash.onGround) {
+      crash.y = nextY;
+    }
+    crash.x = Math.max(30, Math.min(LEVEL_WIDTH - 50, nextX));
+
+    // Fall into pit
+    if (crash.y > 600) {
+      killCrash();
+    }
+
+    // Crates Interaction
+    for (let c of crates) {
+      if (!c.active) continue;
+
+      const crashBox = { x: crash.x - crash.w/2, y: crash.y, w: crash.w, h: crash.h };
+
+      // Overlap with crate
+      if (crashBox.x < c.x + c.w && crashBox.x + crashBox.w > c.x &&
+          crashBox.y < c.y + c.h && crashBox.y + crashBox.h > c.y) {
+
+        // Check spin attack hit
+        if (crash.isSpinning || akuAkuLevel >= 3) {
+          if (c.type === 'nitro') {
+            // Nitro explodes on spin too!
+            AudioEngine.explosion();
+            addSplinters(c.x + c.w/2, c.y + c.h/2, '#22c55e');
+            c.active = false;
+            screenShake = 12;
+            killCrash();
+          } else {
+            // Smash crate!
+            smashCrate(c);
+          }
+        } else {
+          // Normal touch / landing on crate
+          if (crash.vy > 0 && crash.y + crash.h - crash.vy <= c.y + 10) {
+            // Jump on top
+            crash.y = c.y - crash.h;
+            crash.vy = -10; // bounce off
+            AudioEngine.jump();
+
+            if (c.type === 'tnt') {
+              // Start TNT countdown!
+              if (c.tntTimer === -1) {
+                c.tntTimer = 120; // 2 seconds
+                AudioEngine.tntTick();
+              }
+            } else if (c.type === 'nitro') {
+              AudioEngine.explosion();
+              addSplinters(c.x + c.w/2, c.y + c.h/2, '#22c55e');
+              c.active = false;
+              screenShake = 14;
+              killCrash();
+            } else if (c.type === 'bounce') {
+              c.bouncesLeft--;
+              wumpaCount += 2;
+              AudioEngine.wumpa();
+              document.getElementById('val-wumpa').textContent = String(wumpaCount).padStart(2, '0');
+              if (c.bouncesLeft <= 0) smashCrate(c);
+            } else {
+              smashCrate(c);
+            }
+          } else {
+            // Touch side of nitro or tnt
+            if (c.type === 'nitro') {
+              AudioEngine.explosion();
+              addSplinters(c.x + c.w/2, c.y + c.h/2, '#22c55e');
+              c.active = false;
+              screenShake = 14;
+              killCrash();
+            }
+          }
+        }
+      }
+
+      // TNT countdown
+      if (c.tntTimer > 0) {
+        c.tntTimer--;
+        if (c.tntTimer % 30 === 0) AudioEngine.tntTick();
+        if (c.tntTimer <= 0) {
+          c.active = false;
+          AudioEngine.explosion();
+          addSplinters(c.x + c.w/2, c.y + c.h/2, '#ef4444');
+          screenShake = 16;
+          // Check if Crash is within blast radius
+          if (Math.hypot(crash.x - (c.x + c.w/2), crash.y - (c.y + c.h/2)) < 110) {
+            killCrash();
+          }
+        }
+      }
+    }
+
+    // Wumpa Collection
+    for (let w of wumpas) {
+      if (!w.collected && Math.hypot(crash.x - w.x, (crash.y + crash.h/2) - w.y) < 32) {
+        w.collected = true;
+        wumpaCount++;
+        AudioEngine.wumpa();
+        if (wumpaCount >= 100) {
+          wumpaCount -= 100;
+          lives++;
+          document.getElementById('val-lives').textContent = lives;
+          AudioEngine.akuAku();
+        }
+        document.getElementById('val-wumpa').textContent = String(wumpaCount).padStart(2, '0');
+      }
+    }
+
+    // Enemies Logic
+    for (let e of enemies) {
+      if (!e.active) continue;
+
+      if (e.defeated) {
+        e.y += e.vy;
+        e.x += e.vx;
+        e.vy += 0.5;
+        if (e.y > 600) e.active = false;
+        continue;
+      }
+
+      // Patrol
+      e.x += e.vx;
+      if (e.x < e.startX) { e.x = e.startX; e.vx = Math.abs(e.vx); }
+      if (e.x > e.endX) { e.x = e.endX; e.vx = -Math.abs(e.vx); }
+
+      // Crash overlap
+      if (Math.hypot(crash.x - e.x, (crash.y + crash.h/2) - (e.y + e.h/2)) < 36) {
+        if (crash.isSpinning || akuAkuLevel >= 3) {
+          // Spin attack defeats enemy!
+          e.defeated = true;
+          e.vy = -8;
+          e.vx = crash.facing * 8;
+          AudioEngine.crateSmash();
+          addSplinters(e.x, e.y, '#e11d48');
+        } else if (crash.vy > 0 && crash.y + crash.h - crash.vy <= e.y + 8) {
+          // Jump on enemy
+          crash.vy = -10;
+          e.defeated = true;
+          e.vy = -6;
+          AudioEngine.jump();
+          addSplinters(e.x, e.y, '#e11d48');
+        } else {
+          killCrash();
+        }
+      }
+    }
+
+    // Level Finish Portal at x = 4500
+    if (crash.x >= 4500 && !gameOver) {
+      gameOver = true;
+      AudioEngine.gemWin();
+      const allCrates = cratesSmashed >= cratesTotal;
+      showCenterMsg(
+        'VAI CRASH! FASE CONCLUÍDA!',
+        allCrates
+          ? `🏆 PERFEITO! Todas as ${cratesTotal} caixas destruídas! Você desbloqueou a Joia de Cristal 💎!`
+          : `🎉 Muito bem! Você destruiu ${cratesSmashed} de ${cratesTotal} caixas. Destrua todas para ganhar a Joia!`,
+        'JOGAR NOVAMENTE'
+      );
+    }
+
+    // Particles update
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.3;
+      p.rot += p.rotSpd;
+      p.life--;
+      if (p.life <= 0) particles.splice(i, 1);
+    }
+  }
+
+  function smashCrate(c) {
+    c.active = false;
+    cratesSmashed++;
+    document.getElementById('val-crates').textContent = `${cratesSmashed} / ${cratesTotal}`;
+    AudioEngine.crateSmash();
+
+    if (c.type === 'aku') {
+      akuAkuLevel = Math.min(3, akuAkuLevel + 1);
+      updateAkuHUD();
+      AudioEngine.akuAku();
+      addSplinters(c.x + c.w/2, c.y + c.h/2, '#ca8a04');
+    } else {
+      // Bonus Wumpa
+      const bonus = c.type === 'question' ? 5 : 1;
+      wumpaCount += bonus;
+      document.getElementById('val-wumpa').textContent = String(wumpaCount).padStart(2, '0');
+      addSplinters(c.x + c.w/2, c.y + c.h/2, '#b45309');
+    }
+  }
+
+  // Render Scene
+  function draw() {
+    ctx.save();
+
+    // Screen Shake
+    if (screenShake > 0) {
+      ctx.translate((Math.random() - 0.5) * screenShake * 2, (Math.random() - 0.5) * screenShake * 2);
+    }
+
+    // Clear Sky / Jungle Background
+    const bgGrad = ctx.createLinearGradient(0, 0, 0, VIEW_HEIGHT);
+    bgGrad.addColorStop(0, '#0284c7');
+    bgGrad.addColorStop(0.6, '#38bdf8');
+    bgGrad.addColorStop(1, '#bae6fd');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, VIEW_WIDTH, VIEW_HEIGHT);
+
+    // Camera follow Crash
+    const camX = Math.max(0, Math.min(LEVEL_WIDTH - VIEW_WIDTH, crash.x - VIEW_WIDTH * 0.35));
+
+    // Distant Parallax Jungle Hills
+    ctx.fillStyle = '#065f46';
+    ctx.beginPath();
+    for (let i = 0; i < 15; i++) {
+      const hillX = i * 280 - (camX * 0.2) % 280;
+      ctx.arc(hillX + 140, 480, 180, Math.PI, 0);
+    }
+    ctx.fill();
+
+    ctx.save();
+    ctx.translate(-camX, 0);
+
+    // Platforms (Beach sand & grassy jungle floor)
+    for (let p of platforms) {
+      // Grass top
+      ctx.fillStyle = '#16a34a';
+      ctx.fillRect(p.x, p.y, p.w, 14);
+
+      // Dirt / Rock body
+      ctx.fillStyle = '#78350f';
+      ctx.fillRect(p.x, p.y + 14, p.w, p.h - 14);
+
+      // Wood plank detailing for floating platforms
+      if (p.h < 50) {
+        ctx.strokeStyle = '#451a03';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(p.x, p.y, p.w, p.h);
+      }
+    }
+
+    // Crates
+    for (let c of crates) {
+      if (!c.active) continue;
+
+      ctx.save();
+      ctx.translate(c.x, c.y);
+
+      if (c.type === 'wood') {
+        ctx.fillStyle = '#d97706';
+        ctx.fillRect(0, 0, c.w, c.h);
+        ctx.strokeStyle = '#78350f';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(0, 0, c.w, c.h);
+        ctx.beginPath();
+        ctx.moveTo(0,0); ctx.lineTo(c.w, c.h);
+        ctx.moveTo(c.w,0); ctx.lineTo(0, c.h);
+        ctx.stroke();
+      } else if (c.type === 'question') {
+        ctx.fillStyle = '#f59e0b';
+        ctx.fillRect(0, 0, c.w, c.h);
+        ctx.strokeStyle = '#b45309';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(0, 0, c.w, c.h);
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 24px Impact, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('?', c.w/2, 28);
+      } else if (c.type === 'tnt') {
+        ctx.fillStyle = '#dc2626';
+        ctx.fillRect(0, 0, c.w, c.h);
+        ctx.strokeStyle = '#991b1b';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(0, 0, c.w, c.h);
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 15px Impact, sans-serif';
+        ctx.textAlign = 'center';
+        if (c.tntTimer > 0) {
+          ctx.fillText(Math.ceil(c.tntTimer / 30), c.w/2, 26);
+        } else {
+          ctx.fillText('TNT', c.w/2, 26);
+        }
+      } else if (c.type === 'nitro') {
+        ctx.fillStyle = '#16a34a';
+        ctx.fillRect(0, 0, c.w, c.h);
+        ctx.strokeStyle = '#15803d';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(0, 0, c.w, c.h);
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 11px Impact, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('NITRO', c.w/2, 25);
+      } else if (c.type === 'bounce') {
+        ctx.fillStyle = '#eab308';
+        ctx.fillRect(0, 0, c.w, c.h);
+        ctx.strokeStyle = '#a16207';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(0, 0, c.w, c.h);
+        ctx.fillStyle = '#78350f';
+        ctx.font = 'bold 16px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(c.bouncesLeft, c.w/2, 26);
+      } else if (c.type === 'aku') {
+        ctx.fillStyle = '#854d0e';
+        ctx.fillRect(0, 0, c.w, c.h);
+        ctx.strokeStyle = '#ca8a04';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(0, 0, c.w, c.h);
+        ctx.font = '20px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('🎭', c.w/2, 28);
+      }
+
+      ctx.restore();
+    }
+
+    // Wumpa Fruits
+    for (let w of wumpas) {
+      if (w.collected) continue;
+      const floatY = w.baseY + Math.sin(Date.now() * 0.005 + w.floatOffset) * 6;
+      ctx.fillStyle = '#f97316';
+      ctx.beginPath();
+      ctx.ellipse(w.x, floatY, 11, 14, 0, 0, Math.PI * 2);
+      ctx.fill();
+      // Green stem leaf
+      ctx.fillStyle = '#22c55e';
+      ctx.beginPath();
+      ctx.ellipse(w.x + 3, floatY - 13, 5, 2, 0.4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Enemies
+    for (let e of enemies) {
+      if (!e.active) continue;
+      ctx.save();
+      ctx.translate(e.x, e.y);
+      if (e.type === 'crab') {
+        ctx.fillStyle = '#e11d48';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 16, 12, 0, 0, Math.PI * 2);
+        ctx.fill();
+        // Eyes
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(-5, -10, 4, 0, Math.PI * 2);
+        ctx.arc(5, -10, 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#000';
+        ctx.beginPath();
+        ctx.arc(-5, -10, 2, 0, Math.PI * 2);
+        ctx.arc(5, -10, 2, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        // Spiked Turtle
+        ctx.fillStyle = '#047857';
+        ctx.beginPath();
+        ctx.arc(0, 0, 16, Math.PI, 0);
+        ctx.fill();
+        ctx.fillStyle = '#cbd5e1';
+        ctx.beginPath();
+        ctx.moveTo(0, -18); ctx.lineTo(-6, 0); ctx.lineTo(6, 0); ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    // Level Finish Warp Vortex (x = 4500)
+    ctx.save();
+    ctx.translate(4500, 360);
+    const time = Date.now() * 0.003;
+    ctx.rotate(time);
+    const warpGrad = ctx.createRadialGradient(0, 0, 10, 0, 0, 60);
+    warpGrad.addColorStop(0, '#ffffff');
+    warpGrad.addColorStop(0.5, '#38bdf8');
+    warpGrad.addColorStop(1, 'transparent');
+    ctx.fillStyle = warpGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, 60, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Crash Bandicoot Character
+    ctx.save();
+    ctx.translate(crash.x, crash.y);
+
+    if (crash.isSpinning) {
+      // Spinning cyclone effect
+      const spinAngle = Date.now() * 0.04;
+      ctx.rotate(spinAngle);
+      ctx.fillStyle = '#ea580c';
+      ctx.beginPath();
+      ctx.ellipse(0, crash.h/2, 28, 16, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#f97316';
+      ctx.beginPath();
+      ctx.ellipse(0, crash.h/2, 20, 10, 0, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      ctx.scale(crash.facing, 1);
+
+      // Crash Torso & Fur (Orange)
+      ctx.fillStyle = '#ea580c';
+      ctx.beginPath();
+      ctx.roundRect(-12, 14, 24, 24, 6);
+      ctx.fill();
+
+      // Blue Shorts
+      ctx.fillStyle = '#2563eb';
+      ctx.fillRect(-11, 34, 22, 10);
+
+      // Red Shoes
+      ctx.fillStyle = '#dc2626';
+      ctx.beginPath();
+      ctx.ellipse(-6, 48, 8, 5, 0, 0, Math.PI * 2);
+      ctx.ellipse(6, 48, 8, 5, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Head & Ears
+      ctx.fillStyle = '#ea580c';
+      ctx.beginPath();
+      ctx.arc(0, 6, 14, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Muzzle / Peach Snout
+      ctx.fillStyle = '#fed7aa';
+      ctx.beginPath();
+      ctx.ellipse(4, 8, 9, 6, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Nose
+      ctx.fillStyle = '#0f172a';
+      ctx.beginPath();
+      ctx.arc(8, 6, 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Eyes
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(4, 2, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#22c55e'; // Green iris
+      ctx.beginPath();
+      ctx.arc(5, 2, 2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Mohwak Hair Crest
+      ctx.fillStyle = '#7c2d12';
+      ctx.beginPath();
+      ctx.moveTo(-4, -8);
+      ctx.lineTo(0, -18);
+      ctx.lineTo(4, -8);
+      ctx.fill();
+    }
+
+    // Aku Aku Mask Floating Beside Crash
+    if (akuAkuLevel > 0 && !crash.dead) {
+      const maskX = -crash.facing * 32;
+      const maskY = 6 + Math.sin(Date.now() * 0.008) * 8;
+
+      ctx.save();
+      ctx.translate(maskX, maskY);
+
+      // Mask Body
+      ctx.fillStyle = akuAkuLevel === 2 ? '#fef08a' : '#92400e';
+      ctx.fillRect(-10, -16, 20, 32);
+
+      // Feathers on Top
+      const featherColors = ['#ef4444', '#facc15', '#22c55e', '#3b82f6'];
+      featherColors.forEach((fc, fi) => {
+        ctx.fillStyle = fc;
+        ctx.fillRect(-9 + fi * 5, -26, 4, 10);
+      });
+
+      // Eyes & Brow
+      ctx.fillStyle = '#facc15';
+      ctx.fillRect(-7, -8, 5, 5);
+      ctx.fillRect(2, -8, 5, 5);
+      // Nose
+      ctx.fillStyle = '#dc2626';
+      ctx.fillRect(-2, 0, 4, 6);
+
+      ctx.restore();
+    }
+
+    ctx.restore();
+
+    // Draw Particles
+    for (let p of particles) {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+      ctx.restore();
+    }
+
+    ctx.restore(); // end camera
+    ctx.restore(); // end shake
+  }
+
+  function loop() {
+    update();
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+})();
+</script>
+</body>
+</html>

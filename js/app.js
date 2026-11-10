@@ -2192,6 +2192,46 @@ const GAMES_DATA = [
     "recent": true,
     "description": "Fangame de Scald: use comandos para vigiar câmeras, explorar e se esconder.",
     "cover": "assets/covers/reviewed/fnaf-security-console.jpg"
+  },
+  {
+    "id": "gta-san-andreas",
+    "title": "GTA: San Andreas (2D Demake)",
+    "category": "acao",
+    "platform": "console",
+    "recent": true,
+    "popular": true,
+    "description": "Demake 2D em Los Santos: ande pela cidade, dirija carros, fuja da policia e explore o mapa.",
+    "cover": "assets/covers/gta-san-andreas.jpg"
+  },
+  {
+    "id": "crash-bandicoot",
+    "title": "Crash Bandicoot",
+    "category": "classico",
+    "platform": "console",
+    "recent": true,
+    "popular": true,
+    "description": "O clássico do PlayStation: corra pela ilha, gire contra inimigos, destrua caixas e colete Wumpas.",
+    "cover": "assets/covers/crash-bandicoot.jpg"
+  },
+  {
+    "id": "crazy-taxi",
+    "title": "Crazy Taxi",
+    "category": "arcade",
+    "platform": "arcade",
+    "recent": true,
+    "popular": true,
+    "description": "O clássico de Dreamcast e fliperama: pegue passageiros, faça manobras insanas e ganhe dinheiro rápido.",
+    "cover": "assets/covers/crazy-taxi.jpg"
+  },
+  {
+    "id": "basket-random",
+    "title": "Basket Random",
+    "category": "classico",
+    "platform": "html5",
+    "recent": true,
+    "popular": true,
+    "description": "Basquete ragdoll com física maluca! Pule e balance os braços para fazer cestas em quadras aleatórias.",
+    "cover": "assets/covers/basket-random.jpg"
   }
 ];
 const labels={todos:'Todos os jogos',recentes:'Novos jogos',populares:'Em alta',favoritos:'Meus favoritos',arcade:'Arcade',puzzle:'Puzzle',classico:'Clássicos',acao:'Ação',retro:'Retrô',leves:'Jogos leves',mobile:'Mobile → PC',console:'Console Port',flash:'Estilo Flash',terror:'Terror',fnaf:'FNAF — jogos de fãs'};

@@ -1,1 +1,3527 @@
-{"version":2,"total":220,"games":[{"id":"pacman","title":"Pac-Man HTML5","category":"classico","cover":"assets/covers/pacman.png","features":{"controls":{"keyboard":true},"source":"games/pacman/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"mario-html5","title":"Infinite Mario","category":"retro","cover":"assets/covers/mario-html5.png","features":{"controls":{},"source":"games/mario-html5/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"mario64-cleanroom","title":"Mario 64 — Clean Room","category":"retro","cover":"assets/covers/mario64-cleanroom.png","features":{"controls":{"keyboard":true,"touch":true,"gamepad":true},"source":"games/mario64-cleanroom/runtime/touch.js"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"zelda-tribute","title":"Zelda 30 Year Tribute","category":"retro","cover":"assets/covers/zelda-tribute.png","features":{"controls":{},"source":"games/zelda-tribute/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"flappy-bird","title":"Flappy Bird","category":"arcade","cover":"assets/covers/flappy-bird.png","features":{"controls":{"keyboard":true,"mouse":true},"source":"games/flappy-bird/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"slope","title":"Slope 3D","category":"arcade","cover":"assets/covers/slope-play.png","features":{"controls":{"keyboard":true},"source":"games/slope/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"clumsy-bird","title":"Clumsy Bird","category":"arcade","cover":"assets/covers/clumsy-bird.png","features":{"controls":{},"source":"games/clumsy-bird/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"tetris","title":"Tetris","category":"puzzle","cover":"assets/covers/tetris.png","features":{"controls":{"keyboard":true},"source":"games/tetris/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"hextris","title":"Hextris","category":"puzzle","cover":"assets/covers/hextris.png","features":{"controls":{},"source":"games/hextris/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"breakout","title":"Breakout","category":"arcade","cover":"assets/covers/breakout.png","features":{"controls":{},"source":"games/breakout/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"fireboy-and-watergirl","title":"Fogo e Água: Floresta","category":"puzzle","cover":"assets/covers/fireboy-and-watergirl.png","features":{"controls":{"keyboard":true},"source":"games/fireboy-and-watergirl/index.html","players":2},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"bad-ice-cream","title":"Bad Ice Cream","category":"arcade","cover":"assets/covers/bad-ice-cream.png","features":{"controls":{"keyboard":true},"source":"https://www.nitrome.com/search.php?id=bad+ice-cream&search_type=default","players":2},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"bad-ice-cream-2","title":"Bad Ice Cream 2","category":"arcade","cover":"assets/covers/bad-ice-cream-2.png","features":{"controls":{"keyboard":true},"source":"https://www.nitrome.com/search.php?id=bad+ice-cream&search_type=default","players":2},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"bad-ice-cream-3","title":"Bad Ice Cream 3","category":"arcade","cover":"assets/covers/bad-ice-cream-3.png","features":{"controls":{"keyboard":true},"source":"games/bad-ice-cream-3/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"moto-x3m","title":"Moto X3M","category":"acao","cover":"assets/covers/moto-x3m.jpg","features":{"controls":{"keyboard":true},"source":"games/moto-x3m/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"moto-x3m-winter","title":"Moto X3M: Winter","category":"acao","cover":"assets/covers/moto-x3m-winter.jpeg","features":{"controls":{"keyboard":true},"source":"games/moto-x3m-winter/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"moto-x3m-pool-party","title":"Moto X3M: Pool Party","category":"acao","cover":"assets/covers/moto-x3m-pool-party.jpg","features":{"controls":{"keyboard":true},"source":"games/moto-x3m-pool-party/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"moto-x3m-spooky-land","title":"Moto X3M: Spooky Land","category":"acao","cover":"assets/covers/moto-x3m-spooky-land.jpeg","features":{"controls":{"keyboard":true},"source":"games/moto-x3m-spooky-land/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"papas-pizzeria","title":"Papa's Pizzeria","category":"arcade","cover":"assets/covers/papas-pizzeria.jpg","features":{"controls":{"mouse":true},"source":"games/papas-pizzeria/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"papas-freezeria","title":"Papa's Freezeria","category":"arcade","cover":"assets/covers/papas-freezeria.png","features":{"controls":{"mouse":true},"source":"games/papas-freezeria/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"papas-burgeria","title":"Papa's Burgeria","category":"arcade","cover":"assets/covers/papas-burgeria.jpg","features":{"controls":{"mouse":true},"source":"games/papas-burgeria/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"papas-hot-doggeria","title":"Papa's Hot Doggeria","category":"arcade","cover":"assets/covers/papas-hot-doggeria.jpg","features":{"controls":{"mouse":true},"source":"games/papas-hot-doggeria/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"papas-pancakeria","title":"Papa's Pancakeria","category":"arcade","cover":"assets/covers/papas-pancakeria.jpg","features":{"controls":{"mouse":true},"source":"games/papas-pancakeria/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"papas-sushiria","title":"Papa's Sushiria","category":"arcade","cover":"assets/covers/papas-sushiria.png","features":{"controls":{"mouse":true},"source":"games/papas-sushiria/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"papas-wingeria","title":"Papa's Wingeria","category":"arcade","cover":"assets/covers/papas-wingeria.jpg","features":{"controls":{"mouse":true},"source":"games/papas-wingeria/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"papa-louie","title":"Papa Louie: Attack","category":"arcade","cover":"assets/covers/papa-louie.png","features":{"controls":{"keyboard":true},"source":"games/papa-louie/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"age-of-war","title":"Age of War","category":"acao","cover":"assets/covers/age-of-war.jpg","features":{"controls":{},"source":"games/age-of-war/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"stick-war","title":"Stick War: Legacy","category":"acao","cover":"assets/covers/stick-war.jpg","features":{"controls":{"mouse":true},"source":"games/stick-war/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"bloons-td","title":"Bloons Tower Defense","category":"puzzle","cover":"assets/covers/bloons-td.jpg","features":{"controls":{"mouse":true},"source":"games/bloons-td/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"bloons-td-2","title":"Bloons Tower Defense 2","category":"puzzle","cover":"assets/covers/bloons-td-2.png","features":{"controls":{"mouse":true},"source":"games/bloons-td-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"bloons-td-4","title":"Bloons Tower Defense 4","category":"puzzle","cover":"assets/covers/bloons-td-4.jpg","features":{"controls":{"mouse":true},"source":"games/bloons-td-4/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"vex-3","title":"Vex 3","category":"acao","cover":"assets/covers/vex-3.png","features":{"controls":{"keyboard":true},"source":"games/vex-3/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"vex-4","title":"Vex 4","category":"acao","cover":"assets/covers/vex-4.png","features":{"controls":{"keyboard":true},"source":"games/vex-4/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"vex-5","title":"Vex 5","category":"acao","cover":"assets/covers/vex-5.png","features":{"controls":{"keyboard":true},"source":"games/vex-5/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"vex-6","title":"Vex 6","category":"acao","cover":"assets/covers/vex-6.png","features":{"controls":{"keyboard":true},"source":"games/vex-6/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"vex-7","title":"Vex 7","category":"acao","cover":"assets/covers/vex-7.jpeg","features":{"controls":{"keyboard":true},"source":"games/vex-7/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"duck-life","title":"Duck Life","category":"arcade","cover":"assets/covers/duck-life.png","features":{"controls":{"keyboard":true},"source":"games/duck-life/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"duck-life-2","title":"Duck Life 2","category":"arcade","cover":"assets/covers/duck-life-2.png","features":{"controls":{"keyboard":true},"source":"games/duck-life-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"duck-life-3","title":"Duck Life 3: Evolutions","category":"arcade","cover":"assets/covers/duck-life-3.png","features":{"controls":{"keyboard":true},"source":"games/duck-life-3/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"duck-life-4","title":"Duck Life 4","category":"arcade","cover":"assets/covers/duck-life-4.jpg","features":{"controls":{"keyboard":true},"source":"games/duck-life-4/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"duck-life-treasure-hunt","title":"Duck Life: Treasure","category":"arcade","cover":"assets/covers/duck-life-treasure-hunt.png","features":{"controls":{"mouse":true},"source":"games/duck-life-treasure-hunt/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"bloxorz","title":"Bloxorz","category":"puzzle","cover":"assets/covers/bloxorz.png","features":{"controls":{"keyboard":true},"source":"games/bloxorz/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"fancy-pants-adventures","title":"Fancy Pants Adventures","category":"arcade","cover":"assets/covers/fancy-pants-adventures.png","features":{"controls":{},"source":"games/fancy-pants-adventures/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"learn-to-fly","title":"Learn to Fly","category":"arcade","cover":"assets/covers/learn-to-fly.png","features":{"controls":{"keyboard":true},"source":"games/learn-to-fly/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"learn-to-fly-2","title":"Learn to Fly 2","category":"arcade","cover":"assets/covers/learn-to-fly-2.jpg","features":{"controls":{"keyboard":true,"mouse":true},"source":"games/learn-to-fly-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"gun-mayhem","title":"Gun Mayhem","category":"acao","cover":"assets/covers/gun-mayhem.jpg","features":{"controls":{"keyboard":true},"source":"games/gun-mayhem/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"gun-mayhem-2","title":"Gun Mayhem 2: More","category":"acao","cover":"assets/covers/gun-mayhem-2.jpg","features":{"controls":{"keyboard":true},"source":"games/gun-mayhem-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"run-3","title":"Run 3","category":"acao","cover":"assets/covers/run-3.jpg","features":{"controls":{"keyboard":true},"source":"games/run-3/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"worlds-hardest-game","title":"World's Hardest Game","category":"puzzle","cover":"assets/covers/worlds-hardest-game.jpg","features":{"controls":{"touch":true},"source":"games/worlds-hardest-game/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"worlds-hardest-game-2","title":"World's Hardest Game 2","category":"puzzle","cover":"assets/covers/worlds-hardest-game-2.jpg","features":{"controls":{},"source":"games/worlds-hardest-game-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"the-impossible-quiz","title":"The Impossible Quiz","category":"puzzle","cover":"assets/covers/the-impossible-quiz.png","features":{"controls":{"mouse":true},"source":"games/the-impossible-quiz/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"the-impossible-quiz-2","title":"The Impossible Quiz 2","category":"puzzle","cover":"assets/covers/the-impossible-quiz-2.png","features":{"controls":{"mouse":true},"source":"games/the-impossible-quiz-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"happy-wheels","title":"Happy Wheels","category":"acao","cover":"assets/covers/happy-wheels.png","features":{"controls":{"keyboard":true},"source":"games/happy-wheels/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"boxhead-2play","title":"Boxhead 2Play","category":"acao","cover":"assets/covers/boxhead-2play.jpg","features":{"controls":{},"source":"games/boxhead-2play/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"pandemic-2","title":"Pandemic 2","category":"puzzle","cover":"assets/covers/pandemic-2.png","features":{"controls":{},"source":"games/pandemic-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"henry-stickmin-breaking-the-bank","title":"Stickmin: Breaking Bank","category":"puzzle","cover":"assets/covers/henry-stickmin-breaking-the-bank.png","features":{"controls":{},"source":"games/henry-stickmin-breaking-the-bank/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"henry-stickmin-escaping-the-prison","title":"Stickmin: Escaping Prison","category":"puzzle","cover":"assets/covers/henry-stickmin-escaping-the-prison.jpg","features":{"controls":{},"source":"games/henry-stickmin-escaping-the-prison/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"henry-stickmin-stealing-the-diamond","title":"Stickmin: Stealing Diamond","category":"puzzle","cover":"assets/covers/henry-stickmin-stealing-the-diamond.jpg","features":{"controls":{},"source":"games/henry-stickmin-stealing-the-diamond/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"subway-surfers","title":"Subway Surfers","category":"arcade","cover":"assets/covers/subway-surfers.png","features":{"controls":{"keyboard":true},"source":"games/subway-surfers/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"temple-run-2","title":"Temple Run 2","category":"arcade","cover":"assets/covers/temple-run-2.png","features":{"controls":{"keyboard":true},"source":"games/temple-run-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"cut-the-rope","title":"Cut the Rope","category":"puzzle","cover":"assets/covers/cut-the-rope.png","features":{"controls":{"mouse":true},"source":"games/cut-the-rope/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"cut-the-rope-2","title":"Cut the Rope 2","category":"puzzle","cover":"assets/covers/cut-the-rope-2.png","features":{"controls":{},"source":"games/cut-the-rope-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"crossy-road","title":"Crossy Road","category":"arcade","cover":"assets/covers/crossy-road.png","features":{"controls":{"keyboard":true},"source":"games/crossy-road/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"doodle-jump","title":"Doodle Jump","category":"arcade","cover":"assets/covers/doodle-jump.png","features":{"controls":{"keyboard":true},"source":"games/doodle-jump/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"cookie-clicker","title":"Cookie Clicker","category":"arcade","cover":"assets/covers/cookie-clicker.jpeg","features":{"controls":{"mouse":true},"source":"games/cookie-clicker/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"rooftop-snipers","title":"Rooftop Snipers","category":"acao","cover":"assets/covers/rooftop-snipers.png","features":{"controls":{"keyboard":true},"source":"https://www.twoplayergames.org/game/rooftop-snipers","players":2},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"getaway-shootout","title":"Getaway Shootout","category":"acao","cover":"assets/covers/getaway-shootout.png","features":{"controls":{},"source":"games/getaway-shootout/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"tunnel-rush","title":"Tunnel Rush","category":"arcade","cover":"assets/covers/tunnel-rush.png","features":{"controls":{},"source":"games/tunnel-rush/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"drive-mad","title":"Drive Mad","category":"acao","cover":"assets/covers/drive-mad.png","features":{"controls":{},"source":"games/drive-mad/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"bitlife","title":"BitLife","category":"puzzle","cover":"assets/covers/bitlife.png","features":{"controls":{},"source":"games/bitlife/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"retro-bowl","title":"Retro Bowl","category":"arcade","cover":"assets/covers/retro-bowl.png","features":{"controls":{},"source":"games/retro-bowl/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"tiny-fishing","title":"Tiny Fishing","category":"arcade","cover":"assets/covers/tiny-fishing.png","features":{"controls":{},"source":"games/tiny-fishing/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"ovo","title":"OvO","category":"acao","cover":"assets/covers/ovo.png","features":{"controls":{},"source":"games/ovo/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"friday-night-funkin","title":"Friday Night Funkin'","category":"arcade","cover":"assets/covers/friday-night-funkin.jpg","features":{"controls":{"keyboard":true},"source":"games/friday-night-funkin/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"baldis-basics","title":"Baldi's Basics","category":"acao","cover":"assets/covers/baldis-basics.png","features":{"controls":{"keyboard":true,"mouse":true},"source":"games/baldis-basics/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"superhot","title":"SUPERHOT Web","category":"acao","cover":"assets/covers/superhot.jpg","features":{"controls":{},"source":"games/superhot/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"time-shooter-3","title":"Time Shooter 3: SWAT","category":"acao","cover":"assets/covers/time-shooter-3.png","features":{"controls":{},"source":"games/time-shooter-3/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"smash-karts","title":"Smash Karts","category":"arcade","cover":"assets/covers/smash-karts.png","features":{"controls":{"keyboard":true},"source":"games/smash-karts/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"paper-io-2","title":"Paper.io 2","category":"arcade","cover":"assets/covers/paper-io-2.png","features":{"controls":{},"source":"games/paper-io-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"craftmine","title":"CraftMine","category":"puzzle","cover":"assets/covers/craftmine.png","features":{"controls":{},"source":"games/craftmine/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"grindcraft","title":"Grindcraft","category":"puzzle","cover":"assets/covers/grindcraft.png","features":{"controls":{"mouse":true},"source":"games/grindcraft/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"toss-the-turtle","title":"Toss The Turtle","category":"arcade","cover":"assets/covers/toss-the-turtle.png","features":{"controls":{},"source":"games/toss-the-turtle/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"there-is-no-game","title":"There Is No Game","category":"puzzle","cover":"assets/covers/there-is-no-game.png","features":{"controls":{},"source":"games/there-is-no-game/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"this-is-the-only-level","title":"This Is The Only Level","category":"puzzle","cover":"assets/covers/this-is-the-only-level.png","features":{"controls":{},"source":"games/this-is-the-only-level/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"zombocalypse","title":"Zombocalypse","category":"acao","cover":"assets/covers/zombocalypse.svg","features":{"controls":{},"source":"games/zombocalypse/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"1v1-lol","title":"1v1.LOL","category":"acao","cover":"assets/covers/1v1-lol.png","features":{"controls":{"keyboard":true,"mouse":true},"source":"games/1v1-lol/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"angry-birds","title":"Angry Birds Classic","category":"arcade","cover":"assets/covers/angry-birds.jpg","features":{"controls":{},"source":"games/angry-birds/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"alien-hominid","title":"Alien Hominid","category":"acao","cover":"assets/covers/alien-hominid.jpeg","features":{"controls":{},"source":"games/alien-hominid/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"awesome-tanks-2","title":"Awesome Tanks 2","category":"acao","cover":"assets/covers/awesome-tanks-2.png","features":{"controls":{},"source":"games/awesome-tanks-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"backflip-dive-3d","title":"Backflip Dive 3D","category":"arcade","cover":"assets/covers/backflip-dive-3d.jpeg","features":{"controls":{},"source":"games/backflip-dive-3d/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"basket-bros","title":"Basket Bros","category":"arcade","cover":"assets/covers/basket-bros.jpg","features":{"controls":{},"source":"games/basket-bros/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"basketball-legends","title":"Basketball Legends","category":"arcade","cover":"assets/covers/basketball-legends.png","features":{"controls":{},"source":"games/basketball-legends/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"basketball-stars","title":"Basketball Stars","category":"arcade","cover":"assets/covers/basketball-stars.png","features":{"controls":{},"source":"games/basketball-stars/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"binding-of-isaac","title":"The Binding of Isaac","category":"acao","cover":"assets/covers/binding-of-isaac.jpg","features":{"controls":{},"source":"games/binding-of-isaac/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"canyon-defense","title":"Canyon Defense","category":"puzzle","cover":"assets/covers/canyon-defense.png","features":{"controls":{},"source":"games/canyon-defense/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"cars-simulator-3d","title":"Cars Simulator 3D","category":"arcade","cover":"assets/covers/cars-simulator-3d.png","features":{"controls":{},"source":"games/cars-simulator-3d/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"chess-classic","title":"Xadrez Clássico","category":"classico","cover":"assets/covers/chess-classic.png","features":{"controls":{},"source":"games/chess-classic/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"chrome-dino","title":"T-Rex Dino Runner","category":"retro","cover":"assets/covers/chrome-dino.png","features":{"controls":{},"source":"games/chrome-dino/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"cluster-rush","title":"Cluster Rush","category":"arcade","cover":"assets/covers/cluster-rush.jpg","features":{"controls":{"touch":true},"source":"games/cluster-rush/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"color-switch","title":"Color Switch","category":"arcade","cover":"assets/covers/color-switch.png","features":{"controls":{"touch":true},"source":"games/color-switch/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"cubefield","title":"Cubefield","category":"retro","cover":"assets/covers/cubefield.png","features":{"controls":{},"source":"games/cubefield/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"dadish","title":"Dadish","category":"arcade","cover":"assets/covers/reviewed/dadish.jpg","features":{"controls":{},"source":"games/dadish/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"dadish-2","title":"Dadish 2","category":"arcade","cover":"assets/covers/dadish-2.jpg","features":{"controls":{},"source":"games/dadish-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"dadish-3","title":"Dadish 3","category":"arcade","cover":"assets/covers/dadish-3.jpg","features":{"controls":{},"source":"games/dadish-3/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"death-run-3d","title":"Death Run 3D","category":"arcade","cover":"assets/covers/death-run-3d.png","features":{"controls":{},"source":"games/death-run-3d/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"doge-miner-2","title":"Doge Miner 2","category":"arcade","cover":"assets/covers/reviewed/doge-miner-2.webp","features":{"controls":{},"source":"games/doge-miner-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"elastic-man","title":"Elastic Man","category":"arcade","cover":"assets/covers/elastic-man.jpg","features":{"controls":{},"source":"games/elastic-man/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"evil-glitch","title":"Evil Glitch","category":"acao","cover":"assets/covers/evil-glitch.jpeg","features":{"controls":{},"source":"games/evil-glitch/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"factory-balls-forever","title":"Factory Balls Forever","category":"puzzle","cover":"assets/covers/reviewed/factory-balls-forever.jpg","features":{"controls":{},"source":"games/factory-balls-forever/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"flood-runner-2","title":"Flood Runner 2","category":"arcade","cover":"assets/covers/flood-runner-2.svg","features":{"controls":{},"source":"games/flood-runner-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"fruit-ninja","title":"Fruit Ninja Classic","category":"arcade","cover":"assets/covers/fruit-ninja.jpg","features":{"controls":{},"source":"games/fruit-ninja/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"getting-over-it-scratch","title":"Getting Over It","category":"arcade","cover":"assets/covers/getting-over-it-scratch.png","features":{"controls":{},"source":"games/getting-over-it-scratch/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"google-snake-custom","title":"Google Snake Especial","category":"classico","cover":"assets/covers/google-snake-custom.png","features":{"controls":{},"source":"games/google-snake-custom/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"grow-in-the-hole","title":"Grow In The Hole","category":"arcade","cover":"assets/covers/reviewed/grow-in-the-hole.png","features":{"controls":{},"source":"games/grow-in-the-hole/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"gunspin","title":"Gunspin","category":"arcade","cover":"assets/covers/reviewed/gunspin.jpg","features":{"controls":{},"source":"games/gunspin/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"house-of-hazards","title":"House of Hazards","category":"acao","cover":"assets/covers/house-of-hazards.png","features":{"controls":{},"source":"games/house-of-hazards/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"idle-breakout","title":"Idle Breakout","category":"puzzle","cover":"assets/covers/idle-breakout.png","features":{"controls":{},"source":"games/idle-breakout/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"interactive-buddy","title":"Interactive Buddy","category":"arcade","cover":"assets/covers/interactive-buddy.jpg","features":{"controls":{},"source":"games/interactive-buddy/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"jelly-truck","title":"Jelly Truck","category":"arcade","cover":"assets/covers/reviewed/jelly-truck.jpg","features":{"controls":{},"source":"games/jelly-truck/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"jetpack-joyride","title":"Jetpack Joyride","category":"arcade","cover":"assets/covers/reviewed/jetpack-joyride.png","features":{"controls":{},"source":"games/jetpack-joyride/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"just-fall-lol","title":"Just Fall.LOL","category":"arcade","cover":"assets/covers/just-fall-lol.png","features":{"controls":{},"source":"games/just-fall-lol/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"line-rider","title":"Line Rider","category":"arcade","cover":"assets/covers/reviewed/line-rider.jpg","features":{"controls":{},"source":"games/line-rider/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"madalin-stunt-cars-2","title":"Madalin Stunt Cars 2","category":"arcade","cover":"assets/covers/madalin-stunt-cars-2.png","features":{"controls":{},"source":"games/madalin-stunt-cars-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"madalin-stunt-cars-3","title":"Madalin Stunt Cars 3","category":"arcade","cover":"assets/covers/reviewed/madalin-stunt-cars-3.jpg","features":{"controls":{},"source":"games/madalin-stunt-cars-3/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"meat-boy-flash","title":"Meat Boy Original","category":"acao","cover":"assets/covers/meat-boy-flash.png","features":{"controls":{},"source":"games/meat-boy-flash/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"minecraft-classic","title":"Minecraft Classic","category":"puzzle","cover":"assets/covers/minecraft-classic.png","features":{"controls":{},"source":"games/minecraft-classic/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"my-friend-pedro-flash","title":"My Friend Pedro","category":"acao","cover":"assets/covers/my-friend-pedro-flash.jpg","features":{"controls":{},"source":"games/my-friend-pedro-flash/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"ninja-dash","title":"Ninja Dash","category":"acao","cover":"assets/covers/ninja-dash.png","features":{"controls":{},"source":"games/ninja-dash/index.html"},"availability":{"status":"pending","reason":"Não há uma cópia correspondente completa para iniciar este título.","quickCheck":"missing"}},{"id":"ninja-vs-evilcorp","title":"Ninja vs Evilcorp","category":"acao","cover":"assets/covers/ninja-vs-evilcorp.png","features":{"controls":{},"source":"games/ninja-vs-evilcorp/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"pacman-fps","title":"Pac-Man FPS 3D","category":"acao","cover":"assets/covers/pacman-fps.jpg","features":{"controls":{},"source":"games/pacman-fps/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"portal-flash","title":"Portal: The Flash Version","category":"puzzle","cover":"assets/covers/portal-flash.jpg","features":{"controls":{},"source":"games/portal-flash/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"plants-vs-zombies-web","title":"Plants vs Zombies","category":"puzzle","cover":"assets/covers/plants-vs-zombies-web.jpg","features":{"controls":{},"source":"games/plants-vs-zombies-web/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"rolly-vortex","title":"Rolly Vortex","category":"arcade","cover":"assets/covers/rolly-vortex.png","features":{"controls":{},"source":"games/rolly-vortex/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"sandboxels","title":"Sandboxels","category":"puzzle","cover":"assets/covers/sandboxels.jpg","features":{"controls":{},"source":"games/sandboxels/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"short-life-2","title":"Short Life 2","category":"acao","cover":"assets/covers/short-life-2.png","features":{"controls":{},"source":"games/short-life-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"short-ride","title":"Short Ride","category":"acao","cover":"assets/covers/short-ride.jpg","features":{"controls":{},"source":"games/short-ride/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"super-mario-63","title":"Super Mario 63","category":"arcade","cover":"assets/covers/super-mario-63.png","features":{"controls":{"keyboard":true},"source":"games/super-mario-63/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"sonic-the-hedgehog","title":"Sonic the Hedgehog","category":"arcade","cover":"assets/covers/sonic-the-hedgehog.png","features":{"controls":{"keyboard":true},"source":"games/sonic-the-hedgehog/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"spelunky-html5","title":"Spelunky Classic","category":"acao","cover":"assets/covers/spelunky-html5.png","features":{"controls":{},"source":"games/spelunky-html5/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"stick-archers-battle","title":"Stick Archers Battle","category":"acao","cover":"assets/covers/stick-archers-battle.png","features":{"controls":{},"source":"games/stick-archers-battle/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"stickman-boost","title":"Stickman Boost","category":"acao","cover":"assets/covers/stickman-boost.png","features":{"controls":{},"source":"games/stickman-boost/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"stickman-dismount","title":"Stickman Dismount","category":"arcade","cover":"assets/covers/stickman-dismount.png","features":{"controls":{},"source":"games/stickman-dismount/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"stickman-epic-battle","title":"Stickman Epic Battle","category":"acao","cover":"assets/covers/stickman-epic-battle.png","features":{"controls":{},"source":"games/stickman-epic-battle/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"stickman-golf","title":"Stickman Golf","category":"arcade","cover":"assets/covers/stickman-golf.png","features":{"controls":{},"source":"games/stickman-golf/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"storm-the-house-2","title":"Storm the House 2","category":"acao","cover":"assets/covers/storm-the-house-2.jpg","features":{"controls":{},"source":"games/storm-the-house-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"tank-trouble-2","title":"Tank Trouble 2","category":"acao","cover":"assets/covers/tank-trouble-2.png","features":{"controls":{},"source":"games/tank-trouble-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"tanuki-sunset","title":"Tanuki Sunset","category":"arcade","cover":"assets/covers/tanuki-sunset.png","features":{"controls":{},"source":"games/tanuki-sunset/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"the-final-earth-2","title":"The Final Earth 2","category":"puzzle","cover":"assets/covers/the-final-earth-2.png","features":{"controls":{},"source":"games/the-final-earth-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"tube-jumpers","title":"Tube Jumpers","category":"arcade","cover":"assets/covers/tube-jumpers.png","features":{"controls":{},"source":"games/tube-jumpers/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"wordle-classic","title":"Wordle Clássico","category":"puzzle","cover":"assets/covers/wordle-classic.png","features":{"controls":{},"source":"games/wordle-classic/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"zombs-royale","title":"Zombs Royale 2D","category":"acao","cover":"assets/covers/zombs-royale.png","features":{"controls":{},"source":"games/zombs-royale/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"achievement-unlocked","title":"Achievement Unlocked","category":"puzzle","cover":"assets/covers/achievement-unlocked.png","features":{"controls":{},"source":"games/achievement-unlocked/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"adrenaline-challenge","title":"Adrenaline Challenge","category":"acao","cover":"assets/covers/adrenaline-challenge.jpg","features":{"controls":{},"source":"games/adrenaline-challenge/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"anti-terrorist-rush","title":"Anti Terrorist Rush","category":"acao","cover":"assets/covers/anti-terrorist-rush.png","features":{"controls":{},"source":"games/anti-terrorist-rush/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"asteroids-arcade","title":"Asteroids Arcade","category":"retro","cover":"assets/covers/asteroids-arcade.jpg","features":{"controls":{},"source":"games/asteroids-arcade/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"battle-for-gondor","title":"Battle for Gondor","category":"acao","cover":"assets/covers/battle-for-gondor.jpg","features":{"controls":{},"source":"games/battle-for-gondor/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"champion-archer","title":"Champion Archer","category":"acao","cover":"assets/covers/champion-archer.png","features":{"controls":{},"source":"games/champion-archer/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"circloo","title":"circlO","category":"puzzle","cover":"assets/covers/circloo.png","features":{"controls":{},"source":"games/circloo/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"city-blocks-2","title":"City Blocks 2","category":"puzzle","cover":"assets/covers/city-blocks-2.png","features":{"controls":{},"source":"games/city-blocks-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"core-ball","title":"Core Ball","category":"arcade","cover":"assets/covers/core-ball.png","features":{"controls":{},"source":"games/core-ball/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"csgo-case-clicker","title":"CS:GO Case Clicker","category":"arcade","cover":"assets/covers/csgo-case-clicker.png","features":{"controls":{},"source":"games/csgo-case-clicker/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"defend-the-tank","title":"Defend The Tank","category":"acao","cover":"assets/covers/defend-the-tank.png","features":{"controls":{},"source":"games/defend-the-tank/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"double-wires","title":"Double Wires","category":"arcade","cover":"assets/covers/double-wires.png","features":{"controls":{},"source":"games/double-wires/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"draw-the-hill","title":"Draw The Hill","category":"arcade","cover":"assets/covers/draw-the-hill.png","features":{"controls":{},"source":"games/draw-the-hill/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"duke-dashington","title":"Duke Dashington","category":"arcade","cover":"assets/covers/duke-dashington.png","features":{"controls":{},"source":"games/duke-dashington/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"edge-surf","title":"Edge Surf","category":"arcade","cover":"assets/covers/edge-surf.png","features":{"controls":{},"source":"games/edge-surf/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"finns-food-machine","title":"Finn's Food Machine","category":"puzzle","cover":"assets/covers/finns-food-machine.png","features":{"controls":{},"source":"games/finns-food-machine/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"friendly-fire","title":"Friendly Fire","category":"acao","cover":"assets/covers/friendly-fire.png","features":{"controls":{},"source":"games/friendly-fire/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"gravity-soccer","title":"Gravity Soccer","category":"puzzle","cover":"assets/covers/gravity-soccer.png","features":{"controls":{},"source":"games/gravity-soccer/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"hacker-typer","title":"Hacker Typer","category":"retro","cover":"assets/covers/reviewed/hacker-typer.jpg","features":{"controls":{},"source":"games/hacker-typer/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"hex-empire","title":"Hex Empire","category":"puzzle","cover":"assets/covers/hex-empire.jpg","features":{"controls":{},"source":"games/hex-empire/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"icys-purple-head","title":"Icy Purple Head","category":"puzzle","cover":"assets/covers/icys-purple-head.png","features":{"controls":{},"source":"games/icys-purple-head/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"kart-fight-io","title":"Kart Fight.io","category":"arcade","cover":"assets/covers/kart-fight-io.jpg","features":{"controls":{},"source":"games/kart-fight-io/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"klocki","title":"Klocki","category":"puzzle","cover":"assets/covers/klocki.jpg","features":{"controls":{},"source":"games/klocki/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"linquest","title":"Linquest","category":"arcade","cover":"assets/covers/linquest.jpg","features":{"controls":{},"source":"games/linquest/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"matrix-rampage","title":"Matrix Rampage","category":"acao","cover":"assets/covers/matrix-rampage.jpg","features":{"controls":{},"source":"games/matrix-rampage/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"mini-stilts","title":"Mini Stilts","category":"arcade","cover":"assets/covers/mini-stilts.png","features":{"controls":{},"source":"games/mini-stilts/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"mini-putt","title":"Mini Putt Clássico","category":"classico","cover":"assets/covers/mini-putt.png","features":{"controls":{},"source":"games/mini-putt/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"n-gon","title":"n-gon","category":"acao","cover":"assets/covers/n-gon.png","features":{"controls":{},"source":"games/n-gon/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"osu-web","title":"osu! Web","category":"arcade","cover":"assets/covers/osu-web.png","features":{"controls":{"mouse":true},"source":"games/osu-web/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"packabunchas","title":"Packabunchas","category":"puzzle","cover":"assets/covers/packabunchas.svg","features":{"controls":{},"source":"games/packabunchas/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"particle-clicker","title":"Particle Clicker","category":"puzzle","cover":"assets/covers/particle-clicker.png","features":{"controls":{},"source":"games/particle-clicker/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"quake-1k","title":"Q1K3","category":"acao","cover":"assets/covers/quake-1k.jpg","features":{"controls":{},"source":"games/quake-1k/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"roadblocks","title":"Roadblocks","category":"puzzle","cover":"assets/covers/roadblocks.svg","features":{"controls":{},"source":"games/roadblocks/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"this-is-sand","title":"This Is Sand","category":"puzzle","cover":"assets/covers/this-is-sand.png","features":{"controls":{},"source":"games/this-is-sand/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"senya-and-oscar-2","title":"Senya & Oscar 2","category":"acao","cover":"assets/covers/senya-and-oscar-2.svg","features":{"controls":{},"source":"games/senya-and-oscar-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"shift","title":"Shift","category":"puzzle","cover":"assets/covers/shift.svg","features":{"controls":{},"source":"games/shift/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"skyblock-2d","title":"Skyblock 2D","category":"puzzle","cover":"assets/covers/skyblock-2d.png","features":{"controls":{},"source":"games/skyblock-2d/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"solitaire-classic","title":"Paciência Clássica","category":"classico","cover":"assets/covers/reviewed/solitaire-classic.jpg","features":{"controls":{},"source":"games/solitaire-classic/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"sort-the-court","title":"Sort the Court","category":"puzzle","cover":"assets/covers/sort-the-court.png","features":{"controls":{},"source":"games/sort-the-court/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"tactical-assassin-2","title":"Tactical Assassin 2","category":"acao","cover":"assets/covers/tactical-assassin-2.png","features":{"controls":{},"source":"games/tactical-assassin-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"tower-master","title":"Tower Master","category":"arcade","cover":"assets/covers/tower-master.png","features":{"controls":{},"source":"games/tower-master/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"townscaper-web","title":"Townscaper Web","category":"puzzle","cover":"assets/covers/townscaper-web.jpg","features":{"controls":{},"source":"games/townscaper-web/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"trimps","title":"Trimps","category":"puzzle","cover":"assets/covers/trimps.png","features":{"controls":{},"source":"games/trimps/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"up-left-out","title":"Up Left Out","category":"puzzle","cover":"assets/covers/up-left-out.svg","features":{"controls":{},"source":"games/up-left-out/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"wolfenstein-3d","title":"Wolfenstein 3D","category":"retro","cover":"assets/covers/wolfenstein-3d.png","features":{"controls":{},"source":"games/wolfenstein-3d/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"yoshi-fabrication","title":"Yoshi Fabrication","category":"arcade","cover":"assets/covers/yoshi-fabrication.png","features":{"controls":{},"source":"games/yoshi-fabrication/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"10-minutes-till-dawn","title":"10 Minutes Till Dawn","category":"acao","cover":"assets/covers/10-minutes-till-dawn.png","features":{"controls":{},"source":"games/10-minutes-till-dawn/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"8-ball-billiards","title":"Sinuca 8 Ball Clássica","category":"classico","cover":"assets/covers/8-ball-billiards.png","features":{"controls":{},"source":"games/8-ball-billiards/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"doge-miner","title":"Doge Miner","category":"arcade","cover":"assets/covers/doge-miner.png","features":{"controls":{"mouse":true},"source":"games/doge-miner/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"fullscreen-mario","title":"Super Mario Bros Full","category":"retro","cover":"assets/covers/fullscreen-mario.png","features":{"controls":{},"source":"games/fullscreen-mario/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"black-knight","title":"Black Knight","category":"acao","cover":"assets/covers/black-knight.png","features":{"controls":{},"source":"games/black-knight/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"cell-machine","title":"Cell Machine","category":"puzzle","cover":"assets/covers/cell-machine.png","features":{"controls":{},"source":"games/cell-machine/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"deal-or-no-deal","title":"Topa ou Não Topa","category":"classico","cover":"assets/covers/deal-or-no-deal.jpg","features":{"controls":{"mouse":true},"source":"games/deal-or-no-deal/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"flappy-2048","title":"Flappy 2048","category":"arcade","cover":"assets/covers/flappy-2048.png","features":{"controls":{},"source":"games/flappy-2048/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"google-solitaire","title":"Google Paciência","category":"classico","cover":"assets/covers/google-solitaire.png","features":{"controls":{},"source":"games/google-solitaire/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"super-smash-flash-2","title":"Super Smash Flash","category":"acao","cover":"assets/covers/super-smash-flash-2.png","features":{"controls":{},"source":"games/super-smash-flash-2/index.html"},"availability":{"status":"pending","reason":"Não há uma cópia correspondente completa para iniciar este título.","quickCheck":"missing"}},{"id":"stickman-survival","title":"Stickman Survival","category":"acao","cover":"assets/covers/stickman-survival.png","features":{"controls":{},"source":"games/stickman-survival/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"indian-truck-simulator","title":"Indian Truck 3D","category":"arcade","cover":"assets/covers/indian-truck-simulator.png","features":{"controls":{},"source":"games/indian-truck-simulator/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"geometry-dash","title":"Geometry Dash","category":"arcade","cover":"assets/covers/geometry-dash.png","features":{"controls":{"keyboard":true,"mouse":true},"source":"games/geometry-dash/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"endless-war-3","title":"Endless War 3","category":"acao","cover":"assets/covers/endless-war-3.png","features":{"controls":{},"source":"games/endless-war-3/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"kitten-cannon","title":"Kitten Cannon","category":"arcade","cover":"assets/covers/kitten-cannon.jpg","features":{"controls":{},"source":"games/kitten-cannon/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"krunker-web","title":"Krunker.io","category":"acao","cover":"assets/covers/krunker-web.png","features":{"controls":{},"source":"games/krunker-web/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"idle-shark","title":"Idle Shark","category":"arcade","cover":"assets/covers/idle-shark.png","features":{"controls":{},"source":"games/idle-shark/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"dragon-vs-bricks","title":"Dragon vs Bricks","category":"arcade","cover":"assets/covers/dragon-vs-bricks.jpg","features":{"controls":{},"source":"games/dragon-vs-bricks/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"doctor-acorn-2","title":"Doctor Acorn 2","category":"puzzle","cover":"assets/covers/doctor-acorn-2.png","features":{"controls":{},"source":"games/doctor-acorn-2/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"froggys-battle","title":"Froggy's Battle","category":"arcade","cover":"assets/covers/froggys-battle.jpg","features":{"controls":{},"source":"games/froggys-battle/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"golf-classic","title":"Golf Clássico","category":"classico","cover":"assets/covers/golf-classic.jpg","features":{"controls":{},"source":"games/golf-classic/index.html"},"availability":{"status":"pending","reason":"Não há uma cópia correspondente completa para iniciar este título.","quickCheck":"missing"}},{"id":"fnaf-night-at-mythius","title":"FNAF: Night at Mythius","category":"terror","cover":"assets/covers/reviewed/fnaf-night-at-mythius.jpg","features":{"controls":{"keyboard":true,"mouse":true},"players":1,"source":"games/fnaf-night-at-mythius/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}},{"id":"fnaf-security-console","title":"FNAF: Security Console","category":"terror","cover":"assets/covers/reviewed/fnaf-security-console.jpg","features":{"controls":{"keyboard":true,"mouse":true},"players":1,"source":"games/fnaf-security-console/index.html"},"availability":{"status":"available","reason":"","quickCheck":"passed"}}]}
+{
+  "version": 2,
+  "total": 224,
+  "games": [
+    {
+      "id": "pacman",
+      "title": "Pac-Man HTML5",
+      "category": "classico",
+      "cover": "assets/covers/pacman.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/pacman/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "mario-html5",
+      "title": "Infinite Mario",
+      "category": "retro",
+      "cover": "assets/covers/mario-html5.png",
+      "features": {
+        "controls": {},
+        "source": "games/mario-html5/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "mario64-cleanroom",
+      "title": "Mario 64 — Clean Room",
+      "category": "retro",
+      "cover": "assets/covers/mario64-cleanroom.png",
+      "features": {
+        "controls": {
+          "keyboard": true,
+          "touch": true,
+          "gamepad": true
+        },
+        "source": "games/mario64-cleanroom/runtime/touch.js"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "zelda-tribute",
+      "title": "Zelda 30 Year Tribute",
+      "category": "retro",
+      "cover": "assets/covers/zelda-tribute.png",
+      "features": {
+        "controls": {},
+        "source": "games/zelda-tribute/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "flappy-bird",
+      "title": "Flappy Bird",
+      "category": "arcade",
+      "cover": "assets/covers/flappy-bird.png",
+      "features": {
+        "controls": {
+          "keyboard": true,
+          "mouse": true
+        },
+        "source": "games/flappy-bird/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "slope",
+      "title": "Slope 3D",
+      "category": "arcade",
+      "cover": "assets/covers/slope-play.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/slope/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "clumsy-bird",
+      "title": "Clumsy Bird",
+      "category": "arcade",
+      "cover": "assets/covers/clumsy-bird.png",
+      "features": {
+        "controls": {},
+        "source": "games/clumsy-bird/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "tetris",
+      "title": "Tetris",
+      "category": "puzzle",
+      "cover": "assets/covers/tetris.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/tetris/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "hextris",
+      "title": "Hextris",
+      "category": "puzzle",
+      "cover": "assets/covers/hextris.png",
+      "features": {
+        "controls": {},
+        "source": "games/hextris/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "breakout",
+      "title": "Breakout",
+      "category": "arcade",
+      "cover": "assets/covers/breakout.png",
+      "features": {
+        "controls": {},
+        "source": "games/breakout/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "fireboy-and-watergirl",
+      "title": "Fogo e Água: Floresta",
+      "category": "puzzle",
+      "cover": "assets/covers/fireboy-and-watergirl.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/fireboy-and-watergirl/index.html",
+        "players": 2
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "bad-ice-cream",
+      "title": "Bad Ice Cream",
+      "category": "arcade",
+      "cover": "assets/covers/bad-ice-cream.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "https://www.nitrome.com/search.php?id=bad+ice-cream&search_type=default",
+        "players": 2
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "bad-ice-cream-2",
+      "title": "Bad Ice Cream 2",
+      "category": "arcade",
+      "cover": "assets/covers/bad-ice-cream-2.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "https://www.nitrome.com/search.php?id=bad+ice-cream&search_type=default",
+        "players": 2
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "bad-ice-cream-3",
+      "title": "Bad Ice Cream 3",
+      "category": "arcade",
+      "cover": "assets/covers/bad-ice-cream-3.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/bad-ice-cream-3/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "moto-x3m",
+      "title": "Moto X3M",
+      "category": "acao",
+      "cover": "assets/covers/moto-x3m.jpg",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/moto-x3m/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "moto-x3m-winter",
+      "title": "Moto X3M: Winter",
+      "category": "acao",
+      "cover": "assets/covers/moto-x3m-winter.jpeg",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/moto-x3m-winter/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "moto-x3m-pool-party",
+      "title": "Moto X3M: Pool Party",
+      "category": "acao",
+      "cover": "assets/covers/moto-x3m-pool-party.jpg",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/moto-x3m-pool-party/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "moto-x3m-spooky-land",
+      "title": "Moto X3M: Spooky Land",
+      "category": "acao",
+      "cover": "assets/covers/moto-x3m-spooky-land.jpeg",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/moto-x3m-spooky-land/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "papas-pizzeria",
+      "title": "Papa's Pizzeria",
+      "category": "arcade",
+      "cover": "assets/covers/papas-pizzeria.jpg",
+      "features": {
+        "controls": {
+          "mouse": true
+        },
+        "source": "games/papas-pizzeria/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "papas-freezeria",
+      "title": "Papa's Freezeria",
+      "category": "arcade",
+      "cover": "assets/covers/papas-freezeria.png",
+      "features": {
+        "controls": {
+          "mouse": true
+        },
+        "source": "games/papas-freezeria/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "papas-burgeria",
+      "title": "Papa's Burgeria",
+      "category": "arcade",
+      "cover": "assets/covers/papas-burgeria.jpg",
+      "features": {
+        "controls": {
+          "mouse": true
+        },
+        "source": "games/papas-burgeria/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "papas-hot-doggeria",
+      "title": "Papa's Hot Doggeria",
+      "category": "arcade",
+      "cover": "assets/covers/papas-hot-doggeria.jpg",
+      "features": {
+        "controls": {
+          "mouse": true
+        },
+        "source": "games/papas-hot-doggeria/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "papas-pancakeria",
+      "title": "Papa's Pancakeria",
+      "category": "arcade",
+      "cover": "assets/covers/papas-pancakeria.jpg",
+      "features": {
+        "controls": {
+          "mouse": true
+        },
+        "source": "games/papas-pancakeria/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "papas-sushiria",
+      "title": "Papa's Sushiria",
+      "category": "arcade",
+      "cover": "assets/covers/papas-sushiria.png",
+      "features": {
+        "controls": {
+          "mouse": true
+        },
+        "source": "games/papas-sushiria/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "papas-wingeria",
+      "title": "Papa's Wingeria",
+      "category": "arcade",
+      "cover": "assets/covers/papas-wingeria.jpg",
+      "features": {
+        "controls": {
+          "mouse": true
+        },
+        "source": "games/papas-wingeria/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "papa-louie",
+      "title": "Papa Louie: Attack",
+      "category": "arcade",
+      "cover": "assets/covers/papa-louie.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/papa-louie/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "age-of-war",
+      "title": "Age of War",
+      "category": "acao",
+      "cover": "assets/covers/age-of-war.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/age-of-war/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "stick-war",
+      "title": "Stick War: Legacy",
+      "category": "acao",
+      "cover": "assets/covers/stick-war.jpg",
+      "features": {
+        "controls": {
+          "mouse": true
+        },
+        "source": "games/stick-war/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "bloons-td",
+      "title": "Bloons Tower Defense",
+      "category": "puzzle",
+      "cover": "assets/covers/bloons-td.jpg",
+      "features": {
+        "controls": {
+          "mouse": true
+        },
+        "source": "games/bloons-td/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "bloons-td-2",
+      "title": "Bloons Tower Defense 2",
+      "category": "puzzle",
+      "cover": "assets/covers/bloons-td-2.png",
+      "features": {
+        "controls": {
+          "mouse": true
+        },
+        "source": "games/bloons-td-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "bloons-td-4",
+      "title": "Bloons Tower Defense 4",
+      "category": "puzzle",
+      "cover": "assets/covers/bloons-td-4.jpg",
+      "features": {
+        "controls": {
+          "mouse": true
+        },
+        "source": "games/bloons-td-4/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "vex-3",
+      "title": "Vex 3",
+      "category": "acao",
+      "cover": "assets/covers/vex-3.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/vex-3/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "vex-4",
+      "title": "Vex 4",
+      "category": "acao",
+      "cover": "assets/covers/vex-4.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/vex-4/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "vex-5",
+      "title": "Vex 5",
+      "category": "acao",
+      "cover": "assets/covers/vex-5.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/vex-5/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "vex-6",
+      "title": "Vex 6",
+      "category": "acao",
+      "cover": "assets/covers/vex-6.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/vex-6/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "vex-7",
+      "title": "Vex 7",
+      "category": "acao",
+      "cover": "assets/covers/vex-7.jpeg",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/vex-7/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "duck-life",
+      "title": "Duck Life",
+      "category": "arcade",
+      "cover": "assets/covers/duck-life.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/duck-life/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "duck-life-2",
+      "title": "Duck Life 2",
+      "category": "arcade",
+      "cover": "assets/covers/duck-life-2.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/duck-life-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "duck-life-3",
+      "title": "Duck Life 3: Evolutions",
+      "category": "arcade",
+      "cover": "assets/covers/duck-life-3.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/duck-life-3/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "duck-life-4",
+      "title": "Duck Life 4",
+      "category": "arcade",
+      "cover": "assets/covers/duck-life-4.jpg",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/duck-life-4/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "duck-life-treasure-hunt",
+      "title": "Duck Life: Treasure",
+      "category": "arcade",
+      "cover": "assets/covers/duck-life-treasure-hunt.png",
+      "features": {
+        "controls": {
+          "mouse": true
+        },
+        "source": "games/duck-life-treasure-hunt/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "bloxorz",
+      "title": "Bloxorz",
+      "category": "puzzle",
+      "cover": "assets/covers/bloxorz.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/bloxorz/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "fancy-pants-adventures",
+      "title": "Fancy Pants Adventures",
+      "category": "arcade",
+      "cover": "assets/covers/fancy-pants-adventures.png",
+      "features": {
+        "controls": {},
+        "source": "games/fancy-pants-adventures/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "learn-to-fly",
+      "title": "Learn to Fly",
+      "category": "arcade",
+      "cover": "assets/covers/learn-to-fly.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/learn-to-fly/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "learn-to-fly-2",
+      "title": "Learn to Fly 2",
+      "category": "arcade",
+      "cover": "assets/covers/learn-to-fly-2.jpg",
+      "features": {
+        "controls": {
+          "keyboard": true,
+          "mouse": true
+        },
+        "source": "games/learn-to-fly-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "gun-mayhem",
+      "title": "Gun Mayhem",
+      "category": "acao",
+      "cover": "assets/covers/gun-mayhem.jpg",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/gun-mayhem/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "gun-mayhem-2",
+      "title": "Gun Mayhem 2: More",
+      "category": "acao",
+      "cover": "assets/covers/gun-mayhem-2.jpg",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/gun-mayhem-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "run-3",
+      "title": "Run 3",
+      "category": "acao",
+      "cover": "assets/covers/run-3.jpg",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/run-3/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "worlds-hardest-game",
+      "title": "World's Hardest Game",
+      "category": "puzzle",
+      "cover": "assets/covers/worlds-hardest-game.jpg",
+      "features": {
+        "controls": {
+          "touch": true
+        },
+        "source": "games/worlds-hardest-game/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "worlds-hardest-game-2",
+      "title": "World's Hardest Game 2",
+      "category": "puzzle",
+      "cover": "assets/covers/worlds-hardest-game-2.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/worlds-hardest-game-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "the-impossible-quiz",
+      "title": "The Impossible Quiz",
+      "category": "puzzle",
+      "cover": "assets/covers/the-impossible-quiz.png",
+      "features": {
+        "controls": {
+          "mouse": true
+        },
+        "source": "games/the-impossible-quiz/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "the-impossible-quiz-2",
+      "title": "The Impossible Quiz 2",
+      "category": "puzzle",
+      "cover": "assets/covers/the-impossible-quiz-2.png",
+      "features": {
+        "controls": {
+          "mouse": true
+        },
+        "source": "games/the-impossible-quiz-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "happy-wheels",
+      "title": "Happy Wheels",
+      "category": "acao",
+      "cover": "assets/covers/happy-wheels.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/happy-wheels/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "boxhead-2play",
+      "title": "Boxhead 2Play",
+      "category": "acao",
+      "cover": "assets/covers/boxhead-2play.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/boxhead-2play/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "pandemic-2",
+      "title": "Pandemic 2",
+      "category": "puzzle",
+      "cover": "assets/covers/pandemic-2.png",
+      "features": {
+        "controls": {},
+        "source": "games/pandemic-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "henry-stickmin-breaking-the-bank",
+      "title": "Stickmin: Breaking Bank",
+      "category": "puzzle",
+      "cover": "assets/covers/henry-stickmin-breaking-the-bank.png",
+      "features": {
+        "controls": {},
+        "source": "games/henry-stickmin-breaking-the-bank/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "henry-stickmin-escaping-the-prison",
+      "title": "Stickmin: Escaping Prison",
+      "category": "puzzle",
+      "cover": "assets/covers/henry-stickmin-escaping-the-prison.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/henry-stickmin-escaping-the-prison/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "henry-stickmin-stealing-the-diamond",
+      "title": "Stickmin: Stealing Diamond",
+      "category": "puzzle",
+      "cover": "assets/covers/henry-stickmin-stealing-the-diamond.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/henry-stickmin-stealing-the-diamond/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "subway-surfers",
+      "title": "Subway Surfers",
+      "category": "arcade",
+      "cover": "assets/covers/subway-surfers.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/subway-surfers/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "temple-run-2",
+      "title": "Temple Run 2",
+      "category": "arcade",
+      "cover": "assets/covers/temple-run-2.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/temple-run-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "cut-the-rope",
+      "title": "Cut the Rope",
+      "category": "puzzle",
+      "cover": "assets/covers/cut-the-rope.png",
+      "features": {
+        "controls": {
+          "mouse": true
+        },
+        "source": "games/cut-the-rope/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "cut-the-rope-2",
+      "title": "Cut the Rope 2",
+      "category": "puzzle",
+      "cover": "assets/covers/cut-the-rope-2.png",
+      "features": {
+        "controls": {},
+        "source": "games/cut-the-rope-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "crossy-road",
+      "title": "Crossy Road",
+      "category": "arcade",
+      "cover": "assets/covers/crossy-road.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/crossy-road/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "doodle-jump",
+      "title": "Doodle Jump",
+      "category": "arcade",
+      "cover": "assets/covers/doodle-jump.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/doodle-jump/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "cookie-clicker",
+      "title": "Cookie Clicker",
+      "category": "arcade",
+      "cover": "assets/covers/cookie-clicker.jpeg",
+      "features": {
+        "controls": {
+          "mouse": true
+        },
+        "source": "games/cookie-clicker/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "rooftop-snipers",
+      "title": "Rooftop Snipers",
+      "category": "acao",
+      "cover": "assets/covers/rooftop-snipers.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "https://www.twoplayergames.org/game/rooftop-snipers",
+        "players": 2
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "getaway-shootout",
+      "title": "Getaway Shootout",
+      "category": "acao",
+      "cover": "assets/covers/getaway-shootout.png",
+      "features": {
+        "controls": {},
+        "source": "games/getaway-shootout/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "tunnel-rush",
+      "title": "Tunnel Rush",
+      "category": "arcade",
+      "cover": "assets/covers/tunnel-rush.png",
+      "features": {
+        "controls": {},
+        "source": "games/tunnel-rush/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "drive-mad",
+      "title": "Drive Mad",
+      "category": "acao",
+      "cover": "assets/covers/drive-mad.png",
+      "features": {
+        "controls": {},
+        "source": "games/drive-mad/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "bitlife",
+      "title": "BitLife",
+      "category": "puzzle",
+      "cover": "assets/covers/bitlife.png",
+      "features": {
+        "controls": {},
+        "source": "games/bitlife/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "retro-bowl",
+      "title": "Retro Bowl",
+      "category": "arcade",
+      "cover": "assets/covers/retro-bowl.png",
+      "features": {
+        "controls": {},
+        "source": "games/retro-bowl/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "tiny-fishing",
+      "title": "Tiny Fishing",
+      "category": "arcade",
+      "cover": "assets/covers/tiny-fishing.png",
+      "features": {
+        "controls": {},
+        "source": "games/tiny-fishing/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "ovo",
+      "title": "OvO",
+      "category": "acao",
+      "cover": "assets/covers/ovo.png",
+      "features": {
+        "controls": {},
+        "source": "games/ovo/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "friday-night-funkin",
+      "title": "Friday Night Funkin'",
+      "category": "arcade",
+      "cover": "assets/covers/friday-night-funkin.jpg",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/friday-night-funkin/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "baldis-basics",
+      "title": "Baldi's Basics",
+      "category": "acao",
+      "cover": "assets/covers/baldis-basics.png",
+      "features": {
+        "controls": {
+          "keyboard": true,
+          "mouse": true
+        },
+        "source": "games/baldis-basics/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "superhot",
+      "title": "SUPERHOT Web",
+      "category": "acao",
+      "cover": "assets/covers/superhot.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/superhot/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "time-shooter-3",
+      "title": "Time Shooter 3: SWAT",
+      "category": "acao",
+      "cover": "assets/covers/time-shooter-3.png",
+      "features": {
+        "controls": {},
+        "source": "games/time-shooter-3/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "smash-karts",
+      "title": "Smash Karts",
+      "category": "arcade",
+      "cover": "assets/covers/smash-karts.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/smash-karts/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "paper-io-2",
+      "title": "Paper.io 2",
+      "category": "arcade",
+      "cover": "assets/covers/paper-io-2.png",
+      "features": {
+        "controls": {},
+        "source": "games/paper-io-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "craftmine",
+      "title": "CraftMine",
+      "category": "puzzle",
+      "cover": "assets/covers/craftmine.png",
+      "features": {
+        "controls": {},
+        "source": "games/craftmine/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "grindcraft",
+      "title": "Grindcraft",
+      "category": "puzzle",
+      "cover": "assets/covers/grindcraft.png",
+      "features": {
+        "controls": {
+          "mouse": true
+        },
+        "source": "games/grindcraft/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "toss-the-turtle",
+      "title": "Toss The Turtle",
+      "category": "arcade",
+      "cover": "assets/covers/toss-the-turtle.png",
+      "features": {
+        "controls": {},
+        "source": "games/toss-the-turtle/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "there-is-no-game",
+      "title": "There Is No Game",
+      "category": "puzzle",
+      "cover": "assets/covers/there-is-no-game.png",
+      "features": {
+        "controls": {},
+        "source": "games/there-is-no-game/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "this-is-the-only-level",
+      "title": "This Is The Only Level",
+      "category": "puzzle",
+      "cover": "assets/covers/this-is-the-only-level.png",
+      "features": {
+        "controls": {},
+        "source": "games/this-is-the-only-level/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "zombocalypse",
+      "title": "Zombocalypse",
+      "category": "acao",
+      "cover": "assets/covers/zombocalypse.svg",
+      "features": {
+        "controls": {},
+        "source": "games/zombocalypse/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "1v1-lol",
+      "title": "1v1.LOL",
+      "category": "acao",
+      "cover": "assets/covers/1v1-lol.png",
+      "features": {
+        "controls": {
+          "keyboard": true,
+          "mouse": true
+        },
+        "source": "games/1v1-lol/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "angry-birds",
+      "title": "Angry Birds Classic",
+      "category": "arcade",
+      "cover": "assets/covers/angry-birds.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/angry-birds/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "alien-hominid",
+      "title": "Alien Hominid",
+      "category": "acao",
+      "cover": "assets/covers/alien-hominid.jpeg",
+      "features": {
+        "controls": {},
+        "source": "games/alien-hominid/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "awesome-tanks-2",
+      "title": "Awesome Tanks 2",
+      "category": "acao",
+      "cover": "assets/covers/awesome-tanks-2.png",
+      "features": {
+        "controls": {},
+        "source": "games/awesome-tanks-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "backflip-dive-3d",
+      "title": "Backflip Dive 3D",
+      "category": "arcade",
+      "cover": "assets/covers/backflip-dive-3d.jpeg",
+      "features": {
+        "controls": {},
+        "source": "games/backflip-dive-3d/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "basket-bros",
+      "title": "Basket Bros",
+      "category": "arcade",
+      "cover": "assets/covers/basket-bros.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/basket-bros/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "basketball-legends",
+      "title": "Basketball Legends",
+      "category": "arcade",
+      "cover": "assets/covers/basketball-legends.png",
+      "features": {
+        "controls": {},
+        "source": "games/basketball-legends/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "basketball-stars",
+      "title": "Basketball Stars",
+      "category": "arcade",
+      "cover": "assets/covers/basketball-stars.png",
+      "features": {
+        "controls": {},
+        "source": "games/basketball-stars/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "binding-of-isaac",
+      "title": "The Binding of Isaac",
+      "category": "acao",
+      "cover": "assets/covers/binding-of-isaac.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/binding-of-isaac/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "canyon-defense",
+      "title": "Canyon Defense",
+      "category": "puzzle",
+      "cover": "assets/covers/canyon-defense.png",
+      "features": {
+        "controls": {},
+        "source": "games/canyon-defense/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "cars-simulator-3d",
+      "title": "Cars Simulator 3D",
+      "category": "arcade",
+      "cover": "assets/covers/cars-simulator-3d.png",
+      "features": {
+        "controls": {},
+        "source": "games/cars-simulator-3d/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "chess-classic",
+      "title": "Xadrez Clássico",
+      "category": "classico",
+      "cover": "assets/covers/chess-classic.png",
+      "features": {
+        "controls": {},
+        "source": "games/chess-classic/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "chrome-dino",
+      "title": "T-Rex Dino Runner",
+      "category": "retro",
+      "cover": "assets/covers/chrome-dino.png",
+      "features": {
+        "controls": {},
+        "source": "games/chrome-dino/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "cluster-rush",
+      "title": "Cluster Rush",
+      "category": "arcade",
+      "cover": "assets/covers/cluster-rush.jpg",
+      "features": {
+        "controls": {
+          "touch": true
+        },
+        "source": "games/cluster-rush/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "color-switch",
+      "title": "Color Switch",
+      "category": "arcade",
+      "cover": "assets/covers/color-switch.png",
+      "features": {
+        "controls": {
+          "touch": true
+        },
+        "source": "games/color-switch/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "cubefield",
+      "title": "Cubefield",
+      "category": "retro",
+      "cover": "assets/covers/cubefield.png",
+      "features": {
+        "controls": {},
+        "source": "games/cubefield/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "dadish",
+      "title": "Dadish",
+      "category": "arcade",
+      "cover": "assets/covers/reviewed/dadish.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/dadish/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "dadish-2",
+      "title": "Dadish 2",
+      "category": "arcade",
+      "cover": "assets/covers/dadish-2.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/dadish-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "dadish-3",
+      "title": "Dadish 3",
+      "category": "arcade",
+      "cover": "assets/covers/dadish-3.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/dadish-3/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "death-run-3d",
+      "title": "Death Run 3D",
+      "category": "arcade",
+      "cover": "assets/covers/death-run-3d.png",
+      "features": {
+        "controls": {},
+        "source": "games/death-run-3d/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "doge-miner-2",
+      "title": "Doge Miner 2",
+      "category": "arcade",
+      "cover": "assets/covers/reviewed/doge-miner-2.webp",
+      "features": {
+        "controls": {},
+        "source": "games/doge-miner-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "elastic-man",
+      "title": "Elastic Man",
+      "category": "arcade",
+      "cover": "assets/covers/elastic-man.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/elastic-man/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "evil-glitch",
+      "title": "Evil Glitch",
+      "category": "acao",
+      "cover": "assets/covers/evil-glitch.jpeg",
+      "features": {
+        "controls": {},
+        "source": "games/evil-glitch/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "factory-balls-forever",
+      "title": "Factory Balls Forever",
+      "category": "puzzle",
+      "cover": "assets/covers/reviewed/factory-balls-forever.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/factory-balls-forever/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "flood-runner-2",
+      "title": "Flood Runner 2",
+      "category": "arcade",
+      "cover": "assets/covers/flood-runner-2.svg",
+      "features": {
+        "controls": {},
+        "source": "games/flood-runner-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "fruit-ninja",
+      "title": "Fruit Ninja Classic",
+      "category": "arcade",
+      "cover": "assets/covers/fruit-ninja.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/fruit-ninja/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "getting-over-it-scratch",
+      "title": "Getting Over It",
+      "category": "arcade",
+      "cover": "assets/covers/getting-over-it-scratch.png",
+      "features": {
+        "controls": {},
+        "source": "games/getting-over-it-scratch/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "google-snake-custom",
+      "title": "Google Snake Especial",
+      "category": "classico",
+      "cover": "assets/covers/google-snake-custom.png",
+      "features": {
+        "controls": {},
+        "source": "games/google-snake-custom/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "grow-in-the-hole",
+      "title": "Grow In The Hole",
+      "category": "arcade",
+      "cover": "assets/covers/reviewed/grow-in-the-hole.png",
+      "features": {
+        "controls": {},
+        "source": "games/grow-in-the-hole/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "gunspin",
+      "title": "Gunspin",
+      "category": "arcade",
+      "cover": "assets/covers/reviewed/gunspin.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/gunspin/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "house-of-hazards",
+      "title": "House of Hazards",
+      "category": "acao",
+      "cover": "assets/covers/house-of-hazards.png",
+      "features": {
+        "controls": {},
+        "source": "games/house-of-hazards/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "idle-breakout",
+      "title": "Idle Breakout",
+      "category": "puzzle",
+      "cover": "assets/covers/idle-breakout.png",
+      "features": {
+        "controls": {},
+        "source": "games/idle-breakout/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "interactive-buddy",
+      "title": "Interactive Buddy",
+      "category": "arcade",
+      "cover": "assets/covers/interactive-buddy.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/interactive-buddy/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "jelly-truck",
+      "title": "Jelly Truck",
+      "category": "arcade",
+      "cover": "assets/covers/reviewed/jelly-truck.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/jelly-truck/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "jetpack-joyride",
+      "title": "Jetpack Joyride",
+      "category": "arcade",
+      "cover": "assets/covers/reviewed/jetpack-joyride.png",
+      "features": {
+        "controls": {},
+        "source": "games/jetpack-joyride/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "just-fall-lol",
+      "title": "Just Fall.LOL",
+      "category": "arcade",
+      "cover": "assets/covers/just-fall-lol.png",
+      "features": {
+        "controls": {},
+        "source": "games/just-fall-lol/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "line-rider",
+      "title": "Line Rider",
+      "category": "arcade",
+      "cover": "assets/covers/reviewed/line-rider.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/line-rider/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "madalin-stunt-cars-2",
+      "title": "Madalin Stunt Cars 2",
+      "category": "arcade",
+      "cover": "assets/covers/madalin-stunt-cars-2.png",
+      "features": {
+        "controls": {},
+        "source": "games/madalin-stunt-cars-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "madalin-stunt-cars-3",
+      "title": "Madalin Stunt Cars 3",
+      "category": "arcade",
+      "cover": "assets/covers/reviewed/madalin-stunt-cars-3.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/madalin-stunt-cars-3/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "meat-boy-flash",
+      "title": "Meat Boy Original",
+      "category": "acao",
+      "cover": "assets/covers/meat-boy-flash.png",
+      "features": {
+        "controls": {},
+        "source": "games/meat-boy-flash/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "minecraft-classic",
+      "title": "Minecraft Classic",
+      "category": "puzzle",
+      "cover": "assets/covers/minecraft-classic.png",
+      "features": {
+        "controls": {},
+        "source": "games/minecraft-classic/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "my-friend-pedro-flash",
+      "title": "My Friend Pedro",
+      "category": "acao",
+      "cover": "assets/covers/my-friend-pedro-flash.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/my-friend-pedro-flash/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "ninja-dash",
+      "title": "Ninja Dash",
+      "category": "acao",
+      "cover": "assets/covers/ninja-dash.png",
+      "features": {
+        "controls": {},
+        "source": "games/ninja-dash/index.html"
+      },
+      "availability": {
+        "status": "pending",
+        "reason": "Não há uma cópia correspondente completa para iniciar este título.",
+        "quickCheck": "missing"
+      }
+    },
+    {
+      "id": "ninja-vs-evilcorp",
+      "title": "Ninja vs Evilcorp",
+      "category": "acao",
+      "cover": "assets/covers/ninja-vs-evilcorp.png",
+      "features": {
+        "controls": {},
+        "source": "games/ninja-vs-evilcorp/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "pacman-fps",
+      "title": "Pac-Man FPS 3D",
+      "category": "acao",
+      "cover": "assets/covers/pacman-fps.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/pacman-fps/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "portal-flash",
+      "title": "Portal: The Flash Version",
+      "category": "puzzle",
+      "cover": "assets/covers/portal-flash.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/portal-flash/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "plants-vs-zombies-web",
+      "title": "Plants vs Zombies",
+      "category": "puzzle",
+      "cover": "assets/covers/plants-vs-zombies-web.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/plants-vs-zombies-web/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "rolly-vortex",
+      "title": "Rolly Vortex",
+      "category": "arcade",
+      "cover": "assets/covers/rolly-vortex.png",
+      "features": {
+        "controls": {},
+        "source": "games/rolly-vortex/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "sandboxels",
+      "title": "Sandboxels",
+      "category": "puzzle",
+      "cover": "assets/covers/sandboxels.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/sandboxels/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "short-life-2",
+      "title": "Short Life 2",
+      "category": "acao",
+      "cover": "assets/covers/short-life-2.png",
+      "features": {
+        "controls": {},
+        "source": "games/short-life-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "short-ride",
+      "title": "Short Ride",
+      "category": "acao",
+      "cover": "assets/covers/short-ride.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/short-ride/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "super-mario-63",
+      "title": "Super Mario 63",
+      "category": "arcade",
+      "cover": "assets/covers/super-mario-63.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/super-mario-63/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "sonic-the-hedgehog",
+      "title": "Sonic the Hedgehog",
+      "category": "arcade",
+      "cover": "assets/covers/sonic-the-hedgehog.png",
+      "features": {
+        "controls": {
+          "keyboard": true
+        },
+        "source": "games/sonic-the-hedgehog/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "spelunky-html5",
+      "title": "Spelunky Classic",
+      "category": "acao",
+      "cover": "assets/covers/spelunky-html5.png",
+      "features": {
+        "controls": {},
+        "source": "games/spelunky-html5/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "stick-archers-battle",
+      "title": "Stick Archers Battle",
+      "category": "acao",
+      "cover": "assets/covers/stick-archers-battle.png",
+      "features": {
+        "controls": {},
+        "source": "games/stick-archers-battle/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "stickman-boost",
+      "title": "Stickman Boost",
+      "category": "acao",
+      "cover": "assets/covers/stickman-boost.png",
+      "features": {
+        "controls": {},
+        "source": "games/stickman-boost/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "stickman-dismount",
+      "title": "Stickman Dismount",
+      "category": "arcade",
+      "cover": "assets/covers/stickman-dismount.png",
+      "features": {
+        "controls": {},
+        "source": "games/stickman-dismount/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "stickman-epic-battle",
+      "title": "Stickman Epic Battle",
+      "category": "acao",
+      "cover": "assets/covers/stickman-epic-battle.png",
+      "features": {
+        "controls": {},
+        "source": "games/stickman-epic-battle/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "stickman-golf",
+      "title": "Stickman Golf",
+      "category": "arcade",
+      "cover": "assets/covers/stickman-golf.png",
+      "features": {
+        "controls": {},
+        "source": "games/stickman-golf/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "storm-the-house-2",
+      "title": "Storm the House 2",
+      "category": "acao",
+      "cover": "assets/covers/storm-the-house-2.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/storm-the-house-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "tank-trouble-2",
+      "title": "Tank Trouble 2",
+      "category": "acao",
+      "cover": "assets/covers/tank-trouble-2.png",
+      "features": {
+        "controls": {},
+        "source": "games/tank-trouble-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "tanuki-sunset",
+      "title": "Tanuki Sunset",
+      "category": "arcade",
+      "cover": "assets/covers/tanuki-sunset.png",
+      "features": {
+        "controls": {},
+        "source": "games/tanuki-sunset/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "the-final-earth-2",
+      "title": "The Final Earth 2",
+      "category": "puzzle",
+      "cover": "assets/covers/the-final-earth-2.png",
+      "features": {
+        "controls": {},
+        "source": "games/the-final-earth-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "tube-jumpers",
+      "title": "Tube Jumpers",
+      "category": "arcade",
+      "cover": "assets/covers/tube-jumpers.png",
+      "features": {
+        "controls": {},
+        "source": "games/tube-jumpers/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "wordle-classic",
+      "title": "Wordle Clássico",
+      "category": "puzzle",
+      "cover": "assets/covers/wordle-classic.png",
+      "features": {
+        "controls": {},
+        "source": "games/wordle-classic/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "zombs-royale",
+      "title": "Zombs Royale 2D",
+      "category": "acao",
+      "cover": "assets/covers/zombs-royale.png",
+      "features": {
+        "controls": {},
+        "source": "games/zombs-royale/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "achievement-unlocked",
+      "title": "Achievement Unlocked",
+      "category": "puzzle",
+      "cover": "assets/covers/achievement-unlocked.png",
+      "features": {
+        "controls": {},
+        "source": "games/achievement-unlocked/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "adrenaline-challenge",
+      "title": "Adrenaline Challenge",
+      "category": "acao",
+      "cover": "assets/covers/adrenaline-challenge.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/adrenaline-challenge/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "anti-terrorist-rush",
+      "title": "Anti Terrorist Rush",
+      "category": "acao",
+      "cover": "assets/covers/anti-terrorist-rush.png",
+      "features": {
+        "controls": {},
+        "source": "games/anti-terrorist-rush/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "asteroids-arcade",
+      "title": "Asteroids Arcade",
+      "category": "retro",
+      "cover": "assets/covers/asteroids-arcade.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/asteroids-arcade/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "battle-for-gondor",
+      "title": "Battle for Gondor",
+      "category": "acao",
+      "cover": "assets/covers/battle-for-gondor.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/battle-for-gondor/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "champion-archer",
+      "title": "Champion Archer",
+      "category": "acao",
+      "cover": "assets/covers/champion-archer.png",
+      "features": {
+        "controls": {},
+        "source": "games/champion-archer/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "circloo",
+      "title": "circlO",
+      "category": "puzzle",
+      "cover": "assets/covers/circloo.png",
+      "features": {
+        "controls": {},
+        "source": "games/circloo/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "city-blocks-2",
+      "title": "City Blocks 2",
+      "category": "puzzle",
+      "cover": "assets/covers/city-blocks-2.png",
+      "features": {
+        "controls": {},
+        "source": "games/city-blocks-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "core-ball",
+      "title": "Core Ball",
+      "category": "arcade",
+      "cover": "assets/covers/core-ball.png",
+      "features": {
+        "controls": {},
+        "source": "games/core-ball/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "csgo-case-clicker",
+      "title": "CS:GO Case Clicker",
+      "category": "arcade",
+      "cover": "assets/covers/csgo-case-clicker.png",
+      "features": {
+        "controls": {},
+        "source": "games/csgo-case-clicker/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "defend-the-tank",
+      "title": "Defend The Tank",
+      "category": "acao",
+      "cover": "assets/covers/defend-the-tank.png",
+      "features": {
+        "controls": {},
+        "source": "games/defend-the-tank/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "double-wires",
+      "title": "Double Wires",
+      "category": "arcade",
+      "cover": "assets/covers/double-wires.png",
+      "features": {
+        "controls": {},
+        "source": "games/double-wires/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "draw-the-hill",
+      "title": "Draw The Hill",
+      "category": "arcade",
+      "cover": "assets/covers/draw-the-hill.png",
+      "features": {
+        "controls": {},
+        "source": "games/draw-the-hill/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "duke-dashington",
+      "title": "Duke Dashington",
+      "category": "arcade",
+      "cover": "assets/covers/duke-dashington.png",
+      "features": {
+        "controls": {},
+        "source": "games/duke-dashington/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "edge-surf",
+      "title": "Edge Surf",
+      "category": "arcade",
+      "cover": "assets/covers/edge-surf.png",
+      "features": {
+        "controls": {},
+        "source": "games/edge-surf/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "finns-food-machine",
+      "title": "Finn's Food Machine",
+      "category": "puzzle",
+      "cover": "assets/covers/finns-food-machine.png",
+      "features": {
+        "controls": {},
+        "source": "games/finns-food-machine/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "friendly-fire",
+      "title": "Friendly Fire",
+      "category": "acao",
+      "cover": "assets/covers/friendly-fire.png",
+      "features": {
+        "controls": {},
+        "source": "games/friendly-fire/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "gravity-soccer",
+      "title": "Gravity Soccer",
+      "category": "puzzle",
+      "cover": "assets/covers/gravity-soccer.png",
+      "features": {
+        "controls": {},
+        "source": "games/gravity-soccer/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "hacker-typer",
+      "title": "Hacker Typer",
+      "category": "retro",
+      "cover": "assets/covers/reviewed/hacker-typer.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/hacker-typer/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "hex-empire",
+      "title": "Hex Empire",
+      "category": "puzzle",
+      "cover": "assets/covers/hex-empire.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/hex-empire/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "icys-purple-head",
+      "title": "Icy Purple Head",
+      "category": "puzzle",
+      "cover": "assets/covers/icys-purple-head.png",
+      "features": {
+        "controls": {},
+        "source": "games/icys-purple-head/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "kart-fight-io",
+      "title": "Kart Fight.io",
+      "category": "arcade",
+      "cover": "assets/covers/kart-fight-io.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/kart-fight-io/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "klocki",
+      "title": "Klocki",
+      "category": "puzzle",
+      "cover": "assets/covers/klocki.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/klocki/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "linquest",
+      "title": "Linquest",
+      "category": "arcade",
+      "cover": "assets/covers/linquest.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/linquest/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "matrix-rampage",
+      "title": "Matrix Rampage",
+      "category": "acao",
+      "cover": "assets/covers/matrix-rampage.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/matrix-rampage/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "mini-stilts",
+      "title": "Mini Stilts",
+      "category": "arcade",
+      "cover": "assets/covers/mini-stilts.png",
+      "features": {
+        "controls": {},
+        "source": "games/mini-stilts/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "mini-putt",
+      "title": "Mini Putt Clássico",
+      "category": "classico",
+      "cover": "assets/covers/mini-putt.png",
+      "features": {
+        "controls": {},
+        "source": "games/mini-putt/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "n-gon",
+      "title": "n-gon",
+      "category": "acao",
+      "cover": "assets/covers/n-gon.png",
+      "features": {
+        "controls": {},
+        "source": "games/n-gon/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "osu-web",
+      "title": "osu! Web",
+      "category": "arcade",
+      "cover": "assets/covers/osu-web.png",
+      "features": {
+        "controls": {
+          "mouse": true
+        },
+        "source": "games/osu-web/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "packabunchas",
+      "title": "Packabunchas",
+      "category": "puzzle",
+      "cover": "assets/covers/packabunchas.svg",
+      "features": {
+        "controls": {},
+        "source": "games/packabunchas/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "particle-clicker",
+      "title": "Particle Clicker",
+      "category": "puzzle",
+      "cover": "assets/covers/particle-clicker.png",
+      "features": {
+        "controls": {},
+        "source": "games/particle-clicker/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "quake-1k",
+      "title": "Q1K3",
+      "category": "acao",
+      "cover": "assets/covers/quake-1k.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/quake-1k/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "roadblocks",
+      "title": "Roadblocks",
+      "category": "puzzle",
+      "cover": "assets/covers/roadblocks.svg",
+      "features": {
+        "controls": {},
+        "source": "games/roadblocks/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "this-is-sand",
+      "title": "This Is Sand",
+      "category": "puzzle",
+      "cover": "assets/covers/this-is-sand.png",
+      "features": {
+        "controls": {},
+        "source": "games/this-is-sand/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "senya-and-oscar-2",
+      "title": "Senya & Oscar 2",
+      "category": "acao",
+      "cover": "assets/covers/senya-and-oscar-2.svg",
+      "features": {
+        "controls": {},
+        "source": "games/senya-and-oscar-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "shift",
+      "title": "Shift",
+      "category": "puzzle",
+      "cover": "assets/covers/shift.svg",
+      "features": {
+        "controls": {},
+        "source": "games/shift/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "skyblock-2d",
+      "title": "Skyblock 2D",
+      "category": "puzzle",
+      "cover": "assets/covers/skyblock-2d.png",
+      "features": {
+        "controls": {},
+        "source": "games/skyblock-2d/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "solitaire-classic",
+      "title": "Paciência Clássica",
+      "category": "classico",
+      "cover": "assets/covers/reviewed/solitaire-classic.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/solitaire-classic/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "sort-the-court",
+      "title": "Sort the Court",
+      "category": "puzzle",
+      "cover": "assets/covers/sort-the-court.png",
+      "features": {
+        "controls": {},
+        "source": "games/sort-the-court/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "tactical-assassin-2",
+      "title": "Tactical Assassin 2",
+      "category": "acao",
+      "cover": "assets/covers/tactical-assassin-2.png",
+      "features": {
+        "controls": {},
+        "source": "games/tactical-assassin-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "tower-master",
+      "title": "Tower Master",
+      "category": "arcade",
+      "cover": "assets/covers/tower-master.png",
+      "features": {
+        "controls": {},
+        "source": "games/tower-master/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "townscaper-web",
+      "title": "Townscaper Web",
+      "category": "puzzle",
+      "cover": "assets/covers/townscaper-web.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/townscaper-web/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "trimps",
+      "title": "Trimps",
+      "category": "puzzle",
+      "cover": "assets/covers/trimps.png",
+      "features": {
+        "controls": {},
+        "source": "games/trimps/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "up-left-out",
+      "title": "Up Left Out",
+      "category": "puzzle",
+      "cover": "assets/covers/up-left-out.svg",
+      "features": {
+        "controls": {},
+        "source": "games/up-left-out/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "wolfenstein-3d",
+      "title": "Wolfenstein 3D",
+      "category": "retro",
+      "cover": "assets/covers/wolfenstein-3d.png",
+      "features": {
+        "controls": {},
+        "source": "games/wolfenstein-3d/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "yoshi-fabrication",
+      "title": "Yoshi Fabrication",
+      "category": "arcade",
+      "cover": "assets/covers/yoshi-fabrication.png",
+      "features": {
+        "controls": {},
+        "source": "games/yoshi-fabrication/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "10-minutes-till-dawn",
+      "title": "10 Minutes Till Dawn",
+      "category": "acao",
+      "cover": "assets/covers/10-minutes-till-dawn.png",
+      "features": {
+        "controls": {},
+        "source": "games/10-minutes-till-dawn/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "8-ball-billiards",
+      "title": "Sinuca 8 Ball Clássica",
+      "category": "classico",
+      "cover": "assets/covers/8-ball-billiards.png",
+      "features": {
+        "controls": {},
+        "source": "games/8-ball-billiards/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "doge-miner",
+      "title": "Doge Miner",
+      "category": "arcade",
+      "cover": "assets/covers/doge-miner.png",
+      "features": {
+        "controls": {
+          "mouse": true
+        },
+        "source": "games/doge-miner/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "fullscreen-mario",
+      "title": "Super Mario Bros Full",
+      "category": "retro",
+      "cover": "assets/covers/fullscreen-mario.png",
+      "features": {
+        "controls": {},
+        "source": "games/fullscreen-mario/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "black-knight",
+      "title": "Black Knight",
+      "category": "acao",
+      "cover": "assets/covers/black-knight.png",
+      "features": {
+        "controls": {},
+        "source": "games/black-knight/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "cell-machine",
+      "title": "Cell Machine",
+      "category": "puzzle",
+      "cover": "assets/covers/cell-machine.png",
+      "features": {
+        "controls": {},
+        "source": "games/cell-machine/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "deal-or-no-deal",
+      "title": "Topa ou Não Topa",
+      "category": "classico",
+      "cover": "assets/covers/deal-or-no-deal.jpg",
+      "features": {
+        "controls": {
+          "mouse": true
+        },
+        "source": "games/deal-or-no-deal/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "flappy-2048",
+      "title": "Flappy 2048",
+      "category": "arcade",
+      "cover": "assets/covers/flappy-2048.png",
+      "features": {
+        "controls": {},
+        "source": "games/flappy-2048/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "google-solitaire",
+      "title": "Google Paciência",
+      "category": "classico",
+      "cover": "assets/covers/google-solitaire.png",
+      "features": {
+        "controls": {},
+        "source": "games/google-solitaire/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "super-smash-flash-2",
+      "title": "Super Smash Flash",
+      "category": "acao",
+      "cover": "assets/covers/super-smash-flash-2.png",
+      "features": {
+        "controls": {},
+        "source": "games/super-smash-flash-2/index.html"
+      },
+      "availability": {
+        "status": "pending",
+        "reason": "Não há uma cópia correspondente completa para iniciar este título.",
+        "quickCheck": "missing"
+      }
+    },
+    {
+      "id": "stickman-survival",
+      "title": "Stickman Survival",
+      "category": "acao",
+      "cover": "assets/covers/stickman-survival.png",
+      "features": {
+        "controls": {},
+        "source": "games/stickman-survival/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "indian-truck-simulator",
+      "title": "Indian Truck 3D",
+      "category": "arcade",
+      "cover": "assets/covers/indian-truck-simulator.png",
+      "features": {
+        "controls": {},
+        "source": "games/indian-truck-simulator/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "geometry-dash",
+      "title": "Geometry Dash",
+      "category": "arcade",
+      "cover": "assets/covers/geometry-dash.png",
+      "features": {
+        "controls": {
+          "keyboard": true,
+          "mouse": true
+        },
+        "source": "games/geometry-dash/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "endless-war-3",
+      "title": "Endless War 3",
+      "category": "acao",
+      "cover": "assets/covers/endless-war-3.png",
+      "features": {
+        "controls": {},
+        "source": "games/endless-war-3/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "kitten-cannon",
+      "title": "Kitten Cannon",
+      "category": "arcade",
+      "cover": "assets/covers/kitten-cannon.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/kitten-cannon/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "krunker-web",
+      "title": "Krunker.io",
+      "category": "acao",
+      "cover": "assets/covers/krunker-web.png",
+      "features": {
+        "controls": {},
+        "source": "games/krunker-web/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "idle-shark",
+      "title": "Idle Shark",
+      "category": "arcade",
+      "cover": "assets/covers/idle-shark.png",
+      "features": {
+        "controls": {},
+        "source": "games/idle-shark/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "dragon-vs-bricks",
+      "title": "Dragon vs Bricks",
+      "category": "arcade",
+      "cover": "assets/covers/dragon-vs-bricks.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/dragon-vs-bricks/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "doctor-acorn-2",
+      "title": "Doctor Acorn 2",
+      "category": "puzzle",
+      "cover": "assets/covers/doctor-acorn-2.png",
+      "features": {
+        "controls": {},
+        "source": "games/doctor-acorn-2/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "froggys-battle",
+      "title": "Froggy's Battle",
+      "category": "arcade",
+      "cover": "assets/covers/froggys-battle.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/froggys-battle/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "golf-classic",
+      "title": "Golf Clássico",
+      "category": "classico",
+      "cover": "assets/covers/golf-classic.jpg",
+      "features": {
+        "controls": {},
+        "source": "games/golf-classic/index.html"
+      },
+      "availability": {
+        "status": "pending",
+        "reason": "Não há uma cópia correspondente completa para iniciar este título.",
+        "quickCheck": "missing"
+      }
+    },
+    {
+      "id": "fnaf-night-at-mythius",
+      "title": "FNAF: Night at Mythius",
+      "category": "terror",
+      "cover": "assets/covers/reviewed/fnaf-night-at-mythius.jpg",
+      "features": {
+        "controls": {
+          "keyboard": true,
+          "mouse": true
+        },
+        "players": 1,
+        "source": "games/fnaf-night-at-mythius/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "fnaf-security-console",
+      "title": "FNAF: Security Console",
+      "category": "terror",
+      "cover": "assets/covers/reviewed/fnaf-security-console.jpg",
+      "features": {
+        "controls": {
+          "keyboard": true,
+          "mouse": true
+        },
+        "players": 1,
+        "source": "games/fnaf-security-console/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "gta-san-andreas",
+      "title": "GTA: San Andreas (2D Demake)",
+      "category": "acao",
+      "cover": "assets/covers/gta-san-andreas.jpg",
+      "features": {
+        "controls": {
+          "keyboard": true,
+          "touch": true
+        },
+        "source": "games/gta-san-andreas/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "crash-bandicoot",
+      "title": "Crash Bandicoot",
+      "category": "classico",
+      "cover": "assets/covers/crash-bandicoot.jpg",
+      "features": {
+        "controls": {
+          "keyboard": true,
+          "touch": true
+        },
+        "source": "games/crash-bandicoot/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "crazy-taxi",
+      "title": "Crazy Taxi",
+      "category": "arcade",
+      "cover": "assets/covers/crazy-taxi.jpg",
+      "features": {
+        "controls": {
+          "keyboard": true,
+          "touch": true
+        },
+        "source": "games/crazy-taxi/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    },
+    {
+      "id": "basket-random",
+      "title": "Basket Random",
+      "category": "classico",
+      "cover": "assets/covers/basket-random.jpg",
+      "features": {
+        "controls": {
+          "keyboard": true,
+          "touch": true
+        },
+        "source": "games/basket-random/index.html"
+      },
+      "availability": {
+        "status": "available",
+        "reason": "",
+        "quickCheck": "passed"
+      }
+    }
+  ]
+}
