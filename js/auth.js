@@ -426,6 +426,22 @@
     closeModal,
     clearSession,
     generateLetterAvatar,
-    renderAvatarImg
+    renderAvatarImg,
+    createGuestSession: function () {
+      let s = getSession();
+      if (!s) {
+        s = {
+          nick: 'Visitante' + Math.floor(100 + Math.random() * 900),
+          avatarData: null,
+          token: null,
+          expiry: Date.now() + 24 * 60 * 60 * 1000,
+          isGuest: true
+        };
+        saveSession(s);
+        buildHeaderWidget();
+        window.dispatchEvent(new CustomEvent('friv:login', { detail: s }));
+      }
+      return s;
+    }
   };
 })();
