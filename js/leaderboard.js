@@ -273,23 +273,27 @@
       `;
     }
 
-    // Área de envio (funciona para logado e visitante)
+    // Área 100% automática & Anti-Trapaça (sem digitação manual)
     const currentNickDisplay = session ? session.nick : 'Visitante';
-    const submitHtml = `
-      <div class="leaderboard-submit-area">
-        <p class="lb-submit-title">📤 Salvar recorde no ranking (${escHtml(currentNickDisplay)})</p>
-        <div class="lb-submit-row">
-          <input type="number" class="lb-score-input" id="lb-score-input" placeholder="Pontuação do jogo..." min="1" max="${MAX_SCORE}">
-          <button class="lb-submit-btn" id="lb-submit-btn">Salvar Score</button>
+    const autoLiveHtml = `
+      <div class="lb-anti-cheat-card">
+        <div class="lb-shield-icon">🛡️</div>
+        <div class="lb-shield-info">
+          <h4>Pontuação 100% Automática & Anti-Trapaça</h4>
+          <p>Jogue no Slope 3D acima. Ao cair da pista ou finalizar a partida, seus pontos sobem sozinhos direto para o pódio sem risco de trapaça!</p>
         </div>
-        <div class="lb-submit-msg" id="lb-submit-msg">A pontuação também é salva automaticamente ao terminar a partida!</div>
+        <div class="lb-live-pulse"><span class="pulse-dot"></span>Ao vivo</div>
       </div>
       ${(!session || session.isGuest) ? `
-        <div class="lb-guest-notice" style="margin-top:12px;">
-          <span>💡 Quer colocar sua própria foto de perfil no pódio?</span>
-          <button class="lb-guest-btn" id="lb-guest-login-btn">👤 Criar Conta / Entrar</button>
+        <div class="lb-guest-invite">
+          <span>👤 Jogando como <strong>${escHtml(currentNickDisplay)}</strong>. Quer colocar sua própria foto de perfil no topo?</span>
+          <button class="lb-guest-btn" id="lb-guest-login-btn">Entrar / Criar Conta</button>
         </div>
-      ` : ''}
+      ` : `
+        <div class="lb-guest-invite" style="border-color:rgba(16,185,129,0.4);background:rgba(16,185,129,0.08);color:#a7f3d0;">
+          <span>✅ Conectado como <strong>${escHtml(session.nick)}</strong> — Seus recordes são creditados com sua foto!</span>
+        </div>
+      `}
     `;
 
     container.innerHTML = `
@@ -300,44 +304,10 @@
       <div id="lb-live-banner" class="lb-live-banner" style="display:none;"></div>
       ${podiumHtml}
       ${tableHtml}
-      ${submitHtml}
+      ${autoLiveHtml}
     `;
 
-    // Botão manual de envio
-    const submitBtn = document.getElementById('lb-submit-btn');
-    const scoreInput = document.getElementById('lb-score-input');
-    const msgEl = document.getElementById('lb-submit-msg');
-
-    if (submitBtn && scoreInput && msgEl) {
-      submitBtn.addEventListener('click', function () {
-        const val = parseInt(scoreInput.value, 10);
-        if (!val || isNaN(val) || val <= 0) {
-          msgEl.textContent = 'Digite uma pontuação válida acima de 0.';
-          msgEl.className = 'lb-submit-msg err';
-          return;
-        }
-
-        // Se for guest ou não logado, cria sessão de visitante
-        let s = window.FrivAuth ? window.FrivAuth.getSession() : null;
-        if (!s) {
-          s = window.FrivAuth && window.FrivAuth.createGuestSession ? window.FrivAuth.createGuestSession() : { nick: 'Visitante' + Math.floor(100 + Math.random()*900) };
-        }
-
-        const result = submitScore(s.nick, s.avatarData, val, false);
-        msgEl.textContent = result.msg;
-        msgEl.className = 'lb-submit-msg ' + (result.ok ? 'ok' : 'err');
-        if (result.ok) {
-          scoreInput.value = '';
-          renderLeaderboard(container);
-          showBanner(`🎉 Recorde de ${val.toLocaleString('pt-BR')} pontos registrado para ${escHtml(s.nick)}!`);
-        }
-      });
-      scoreInput.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') submitBtn.click();
-      });
-    }
-
-    // Botão de login / registro
+    // Botão de login / registro no convite
     const guestLoginBtn = document.getElementById('lb-guest-login-btn');
     if (guestLoginBtn) {
       guestLoginBtn.addEventListener('click', function () {
@@ -367,13 +337,16 @@
   }
 
   /* =====================================================
-     5. CAPTURA AUTOMÁTICA DE SCORE (GAME OVER NO IFRAME)
+     5. CAPTURA AUTOMÁTICA DE SCORE (GAME OVER NO IFRAME OU INDEXEDDB)
      ===================================================== */
 
-  window.addEventListener('message', function (e) {
-    if (!e.data || e.data.type !== 'SLOPE_SCORE') return;
-    const score = Number(e.data.score);
-    if (!score || isNaN(score) || score <= 0) return;
+  let lastRegisteredScore = 0;
+
+  function handleAutoScore(score) {
+    score = Number(score);
+    if (!score || isNaN(score) || score <= 0 || score > MAX_SCORE) return;
+    if (score === lastRegisteredScore) return;
+    lastRegisteredScore = score;
 
     // Obtém sessão do usuário (logado ou visitante)
     let session = window.FrivAuth ? window.FrivAuth.getSession() : null;
@@ -387,10 +360,55 @@
       const container = document.getElementById('slope-leaderboard');
       if (container) {
         renderLeaderboard(container);
-        showBanner(`🔥 Partida finalizada! ${score.toLocaleString('pt-BR')} pontos adicionados ao pódio para ${escHtml(session.nick)}!`);
+        showBanner(`🔥 Partida finalizada! ${score.toLocaleString('pt-BR')} pontos adicionados automaticamente ao pódio para ${escHtml(session.nick)}!`);
       }
     }
+  }
+
+  // 1. Ouve mensagens diretas do iframe
+  window.addEventListener('message', function (e) {
+    if (!e.data || e.data.type !== 'SLOPE_SCORE') return;
+    handleAutoScore(e.data.score);
   });
+
+  // 2. Monitoramento autônomo do banco IndexedDB do Slope
+  function checkOriginIndexedDB() {
+    try {
+      if (!window.indexedDB) return;
+      const req = indexedDB.open('/idbfs', 21);
+      req.onsuccess = function (e) {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains('FILE_DATA')) return;
+        const tx = db.transaction(['FILE_DATA'], 'readonly');
+        const store = tx.objectStore('FILE_DATA');
+        const cursorReq = store.openCursor();
+        cursorReq.onsuccess = function (evt) {
+          const cursor = evt.target.result;
+          if (cursor) {
+            const val = cursor.value;
+            if (val && val.contents) {
+              try {
+                const str = new TextDecoder('utf-8').decode(val.contents);
+                const m = str.match(/name="[^"]*(?:score|high|points|best)[^"]*"[^>]*>(\d+)</i);
+                const m2 = str.match(/(?:HighScore|LastScore|CurrentScore|Total\s*Score|points)[^\d]*(\d+)/i);
+                const found = m ? m[1] : (m2 ? m2[1] : null);
+                if (found) {
+                  const s = parseInt(found, 10);
+                  if (s > 0 && s < MAX_SCORE) {
+                    handleAutoScore(s);
+                  }
+                }
+              } catch (err) {}
+            }
+            cursor.continue();
+          }
+        };
+      };
+    } catch (e) {}
+  }
+
+  // Varredura a cada 2.5s enquanto o jogador estiver na tela do Slope
+  setInterval(checkOriginIndexedDB, 2500);
 
   /* =====================================================
      6. REATIVIDADE DE AUTENTICAÇÃO
