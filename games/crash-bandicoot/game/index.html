@@ -1119,6 +1119,45 @@
     ctx.restore(); // end shake
   }
 
+  // Snapshot Save/Load Protocol (Friv Memory Card)
+  window.addEventListener('message', e => {
+    if (!e.data) return;
+    if (e.data.type === 'FRIV_SAVE_REQUEST') {
+      const snap = {
+        crash: { x: crash.x, y: crash.y, vx: crash.vx, vy: crash.vy, facing: crash.facing },
+        lives: lives,
+        wumpaCount: wumpaCount,
+        cratesSmashed: cratesSmashed,
+        akuAkuLevel: akuAkuLevel,
+        cratesActive: crates.map(c => c.active)
+      };
+      const summary = `Ilha Wumpa • ${cratesSmashed}/${cratesTotal} Caixas • ❤️ ${lives} Vidas • 🥭 ${wumpaCount}`;
+      window.parent.postMessage({ type: 'FRIV_SAVE_DATA', data: snap, summary }, '*');
+    } else if (e.data.type === 'FRIV_LOAD_DATA') {
+      const snap = e.data.data;
+      if (snap && snap.crash) {
+        crash.x = snap.crash.x;
+        crash.y = snap.crash.y;
+        crash.vx = snap.crash.vx || 0;
+        crash.vy = snap.crash.vy || 0;
+        crash.facing = snap.crash.facing || 1;
+        crash.dead = false;
+        lives = snap.lives || 4;
+        wumpaCount = snap.wumpaCount || 0;
+        cratesSmashed = snap.cratesSmashed || 0;
+        akuAkuLevel = snap.akuAkuLevel || 0;
+        if (Array.isArray(snap.cratesActive)) {
+          snap.cratesActive.forEach((act, idx) => { if (crates[idx]) crates[idx].active = act; });
+        }
+        document.getElementById('val-lives').textContent = lives;
+        document.getElementById('val-wumpa').textContent = String(wumpaCount).padStart(2, '0');
+        document.getElementById('val-crates').textContent = `${cratesSmashed} / ${cratesTotal}`;
+        updateAkuHUD();
+        AudioEngine.akuAku();
+      }
+    }
+  });
+
   function loop() {
     update();
     draw();

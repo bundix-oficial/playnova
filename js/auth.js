@@ -150,7 +150,193 @@
   }
 
   /* =====================================================
-     4. HEADER USER WIDGET
+     4. MEMORY CARD & SAVES SYSTEM (PS2 STYLE)
+     ===================================================== */
+
+  const SAVES_STORAGE_KEY = 'friv_memory_card_v1';
+
+  function getAllSaves() {
+    try {
+      return JSON.parse(localStorage.getItem(SAVES_STORAGE_KEY) || '{}');
+    } catch {
+      return {};
+    }
+  }
+
+  function saveAllSaves(all) {
+    localStorage.setItem(SAVES_STORAGE_KEY, JSON.stringify(all));
+  }
+
+  function getMemoryCardUserKey() {
+    const session = getSession();
+    if (session && session.nick) return session.nick.toLowerCase().trim();
+    return 'visitante';
+  }
+
+  function buildMemoryCardModal() {
+    if (document.getElementById('mc-backdrop')) return;
+    const html = `
+<div id="mc-backdrop" class="mc-backdrop" role="dialog" aria-modal="true" aria-label="Memory Card FRIV DIGITAL">
+  <div class="mc-modal">
+    <div class="mc-header">
+      <div class="mc-header-brand">
+        <span class="mc-brand-icon">🎴</span>
+        <div class="mc-brand-text">
+          <h3 class="mc-brand-title">MEMORY CARD (8MB)</h3>
+          <p class="mc-brand-sub" id="mc-user-sub">Saves &amp; Momentos Salvos</p>
+        </div>
+      </div>
+      <button class="mc-close-btn" id="mc-close" type="button" aria-label="Fechar Memory Card">✕</button>
+    </div>
+
+    <div class="mc-slot-bar">
+      <div class="mc-slot-left">
+        <span class="mc-slot-tag">SLOT 1</span>
+        <span class="mc-slot-status" id="mc-slot-count">Calculando saves...</span>
+      </div>
+      <button class="mc-clear-all-btn" id="mc-clear-all" type="button" title="Excluir todos os saves">🗑️ Limpar Todos</button>
+    </div>
+
+    <div class="mc-body">
+      <div class="mc-grid" id="mc-grid"></div>
+    </div>
+  </div>
+</div>
+`;
+    document.body.insertAdjacentHTML('beforeend', html);
+
+    document.getElementById('mc-close').addEventListener('click', closeMemoryCardModal);
+    document.getElementById('mc-backdrop').addEventListener('click', function (e) {
+      if (e.target === this) closeMemoryCardModal();
+    });
+    document.getElementById('mc-clear-all').addEventListener('click', function () {
+      const userKey = getMemoryCardUserKey();
+      const allSaves = getAllSaves();
+      const hasUserSaves = allSaves[userKey] && Object.keys(allSaves[userKey]).length > 0;
+      const hasGuestSaves = allSaves['visitante'] && Object.keys(allSaves['visitante']).length > 0;
+      if (!hasUserSaves && !hasGuestSaves) {
+        alert('Seu Memory Card já está vazio!');
+        return;
+      }
+      if (confirm('Tem certeza que deseja apagar todos os saves do seu Memory Card?')) {
+        delete allSaves[userKey];
+        delete allSaves['visitante'];
+        saveAllSaves(allSaves);
+        renderMemoryCardGrid();
+      }
+    });
+  }
+
+  function renderMemoryCardGrid() {
+    const grid = document.getElementById('mc-grid');
+    const slotCountEl = document.getElementById('mc-slot-count');
+    const userSubEl = document.getElementById('mc-user-sub');
+    if (!grid) return;
+
+    const userKey = getMemoryCardUserKey();
+    const session = getSession();
+    const displayName = session ? session.nick : 'Visitante';
+    if (userSubEl) {
+      userSubEl.textContent = `Saves de ${displayName} • PS2 / Web Edition`;
+    }
+
+    const allSaves = getAllSaves();
+    let userSaves = Object.assign({}, allSaves['visitante'] || {}, allSaves[userKey] || {});
+
+    const saveKeys = Object.keys(userSaves);
+    const count = saveKeys.length;
+
+    if (slotCountEl) {
+      slotCountEl.textContent = `${count} ${count === 1 ? 'Save Usado' : 'Saves Usados'} • ${Math.max(0, 8 - count)} Slots Livres`;
+    }
+
+    if (count === 0) {
+      grid.innerHTML = `
+        <div class="mc-empty">
+          <div class="mc-empty-icon">🎴</div>
+          <h4>Nenhum Save Encontrado</h4>
+          <p>Você ainda não tem jogos salvos no seu Memory Card.</p>
+          <div class="mc-empty-guide">
+            <strong>Como Salvar o Progresso:</strong>
+            <ol>
+              <li>Abra qualquer jogo clássico (como <b>GTA San Andreas 2D</b>, <b>Crash Bandicoot</b>, <b>Crazy Taxi</b> ou <b>Basket Random</b>).</li>
+              <li>Clique no botão <b>💾 Salvar</b> na barra superior ou aperte <b>F5</b> no teclado a qualquer momento.</li>
+              <li>Volte aqui no Memory Card e clique em <b>▶ Continuar</b> para voltar exatamente de onde parou!</li>
+            </ol>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    const sortedEntries = Object.values(userSaves).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+    const isInGames = window.location.pathname.includes('/games/');
+    const rootPath = isInGames ? '../../' : './';
+
+    grid.innerHTML = sortedEntries.map(entry => {
+      let cover = entry.cover || `${rootPath}assets/brand/frivdigital-logo.png`;
+      if (isInGames && !cover.startsWith('http') && !cover.startsWith('../') && !cover.startsWith('/')) {
+        cover = '../../' + cover.replace(/^\.\//, '');
+      } else if (!isInGames && cover.startsWith('../../')) {
+        cover = cover.replace(/^\.\.\/\.\.\//, './');
+      }
+      const dateStr = entry.dateStr || 'Salvo recentemente';
+      const summary = entry.summary || 'Progresso do jogo salvo';
+      const gameUrl = isInGames ? `../${entry.gameId}/index.html?load_save=true` : `games/${entry.gameId}/index.html?load_save=true`;
+
+      return `
+        <div class="mc-card" data-game-id="${escHtml(entry.gameId)}">
+          <div class="mc-card-media">
+            <img src="${escHtml(cover)}" alt="${escHtml(entry.gameTitle)}" class="mc-card-img" onerror="this.src='${rootPath}assets/brand/frivdigital-logo.png'">
+            <span class="mc-card-badge">SLOT PS2</span>
+          </div>
+          <div class="mc-card-details">
+            <h4 class="mc-card-game-title">${escHtml(entry.gameTitle)}</h4>
+            <div class="mc-card-date">🕒 ${escHtml(dateStr)}</div>
+            <div class="mc-card-summary" title="${escHtml(summary)}">📍 ${escHtml(summary)}</div>
+          </div>
+          <div class="mc-card-actions">
+            <a href="${escHtml(gameUrl)}" class="mc-action-play">▶ Continuar</a>
+            <button type="button" class="mc-action-del" data-delete-id="${escHtml(entry.gameId)}" title="Excluir este save">🗑️</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    grid.querySelectorAll('.mc-action-del').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const gid = this.dataset.deleteId;
+        if (!gid) return;
+        if (confirm(`Deseja apagar o save de "${gid}"?`)) {
+          const curAll = getAllSaves();
+          const k = getMemoryCardUserKey();
+          if (curAll[k] && curAll[k][gid]) delete curAll[k][gid];
+          if (curAll['visitante'] && curAll['visitante'][gid]) delete curAll['visitante'][gid];
+          saveAllSaves(curAll);
+          renderMemoryCardGrid();
+        }
+      });
+    });
+  }
+
+  function openMemoryCardModal() {
+    buildMemoryCardModal();
+    const bd = document.getElementById('mc-backdrop');
+    if (bd) {
+      bd.classList.add('open');
+      renderMemoryCardGrid();
+    }
+  }
+
+  function closeMemoryCardModal() {
+    const bd = document.getElementById('mc-backdrop');
+    if (bd) bd.classList.remove('open');
+  }
+
+  /* =====================================================
+     5. HEADER USER WIDGET
      ===================================================== */
 
   function buildHeaderWidget() {
@@ -167,15 +353,18 @@
     wrapper.style.cssText = 'display:flex;align-items:center;gap:8px;margin-left:auto;';
 
     const session = getSession();
+    const mcBtnHtml = `<button class="header-mc-btn" id="header-mc-btn" type="button" title="Abrir Memory Card (Seus Saves)">🎴 Saves</button>`;
+
     if (!session) {
-      const btn = document.createElement('button');
-      btn.className = 'login-btn';
-      btn.id = 'login-btn';
-      btn.textContent = '👤 Entrar';
-      btn.addEventListener('click', openModal);
-      wrapper.appendChild(btn);
+      wrapper.innerHTML = `
+        ${mcBtnHtml}
+        <button class="login-btn" id="login-btn" type="button">👤 Entrar</button>
+      `;
+      wrapper.querySelector('#login-btn').addEventListener('click', openModal);
+      wrapper.querySelector('#header-mc-btn').addEventListener('click', openMemoryCardModal);
     } else {
       wrapper.innerHTML = `
+        ${mcBtnHtml}
         <div id="header-user-widget">
           <div class="header-avatar-wrap" id="header-avatar-wrap" title="Meu perfil">
             <div class="header-avatar" id="header-avatar-el" style="display:flex;align-items:center;justify-content:center;"></div>
@@ -184,13 +373,25 @@
             <div class="profile-popup" id="profile-popup">
               <div class="profile-popup-avatar" id="profile-popup-avatar" style="display:flex;align-items:center;justify-content:center;"></div>
               <div class="profile-popup-nick" id="profile-popup-nick">${escHtml(session.nick)}</div>
+              <button class="profile-mc-btn" id="profile-mc-btn" type="button">🎴 Meus Saves (Memory Card)</button>
               <label class="profile-upload-btn" for="profile-file-input">📷 Trocar foto de perfil</label>
             </div>
           </div>
           <span class="header-nick" id="header-nick">${escHtml(session.nick)}</span>
-          <button class="header-sair-btn" id="header-sair-btn">Sair</button>
+          <button class="header-sair-btn" id="header-sair-btn" type="button">Sair</button>
         </div>
       `;
+
+      wrapper.querySelector('#header-mc-btn').addEventListener('click', openMemoryCardModal);
+      const profileMcBtn = wrapper.querySelector('#profile-mc-btn');
+      if (profileMcBtn) {
+        profileMcBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const p = document.getElementById('profile-popup');
+          if (p) p.classList.remove('open');
+          openMemoryCardModal();
+        });
+      }
 
       // Set avatars
       setTimeout(() => {
@@ -408,6 +609,7 @@
 
   function init() {
     buildModal();
+    buildMemoryCardModal();
     buildHeaderWidget();
   }
 
@@ -418,12 +620,14 @@
   }
 
   /* =====================================================
-     7. PUBLIC API (window.FrivAuth)
+     7. PUBLIC API (window.FrivAuth & window.FrivMemoryCard)
      ===================================================== */
   window.FrivAuth = {
     getSession,
     openModal,
     closeModal,
+    openMemoryCard: openMemoryCardModal,
+    closeMemoryCard: closeMemoryCardModal,
     clearSession,
     generateLetterAvatar,
     renderAvatarImg,
@@ -443,5 +647,12 @@
       }
       return s;
     }
+  };
+
+  window.FrivMemoryCard = {
+    open: openMemoryCardModal,
+    close: closeMemoryCardModal,
+    getAllSaves,
+    getMemoryCardUserKey
   };
 })();

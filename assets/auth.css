@@ -334,3 +334,447 @@
   .auth-modal { max-width: 95vw; padding: 24px 16px 20px; }
   .login-btn { font-size: 12px; padding: 7px 11px; }
 }
+
+/* =========================================================
+   FRIV DIGITAL — MEMORY CARD & GAME SAVE STYLES
+   ========================================================= */
+
+/* ---- Header Memory Card Button ---- */
+.header-mc-btn {
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9);
+  border: 1px solid rgba(147, 197, 253, 0.4);
+  border-radius: 8px;
+  color: #fff;
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 7px 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.35);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.header-mc-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.6);
+  border-color: #93c5fd;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+}
+
+/* ---- Profile Popup Memory Card Button ---- */
+.profile-mc-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #1e1b4b, #312e81);
+  border: 1px solid #4f46e5;
+  border-radius: 10px;
+  color: #c7d2fe;
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.profile-mc-btn:hover {
+  background: linear-gradient(135deg, #312e81, #4338ca);
+  border-color: #818cf8;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* ---- Game Shell Top Bar Save & Load ---- */
+.game-save-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 8px;
+}
+.game-bar-btn {
+  border: none;
+  border-radius: 8px;
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.game-bar-btn.btn-save {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+}
+.game-bar-btn.btn-save:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.55);
+}
+.game-bar-btn.btn-load {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
+}
+.game-bar-btn.btn-load:hover {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.55);
+}
+
+/* ---- Floating Save/Load Toast Notification ---- */
+.game-save-toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-40px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 99999;
+  padding: 12px 24px;
+  border-radius: 14px;
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: center;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.game-save-toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.game-save-toast.success {
+  background: rgba(6, 78, 59, 0.94);
+  border: 2px solid #10b981;
+  color: #ecfdf5;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.75), 0 0 20px rgba(16, 185, 129, 0.4);
+}
+.game-save-toast.warn {
+  background: rgba(120, 53, 15, 0.94);
+  border: 2px solid #f59e0b;
+  color: #fffbeb;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.75), 0 0 20px rgba(245, 158, 11, 0.4);
+}
+
+/* =========================================================
+   PS2-STYLE RETRO MEMORY CARD MODAL
+   ========================================================= */
+
+.mc-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 7, 18, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 10001;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.mc-backdrop.open {
+  display: flex;
+}
+
+.mc-modal {
+  background: linear-gradient(145deg, #0b0f1d 0%, #05070f 100%);
+  border: 2px solid #2563eb;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 720px;
+  max-height: 90vh;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.85), 0 0 35px rgba(37,99,235,0.25);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  animation: authSlideIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  overflow: hidden;
+}
+
+.mc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px 14px;
+  border-bottom: 1px solid rgba(59,130,246,0.25);
+  background: rgba(37,99,235,0.06);
+}
+.mc-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.mc-brand-icon {
+  font-size: 28px;
+  line-height: 1;
+  filter: drop-shadow(0 0 8px rgba(59,130,246,0.5));
+}
+.mc-brand-title {
+  font-family: 'Fredoka', 'Rubik', system-ui, sans-serif;
+  font-size: 19px;
+  font-weight: 800;
+  color: #60a5fa;
+  letter-spacing: 0.5px;
+  margin: 0;
+  text-shadow: 0 0 16px rgba(96,165,250,0.4);
+}
+.mc-brand-sub {
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 2px 0 0;
+}
+.mc-close-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 20px;
+  line-height: 1;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.mc-close-btn:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.1);
+}
+
+.mc-slot-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 24px;
+  background: rgba(15,23,42,0.6);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-family: 'Fredoka', system-ui, sans-serif;
+}
+.mc-slot-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mc-slot-tag {
+  background: #2563eb;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+.mc-slot-status {
+  font-size: 13px;
+  color: #93c5fd;
+  font-weight: 600;
+}
+.mc-clear-all-btn {
+  background: none;
+  border: 1px solid rgba(239,68,68,0.3);
+  color: #f87171;
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.mc-clear-all-btn:hover {
+  background: rgba(239,68,68,0.15);
+  border-color: #ef4444;
+  color: #fee2e2;
+}
+
+.mc-body {
+  padding: 20px 24px;
+  overflow-y: auto;
+  max-height: calc(90vh - 140px);
+}
+.mc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.mc-card {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(59,130,246,0.25);
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
+  position: relative;
+}
+.mc-card:hover {
+  border-color: #38bdf8;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(37,99,235,0.25);
+}
+
+.mc-card-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0f172a;
+}
+.mc-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.mc-card-badge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background: rgba(0,0,0,0.75);
+  border: 1px solid rgba(56,189,248,0.4);
+  color: #38bdf8;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Fredoka', system-ui, sans-serif;
+}
+
+.mc-card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.mc-card-game-title {
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mc-card-date {
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-size: 11px;
+  color: #94a3b8;
+}
+.mc-card-summary {
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-size: 12px;
+  color: #38bdf8;
+  background: rgba(56,189,248,0.1);
+  border: 1px solid rgba(56,189,248,0.2);
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+}
+
+.mc-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+.mc-action-play {
+  flex: 1;
+  text-align: center;
+  text-decoration: none;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 3px 12px rgba(16,185,129,0.35);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.mc-action-play:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 16px rgba(16,185,129,0.5);
+}
+.mc-action-del {
+  background: rgba(239,68,68,0.12);
+  border: 1px solid rgba(239,68,68,0.35);
+  color: #f87171;
+  border-radius: 8px;
+  padding: 8px 11px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.15s;
+}
+.mc-action-del:hover {
+  background: rgba(239,68,68,0.25);
+  border-color: #ef4444;
+  color: #fee2e2;
+}
+
+.mc-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 36px 16px;
+  background: rgba(15,23,42,0.4);
+  border: 2px dashed rgba(59,130,246,0.3);
+  border-radius: 14px;
+  font-family: 'Fredoka', system-ui, sans-serif;
+}
+.mc-empty-icon {
+  font-size: 42px;
+  margin-bottom: 8px;
+}
+.mc-empty h4 {
+  font-size: 18px;
+  color: #93c5fd;
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+.mc-empty p {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 0 0 16px;
+}
+.mc-empty-guide {
+  max-width: 480px;
+  margin: 0 auto;
+  text-align: left;
+  background: rgba(30,41,59,0.5);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 10px;
+  padding: 14px 18px;
+}
+.mc-empty-guide strong {
+  font-size: 13px;
+  color: #38bdf8;
+  display: block;
+  margin-bottom: 8px;
+}
+.mc-empty-guide ol {
+  font-size: 12px;
+  color: #cbd5e1;
+  margin: 0;
+  padding-left: 20px;
+  line-height: 1.6;
+}

@@ -159,15 +159,216 @@
     } catch(e) {}
   });
 
-  /* ── Inject Popunder ── */
-  try {
-    if (!document.querySelector('script[src*="abscloud.org"]')) {
-      const pop = document.createElement('script');
-      pop.dataset.cfasync = 'false';
-      pop.src = 'https://abscloud.org/1/d4bbc8877fb375d281cfc5a58e8fb195';
-      document.head.appendChild(pop);
+  /* =========================================================
+     FRIV DIGITAL — GAME SAVE & LOAD (QUICKSAVE / MEMORY CARD)
+     ========================================================= */
+  const SAVES_STORAGE_KEY = 'friv_memory_card_v1';
+
+  // Extract Game ID from path
+  const gameMatch = location.pathname.match(/\/games\/([^/]+)/);
+  const currentGameId = gameMatch ? gameMatch[1] : null;
+
+  // Web Audio Synth Chimes
+  const SaveAudio = {
+    ctx: null,
+    init() {
+      if (!this.ctx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (AC) this.ctx = new AC();
+      }
+      if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+    },
+    playTone(f, type, dur, vol, slide) {
+      if (!this.ctx) return;
+      try {
+        const osc = this.ctx.createOscillator();
+        const g = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(f, this.ctx.currentTime);
+        if (slide) osc.frequency.exponentialRampToValueAtTime(slide, this.ctx.currentTime + dur);
+        g.gain.setValueAtTime(vol, this.ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + dur);
+        osc.connect(g);
+        g.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + dur);
+      } catch(e) {}
+    },
+    saveChime() {
+      this.init();
+      this.playTone(523, 'triangle', 0.12, 0.25);
+      setTimeout(() => this.playTone(659, 'triangle', 0.14, 0.25), 80);
+      setTimeout(() => this.playTone(784, 'triangle', 0.22, 0.3), 160);
+    },
+    loadChime() {
+      this.init();
+      this.playTone(440, 'sine', 0.15, 0.25, 880);
+      setTimeout(() => this.playTone(880, 'triangle', 0.22, 0.3), 100);
     }
-  } catch(_) {}
+  };
+
+  // Toast Notification
+  function showSaveToast(msg, isSuccess) {
+    let t = document.getElementById('game-save-toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'game-save-toast';
+      document.body.appendChild(t);
+    }
+    t.innerHTML = msg;
+    t.className = 'game-save-toast show ' + (isSuccess ? 'success' : 'warn');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => {
+      t.className = 'game-save-toast';
+    }, 3500);
+  }
+
+  // Get current session user nick
+  function getCurrentUserKey() {
+    try {
+      const sess = JSON.parse(localStorage.getItem('friv_session') || 'null');
+      if (sess && sess.nick) return sess.nick.toLowerCase().trim();
+    } catch(e) {}
+    return 'visitante';
+  }
+
+  // Save Game Progress / Snapshot
+  function doQuickSave() {
+    if (!currentGameId) return;
+    SaveAudio.init();
+
+    const frame = document.getElementById('game-frame') || document.querySelector('iframe');
+    const userKey = getCurrentUserKey();
+    const gameTitle = document.querySelector('.game-bar h1')?.textContent || document.title.split('—')[0].trim();
+    const rootPath = location.pathname.includes('/games/') ? '../../' : './';
+    const coverPath = `${rootPath}assets/covers/${currentGameId}.jpg`;
+
+    let responded = false;
+
+    // Listen for custom snapshot from iframe
+    function onSaveResponse(e) {
+      if (e.data && e.data.type === 'FRIV_SAVE_DATA') {
+        responded = true;
+        window.removeEventListener('message', onSaveResponse);
+        commitSave(e.data.data, e.data.summary);
+      }
+    }
+    window.addEventListener('message', onSaveResponse);
+
+    // Ask iframe for custom snapshot
+    if (frame && frame.contentWindow) {
+      frame.contentWindow.postMessage({ type: 'FRIV_SAVE_REQUEST' }, '*');
+    }
+
+    // Fallback if game has no custom snapshot (after 250ms)
+    setTimeout(() => {
+      if (!responded) {
+        window.removeEventListener('message', onSaveResponse);
+        commitSave(null, 'Progresso salvo no Memory Card');
+      }
+    }, 250);
+
+    function commitSave(snapshot, summary) {
+      try {
+        const allSaves = JSON.parse(localStorage.getItem(SAVES_STORAGE_KEY) || '{}');
+        if (!allSaves[userKey]) allSaves[userKey] = {};
+
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('pt-BR') + ' às ' + now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+        allSaves[userKey][currentGameId] = {
+          gameId: currentGameId,
+          gameTitle: gameTitle,
+          cover: coverPath,
+          timestamp: Date.now(),
+          dateStr: dateStr,
+          summary: summary || 'Momento salvo no jogo',
+          snapshot: snapshot || null
+        };
+
+        localStorage.setItem(SAVES_STORAGE_KEY, JSON.stringify(allSaves));
+        SaveAudio.saveChime();
+        showSaveToast(`💾 <strong>Momento Salvo no Memory Card!</strong><br><small>${summary || dateStr}</small>`, true);
+      } catch (err) {
+        showSaveToast('⚠️ Não foi possível salvar o progresso.', false);
+      }
+    }
+  }
+
+  // Load Game Progress / Snapshot
+  function doQuickLoad() {
+    if (!currentGameId) return;
+    SaveAudio.init();
+
+    const userKey = getCurrentUserKey();
+    let saveEntry = null;
+
+    try {
+      const allSaves = JSON.parse(localStorage.getItem(SAVES_STORAGE_KEY) || '{}');
+      if (allSaves[userKey] && allSaves[userKey][currentGameId]) {
+        saveEntry = allSaves[userKey][currentGameId];
+      }
+    } catch(e) {}
+
+    if (!saveEntry) {
+      showSaveToast('⚠️ Nenhum save encontrado para este jogo no seu Memory Card.', false);
+      return;
+    }
+
+    const frame = document.getElementById('game-frame') || document.querySelector('iframe');
+    if (frame && frame.contentWindow && saveEntry.snapshot) {
+      frame.contentWindow.postMessage({ type: 'FRIV_LOAD_DATA', data: saveEntry.snapshot }, '*');
+      SaveAudio.loadChime();
+      showSaveToast(`⚡ <strong>Momento Restaurado com Sucesso!</strong><br><small>${saveEntry.summary}</small>`, true);
+    } else {
+      SaveAudio.loadChime();
+      showSaveToast(`⚡ <strong>Save Carregado do Memory Card!</strong>`, true);
+    }
+  }
+
+  // Keyboard Shortcuts: F5 = Save, F8/F9 = Load
+  window.addEventListener('keydown', e => {
+    if (e.key === 'F5') {
+      e.preventDefault();
+      doQuickSave();
+    } else if (e.key === 'F8' || e.key === 'F9') {
+      e.preventDefault();
+      doQuickLoad();
+    }
+  });
+
+  // Inject Save Bar into Header
+  function injectSaveControls() {
+    const bar = document.querySelector('.game-bar');
+    if (!bar || document.getElementById('game-save-bar')) return;
+
+    const wrap = document.createElement('div');
+    wrap.id = 'game-save-bar';
+    wrap.className = 'game-save-bar';
+    wrap.innerHTML = `
+      <button id="btn-save-moment" class="game-bar-btn btn-save" title="Salvar Momento (Atalho: F5)">💾 Salvar</button>
+      <button id="btn-load-moment" class="game-bar-btn btn-load" title="Carregar Momento (Atalho: F8)">⚡ Carregar</button>
+    `;
+
+    const fsBtn = bar.querySelector('#fullscreen') || bar.lastElementChild;
+    bar.insertBefore(wrap, fsBtn);
+
+    document.getElementById('btn-save-moment').addEventListener('click', doQuickSave);
+    document.getElementById('btn-load-moment').addEventListener('click', doQuickLoad);
+
+    // Auto-load if navigated with ?load_save=true
+    if (location.search.includes('load_save=true')) {
+      setTimeout(() => {
+        doQuickLoad();
+      }, 1200);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', injectSaveControls);
+  } else {
+    injectSaveControls();
+  }
 
   /* ── Inject Skyscraper Side Ads (160x600) ── */
   function injectSkyscraperAds() {

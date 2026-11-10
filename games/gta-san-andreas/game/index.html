@@ -1433,6 +1433,53 @@
     ctx.restore();
   }
 
+  // Snapshot Save/Load Protocol (Friv Memory Card)
+  window.addEventListener('message', e => {
+    if (!e.data) return;
+    if (e.data.type === 'FRIV_SAVE_REQUEST') {
+      const snap = {
+        player: {
+          x: player.x,
+          y: player.y,
+          vx: player.vx,
+          vy: player.vy,
+          angle: player.angle,
+          health: player.health,
+          armor: player.armor,
+          money: player.money,
+          wanted: player.wanted,
+          currentWeaponIdx: currentWeaponIdx,
+          ammo: WEAPONS.map(w => w.ammo)
+        }
+      };
+      const summary = `Grove Street • Vida: ${player.health}% • $${player.money} • ${WEAPONS[currentWeaponIdx].name} • ⭐ ${player.wanted}`;
+      window.parent.postMessage({ type: 'FRIV_SAVE_DATA', data: snap, summary }, '*');
+    } else if (e.data.type === 'FRIV_LOAD_DATA') {
+      const snap = e.data.data;
+      if (snap && snap.player) {
+        player.x = snap.player.x;
+        player.y = snap.player.y;
+        player.vx = snap.player.vx || 0;
+        player.vy = snap.player.vy || 0;
+        player.angle = snap.player.angle || 0;
+        player.health = snap.player.health;
+        player.armor = snap.player.armor;
+        player.money = snap.player.money;
+        player.wanted = snap.player.wanted || 0;
+        updateStarsHUD();
+        selectWeapon(snap.player.currentWeaponIdx || 0);
+        if (Array.isArray(snap.player.ammo)) {
+          snap.player.ammo.forEach((a, i) => { if (WEAPONS[i]) WEAPONS[i].ammo = a; });
+          updateWeaponHUD();
+        }
+        document.getElementById('hud-money').textContent = '$' + String(player.money).padStart(8, '0');
+        document.getElementById('bar-health').style.width = player.health + '%';
+        document.getElementById('bar-armor').style.width = player.armor + '%';
+        showBanner('⚡ MOMENTO RESTAURADO DO MEMORY CARD!');
+      }
+    }
+  });
+
   // Main Loop
   function gameLoop() {
     update();

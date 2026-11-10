@@ -773,6 +773,36 @@
     ctx.restore(); // camera
   }
 
+  // Snapshot Save/Load Protocol (Friv Memory Card)
+  window.addEventListener('message', e => {
+    if (!e.data) return;
+    if (e.data.type === 'FRIV_SAVE_REQUEST') {
+      const snap = {
+        taxi: { x: taxi.x, y: taxi.y, angle: taxi.angle, speed: taxi.speed },
+        totalEarnings: totalEarnings,
+        passengersDelivered: passengersDelivered,
+        masterTimer: masterTimer
+      };
+      const summary = `Boulevard • Lucro: $${totalEarnings.toFixed(2)} • Tempo: ${masterTimer}s • ${passengersDelivered} Passageiros`;
+      window.parent.postMessage({ type: 'FRIV_SAVE_DATA', data: snap, summary }, '*');
+    } else if (e.data.type === 'FRIV_LOAD_DATA') {
+      const snap = e.data.data;
+      if (snap && snap.taxi) {
+        taxi.x = snap.taxi.x;
+        taxi.y = snap.taxi.y;
+        taxi.angle = snap.taxi.angle || 0;
+        taxi.speed = snap.taxi.speed || 0;
+        totalEarnings = snap.totalEarnings || 0;
+        passengersDelivered = snap.passengersDelivered || 0;
+        masterTimer = snap.masterTimer || 50;
+        isGameOver = false;
+        document.getElementById('hud-money').textContent = `$${totalEarnings.toFixed(2)}`;
+        document.getElementById('hud-clock').textContent = masterTimer;
+        AudioEngine.cash();
+      }
+    }
+  });
+
   function loop() {
     update();
     draw();
