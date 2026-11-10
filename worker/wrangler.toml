@@ -1,0 +1,9 @@
+name = "friv-api"
+main = "api.js"
+compatibility_date = "2024-01-01"
+
+# Banco D1 gratuito da Cloudflare
+[[d1_databases]]
+binding = "DB"
+database_name = "friv-db"
+database_id = "SEU_DATABASE_ID_AQUI"

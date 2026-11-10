@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="pt-BR">
 <head>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; connect-src 'self' https:; font-src 'self' data: https:; frame-src 'self' https:; media-src 'self' data: blob:; object-src 'none'; base-uri 'self'; form-action 'none'">
@@ -13,7 +13,9 @@
 <link rel="stylesheet" href="../../assets/cookie-consent.css?v=f32e6d291cc5">
 <script src="../../js/icons.js?v=9b7c13021fce" defer></script>
 <script src="../../js/catalog-index.js?v=76b61331a741" defer></script>
-  <link rel="stylesheet" href="../../assets/frivdigital-theme.css?v=1">
+    <link rel="stylesheet" href="../../assets/frivdigital-theme.css?v=1">
+  <link rel="stylesheet" href="../../assets/auth.css">
+  <link rel="stylesheet" href="../../assets/leaderboard.css">
 </head>
 <body>
   <header class="game-bar">
@@ -25,6 +27,7 @@
     <p>Use as Setas Esquerda/Direita ou A/D para controlar a esfera 3D na pista em alta velocidade.</p>
     <iframe id="game-frame" data-game-src="slope_game.html" title="Jogar Slope 3D" allowfullscreen sandbox="allow-scripts allow-same-origin allow-pointer-lock" referrerpolicy="no-referrer" allow="fullscreen; gamepad; autoplay 'none'; camera 'none'; microphone 'none'; geolocation 'none'"></iframe>
     <p class="game-credit">FRIV DIGITAL · Jogue no seu navegador</p>
+    <section id="slope-leaderboard" class="leaderboard-section"></section>
   </main>
   <script src="../../js/game-shell.js?v=d76c1e451958"></script>
 <script src="../../js/library.js?v=10de3536e374" defer></script>
@@ -33,5 +36,8 @@
 <script src="../../js/game-tools.js?v=b5f136001e7d" defer></script>
 <script src="../../js/cookie-consent.js?v=77b01c42f7d4" defer></script>
 <script src="../../js/help-button.js?v=8068a3eafa0a" defer></script>
-<script src="../../js/local-open.js?v=09b74587a585" defer></script></body>
+<script src="../../js/local-open.js?v=09b74587a585" defer></script>
+  <script src="../../js/auth.js" defer></script>
+  <script src="../../js/leaderboard.js" defer></script>
+</body>
 </html>
