@@ -1132,7 +1132,9 @@
         cratesActive: crates.map(c => c.active)
       };
       const summary = `Ilha Wumpa • ${cratesSmashed}/${cratesTotal} Caixas • ❤️ ${lives} Vidas • 🥭 ${wumpaCount}`;
-      window.parent.postMessage({ type: 'FRIV_SAVE_DATA', data: snap, summary }, '*');
+      let screenshot = null;
+      try { screenshot = canvas.toDataURL('image/jpeg', 0.65); } catch(err) {}
+      window.parent.postMessage({ type: 'FRIV_SAVE_DATA', data: snap, summary, screenshot }, '*');
     } else if (e.data.type === 'FRIV_LOAD_DATA') {
       const snap = e.data.data;
       if (snap && snap.crash) {
@@ -1162,6 +1164,7 @@
     update();
     draw();
     requestAnimationFrame(loop);
+  window.parent.postMessage({ type: 'FRIV_GAME_READY' }, '*');
   }
 
   loop();

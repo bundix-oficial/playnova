@@ -56,7 +56,6 @@
   // Block top navigation
   try {
     Object.defineProperty(window, 'top', { get: function() { return window; }, configurable: true });
-    Object.defineProperty(window, 'parent', { get: function() { return window; }, configurable: true });
   } catch(e) {}
   // Mock Poki SDK - auto-resolve all breaks
   window.PokiSDK = {
@@ -207,20 +206,54 @@
     }
   };
 
-  // Toast Notification
-  function showSaveToast(msg, isSuccess) {
-    let t = document.getElementById('game-save-toast');
-    if (!t) {
-      t = document.createElement('div');
-      t.id = 'game-save-toast';
-      document.body.appendChild(t);
+  // Console-style Animated Save Indicator ("Bolinha Salvando Retrô")
+  function showSaveIndicator(type, title, subtitle) {
+    let el = document.getElementById('friv-save-indicator');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'friv-save-indicator';
+      el.className = 'friv-save-indicator';
+      document.body.appendChild(el);
     }
-    t.innerHTML = msg;
-    t.className = 'game-save-toast show ' + (isSuccess ? 'success' : 'warn');
-    clearTimeout(t._timer);
-    t._timer = setTimeout(() => {
-      t.className = 'game-save-toast';
-    }, 3500);
+
+    let orbHtml = '';
+    if (type === 'saving' || type === 'loading') {
+      orbHtml = `
+        <div class="friv-save-orb-wrap">
+          <div class="friv-save-orb-spinner"></div>
+          <div class="friv-save-orb-core"></div>
+        </div>
+      `;
+    } else if (type === 'success') {
+      orbHtml = `
+        <div class="friv-save-orb-wrap success">
+          <div class="friv-save-check">✓</div>
+        </div>
+      `;
+    } else {
+      orbHtml = `
+        <div class="friv-save-orb-wrap warn">
+          <div class="friv-save-warn">!</div>
+        </div>
+      `;
+    }
+
+    el.innerHTML = `
+      ${orbHtml}
+      <div class="friv-save-info">
+        <span class="friv-save-heading">${title}</span>
+        <span class="friv-save-subtext">${subtitle || ''}</span>
+      </div>
+    `;
+
+    el.className = 'friv-save-indicator show ' + type;
+
+    clearTimeout(el._hideTimer);
+    if (type !== 'saving' && type !== 'loading') {
+      el._hideTimer = setTimeout(() => {
+        el.className = 'friv-save-indicator ' + type;
+      }, 3500);
+    }
   }
 
   // Get current session user nick
@@ -237,11 +270,43 @@
     if (!currentGameId) return;
     SaveAudio.init();
 
+    // Show glowing animated PS2-style saving orb immediately
+    showSaveIndicator('saving', 'SALVANDO NO MEMORY CARD...', 'Slot 1 • Gravando momento exato');
+
     const frame = document.getElementById('game-frame') || document.querySelector('iframe');
     const userKey = getCurrentUserKey();
     const gameTitle = document.querySelector('.game-bar h1')?.textContent || document.title.split('—')[0].trim();
     const rootPath = location.pathname.includes('/games/') ? '../../' : './';
-    const coverPath = `${rootPath}assets/covers/${currentGameId}.jpg`;
+
+    // 1. Resolve exact cover path from Catalog Index so it never 404s
+    let coverPath = null;
+    try {
+      if (window.PlaynovaCatalogIndex && Array.isArray(window.PlaynovaCatalogIndex.games)) {
+        const item = window.PlaynovaCatalogIndex.games.find(g => g.id === currentGameId);
+        if (item && item.cover) coverPath = `${rootPath}${item.cover.replace(/^\.\//, '')}`;
+      }
+    } catch(e) {}
+    if (!coverPath) {
+      coverPath = `${rootPath}assets/brand/frivdigital-logo.png`;
+    }
+
+    // 2. Capture real in-game canvas screenshot if accessible
+    let screenshot = null;
+    try {
+      if (frame && frame.contentDocument) {
+        const cvs = frame.contentDocument.querySelector('canvas');
+        if (cvs && cvs.width > 0 && cvs.height > 0) {
+          const thumb = document.createElement('canvas');
+          thumb.width = 320;
+          thumb.height = 180;
+          const tctx = thumb.getContext('2d');
+          tctx.drawImage(cvs, 0, 0, 320, 180);
+          screenshot = thumb.toDataURL('image/jpeg', 0.75);
+        }
+      }
+    } catch(err) {
+      /* cross-origin canvas or tainted */
+    }
 
     let responded = false;
 
@@ -250,7 +315,8 @@
       if (e.data && e.data.type === 'FRIV_SAVE_DATA') {
         responded = true;
         window.removeEventListener('message', onSaveResponse);
-        commitSave(e.data.data, e.data.summary);
+        const finalSnapImg = e.data.screenshot || screenshot;
+        commitSave(e.data.data, e.data.summary, finalSnapImg);
       }
     }
     window.addEventListener('message', onSaveResponse);
@@ -260,15 +326,15 @@
       frame.contentWindow.postMessage({ type: 'FRIV_SAVE_REQUEST' }, '*');
     }
 
-    // Fallback if game has no custom snapshot (after 250ms)
+    // Fallback if game has no custom snapshot (after 300ms)
     setTimeout(() => {
       if (!responded) {
         window.removeEventListener('message', onSaveResponse);
-        commitSave(null, 'Progresso salvo no Memory Card');
+        commitSave(null, 'Momento salvo no Memory Card', screenshot);
       }
-    }, 250);
+    }, 300);
 
-    function commitSave(snapshot, summary) {
+    function commitSave(snapshot, summary, snapImg) {
       try {
         const allSaves = JSON.parse(localStorage.getItem(SAVES_STORAGE_KEY) || '{}');
         if (!allSaves[userKey]) allSaves[userKey] = {};
@@ -280,6 +346,7 @@
           gameId: currentGameId,
           gameTitle: gameTitle,
           cover: coverPath,
+          screenshot: snapImg || null,
           timestamp: Date.now(),
           dateStr: dateStr,
           summary: summary || 'Momento salvo no jogo',
@@ -288,9 +355,9 @@
 
         localStorage.setItem(SAVES_STORAGE_KEY, JSON.stringify(allSaves));
         SaveAudio.saveChime();
-        showSaveToast(`💾 <strong>Momento Salvo no Memory Card!</strong><br><small>${summary || dateStr}</small>`, true);
+        showSaveIndicator('success', 'MOMENTO SALVO COM SUCESSO! 💾', summary || dateStr);
       } catch (err) {
-        showSaveToast('⚠️ Não foi possível salvar o progresso.', false);
+        showSaveIndicator('warn', 'NÃO FOI POSSÍVEL SALVAR ⚠️', 'Armazenamento cheio ou desativado.');
       }
     }
   }
@@ -307,22 +374,30 @@
       const allSaves = JSON.parse(localStorage.getItem(SAVES_STORAGE_KEY) || '{}');
       if (allSaves[userKey] && allSaves[userKey][currentGameId]) {
         saveEntry = allSaves[userKey][currentGameId];
+      } else if (allSaves['visitante'] && allSaves['visitante'][currentGameId]) {
+        saveEntry = allSaves['visitante'][currentGameId];
       }
     } catch(e) {}
 
     if (!saveEntry) {
-      showSaveToast('⚠️ Nenhum save encontrado para este jogo no seu Memory Card.', false);
+      showSaveIndicator('warn', 'NENHUM SAVE ENCONTRADO ⚠️', 'Aperte F5 ou Salvar para registrar seu ponto de parada.');
       return;
     }
+
+    showSaveIndicator('loading', 'CARREGANDO DO MEMORY CARD...', saveEntry.summary || 'Restaurando momento salvo');
 
     const frame = document.getElementById('game-frame') || document.querySelector('iframe');
     if (frame && frame.contentWindow && saveEntry.snapshot) {
       frame.contentWindow.postMessage({ type: 'FRIV_LOAD_DATA', data: saveEntry.snapshot }, '*');
-      SaveAudio.loadChime();
-      showSaveToast(`⚡ <strong>Momento Restaurado com Sucesso!</strong><br><small>${saveEntry.summary}</small>`, true);
+      setTimeout(() => {
+        SaveAudio.loadChime();
+        showSaveIndicator('success', 'MOMENTO RESTAURADO COM SUCESSO! ⚡', saveEntry.summary || 'Save aplicado');
+      }, 400);
     } else {
-      SaveAudio.loadChime();
-      showSaveToast(`⚡ <strong>Save Carregado do Memory Card!</strong>`, true);
+      setTimeout(() => {
+        SaveAudio.loadChime();
+        showSaveIndicator('success', 'SAVE CARREGADO DO MEMORY CARD! ⚡', saveEntry.summary || 'Progresso pronto');
+      }, 400);
     }
   }
 
@@ -358,9 +433,22 @@
 
     // Auto-load if navigated with ?load_save=true
     if (location.search.includes('load_save=true')) {
-      setTimeout(() => {
-        doQuickLoad();
-      }, 1200);
+      const frame = document.getElementById('game-frame') || document.querySelector('iframe');
+      let loaded = false;
+      function tryAutoLoad() {
+        if (loaded) return;
+        loaded = true;
+        setTimeout(doQuickLoad, 400);
+      }
+      window.addEventListener('message', e => {
+        if (e.data && e.data.type === 'FRIV_GAME_READY') {
+          tryAutoLoad();
+        }
+      });
+      if (frame) {
+        frame.addEventListener('load', tryAutoLoad);
+      }
+      setTimeout(tryAutoLoad, 1200);
     }
   }
 

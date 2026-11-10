@@ -180,10 +180,13 @@
   <div class="mc-modal">
     <div class="mc-header">
       <div class="mc-header-brand">
-        <span class="mc-brand-icon">🎴</span>
+        <div class="mc-ps2-logo-pill">
+          <span class="mc-brand-icon">🎴</span>
+          <span class="mc-led-indicator"></span>
+        </div>
         <div class="mc-brand-text">
-          <h3 class="mc-brand-title">MEMORY CARD (8MB)</h3>
-          <p class="mc-brand-sub" id="mc-user-sub">Saves &amp; Momentos Salvos</p>
+          <h3 class="mc-brand-title">PS2 MEMORY CARD <span>(8MB)</span></h3>
+          <p class="mc-brand-sub" id="mc-user-sub">Saves &amp; Momentos Gravados</p>
         </div>
       </div>
       <button class="mc-close-btn" id="mc-close" type="button" aria-label="Fechar Memory Card">✕</button>
@@ -192,6 +195,9 @@
     <div class="mc-slot-bar">
       <div class="mc-slot-left">
         <span class="mc-slot-tag">SLOT 1</span>
+        <div class="mc-storage-meter">
+          <div class="mc-storage-fill" id="mc-storage-fill" style="width: 12%;"></div>
+        </div>
         <span class="mc-slot-status" id="mc-slot-count">Calculando saves...</span>
       </div>
       <button class="mc-clear-all-btn" id="mc-clear-all" type="button" title="Excluir todos os saves">🗑️ Limpar Todos</button>
@@ -230,6 +236,7 @@
   function renderMemoryCardGrid() {
     const grid = document.getElementById('mc-grid');
     const slotCountEl = document.getElementById('mc-slot-count');
+    const storageFillEl = document.getElementById('mc-storage-fill');
     const userSubEl = document.getElementById('mc-user-sub');
     if (!grid) return;
 
@@ -247,7 +254,11 @@
     const count = saveKeys.length;
 
     if (slotCountEl) {
-      slotCountEl.textContent = `${count} ${count === 1 ? 'Save Usado' : 'Saves Usados'} • ${Math.max(0, 8 - count)} Slots Livres`;
+      slotCountEl.textContent = `${count} / 8 Blocos Usados • ${Math.max(0, 8 - count)} Livres`;
+    }
+    if (storageFillEl) {
+      const pct = Math.min(100, Math.max(12, (count / 8) * 100));
+      storageFillEl.style.width = pct + '%';
     }
 
     if (count === 0) {
@@ -257,11 +268,12 @@
           <h4>Nenhum Save Encontrado</h4>
           <p>Você ainda não tem jogos salvos no seu Memory Card.</p>
           <div class="mc-empty-guide">
-            <strong>Como Salvar o Progresso:</strong>
+            <strong>Como Salvar o Momento do Jogo:</strong>
             <ol>
               <li>Abra qualquer jogo clássico (como <b>GTA San Andreas 2D</b>, <b>Crash Bandicoot</b>, <b>Crazy Taxi</b> ou <b>Basket Random</b>).</li>
-              <li>Clique no botão <b>💾 Salvar</b> na barra superior ou aperte <b>F5</b> no teclado a qualquer momento.</li>
-              <li>Volte aqui no Memory Card e clique em <b>▶ Continuar</b> para voltar exatamente de onde parou!</li>
+              <li>Aperte o botão <b>💾 Salvar</b> na barra superior ou a tecla <b>F5</b> a qualquer momento.</li>
+              <li>Veja a <b>bolinha girando salvando</b> no canto da tela com som clássico!</li>
+              <li>Volte aqui no Memory Card e clique em <b>▶ Continuar Jogando</b> para voltar na hora!</li>
             </ol>
           </div>
         </div>
@@ -274,29 +286,40 @@
     const rootPath = isInGames ? '../../' : './';
 
     grid.innerHTML = sortedEntries.map(entry => {
-      let cover = entry.cover || `${rootPath}assets/brand/frivdigital-logo.png`;
-      if (isInGames && !cover.startsWith('http') && !cover.startsWith('../') && !cover.startsWith('/')) {
-        cover = '../../' + cover.replace(/^\.\//, '');
-      } else if (!isInGames && cover.startsWith('../../')) {
-        cover = cover.replace(/^\.\.\/\.\.\//, './');
+      let imageSrc = entry.screenshot;
+      const isScreenshot = Boolean(imageSrc);
+
+      if (!imageSrc) {
+        let coverRel = entry.cover;
+        try {
+          if (window.PlaynovaCatalogIndex && Array.isArray(window.PlaynovaCatalogIndex.games)) {
+            const item = window.PlaynovaCatalogIndex.games.find(g => g.id === entry.gameId);
+            if (item && item.cover) coverRel = item.cover;
+          }
+        } catch(e) {}
+        if (!coverRel) coverRel = 'assets/brand/frivdigital-logo.png';
+        imageSrc = coverRel.startsWith('http') || coverRel.startsWith('data:') 
+          ? coverRel 
+          : `${rootPath}${coverRel.replace(/^(\.\/|\.\.\/\.\.\/)/, '')}`;
       }
+
       const dateStr = entry.dateStr || 'Salvo recentemente';
       const summary = entry.summary || 'Progresso do jogo salvo';
       const gameUrl = isInGames ? `../${entry.gameId}/index.html?load_save=true` : `games/${entry.gameId}/index.html?load_save=true`;
 
       return `
         <div class="mc-card" data-game-id="${escHtml(entry.gameId)}">
-          <div class="mc-card-media">
-            <img src="${escHtml(cover)}" alt="${escHtml(entry.gameTitle)}" class="mc-card-img" onerror="this.src='${rootPath}assets/brand/frivdigital-logo.png'">
-            <span class="mc-card-badge">SLOT PS2</span>
+          <div class="mc-card-media ${isScreenshot ? 'has-shot' : ''}">
+            <img src="${escHtml(imageSrc)}" alt="${escHtml(entry.gameTitle)}" class="mc-card-img" onerror="this.onerror=null;this.parentElement.classList.add('no-img');this.style.display='none';">
+            <span class="mc-card-badge">${isScreenshot ? '📸 FOTO DO JOGO' : '🎴 SLOT SALVO'}</span>
+            <span class="mc-card-time-pill">🕒 ${escHtml(dateStr)}</span>
           </div>
           <div class="mc-card-details">
             <h4 class="mc-card-game-title">${escHtml(entry.gameTitle)}</h4>
-            <div class="mc-card-date">🕒 ${escHtml(dateStr)}</div>
             <div class="mc-card-summary" title="${escHtml(summary)}">📍 ${escHtml(summary)}</div>
           </div>
           <div class="mc-card-actions">
-            <a href="${escHtml(gameUrl)}" class="mc-action-play">▶ Continuar</a>
+            <a href="${escHtml(gameUrl)}" class="mc-action-play">▶ Continuar Jogando</a>
             <button type="button" class="mc-action-del" data-delete-id="${escHtml(entry.gameId)}" title="Excluir este save">🗑️</button>
           </div>
         </div>

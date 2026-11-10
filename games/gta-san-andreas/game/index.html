@@ -1453,7 +1453,9 @@
         }
       };
       const summary = `Grove Street • Vida: ${player.health}% • $${player.money} • ${WEAPONS[currentWeaponIdx].name} • ⭐ ${player.wanted}`;
-      window.parent.postMessage({ type: 'FRIV_SAVE_DATA', data: snap, summary }, '*');
+      let screenshot = null;
+      try { screenshot = canvas.toDataURL('image/jpeg', 0.65); } catch(err) {}
+      window.parent.postMessage({ type: 'FRIV_SAVE_DATA', data: snap, summary, screenshot }, '*');
     } else if (e.data.type === 'FRIV_LOAD_DATA') {
       const snap = e.data.data;
       if (snap && snap.player) {
@@ -1493,6 +1495,7 @@
   }, 1000);
 
   gameLoop();
+  window.parent.postMessage({ type: 'FRIV_GAME_READY' }, '*');
 })();
 </script>
 </body>
