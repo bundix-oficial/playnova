@@ -17463,6 +17463,35 @@ if (Module['noInitialRun']) {
 
 Module["noExitRuntime"] = true;
 
+
+// FRIV DIGITAL: observe only the exact current-match PlayerPrefs entry.
+// The existing Unity build remains otherwise unchanged; FS is not exported.
+(function () {
+  var key = 'IdNetApi.CurrentScore55961e5ee694aa0ae90003e8';
+  function readScore(bytes) {
+    if (bytes.length < 8 || String.fromCharCode.apply(null, bytes.subarray(0,8)) !== 'UnityPrf') return null;
+    for (var i=9;i+key.length+5<=bytes.length;i++) {
+      if (bytes[i-1] !== key.length || bytes[i+key.length] !== 254) continue;
+      var match=true;
+      for(var j=0;j<key.length;j++)if(bytes[i+j]!==key.charCodeAt(j)){match=false;break;}
+      if(match)return new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength).getInt32(i+key.length+1,true);
+    }
+    return null;
+  }
+  var originalClose=FS.close;
+  FS.close=function(stream){
+    var path=stream.path,writing=(stream.flags&3)!==0;
+    var result=originalClose.apply(FS,arguments);
+    if(writing && /^\/idbfs\/[^/]+\/PlayerPrefs$/.test(path) && Module.calledRun){
+      try {
+        var score=readScore(FS.readFile(path));
+        if(Number.isInteger(score) && typeof Module.playnovaOnPrefsWrite==='function')Module.playnovaOnPrefsWrite(score);
+      } catch(error) {}
+    }
+    return result;
+  };
+})();
+
 run();
 
 // {{POST_RUN_ADDITIONS}}

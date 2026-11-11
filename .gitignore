@@ -1,4 +1,6 @@
 # Pastas de cache e ferramentas internas
+__pycache__/
+*.pyc
 .browser-check/
 .browser-review/
 .browser-*

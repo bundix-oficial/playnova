@@ -52,7 +52,7 @@
     const close = make('button', { type: 'button', class: 'cookie-close', 'aria-label': 'Fechar configurações' }, '×');
     close.onclick = () => dialog.close();
     dialog.addEventListener('close', () => { if (opener?.isConnected) opener.focus(); });
-    dialog.append(close, make('h2', { id: 'cookie-settings-title' }, 'Configurar cookies'), make('p', {}, 'O portal usa esta preferência e guarda favoritos, listas e histórico neste navegador. O portal não instala analytics ou publicidade. Conteúdos externos podem ter práticas próprias.'));
+    dialog.append(close, make('h2', { id: 'cookie-settings-title' }, 'Configurar cookies'), make('p', {}, 'O portal guarda esta preferência, favoritos, listas e histórico neste navegador. Há anúncios de terceiros para monetização. Esta configuração controla somente o aviso do portal; não controla os cookies dos anunciantes. Contas online usam um cookie de sessão.'));
     const row = make('label', { class: 'cookie-option' });
     row.append(make('input', { type: 'checkbox', checked: 'checked', disabled: 'disabled' }), make('span', {}, 'Essencial — lembrar esta preferência'));
     const saveButton = make('button', { type: 'button', class: 'cookie-button primary' }, 'Salvar preferência');
@@ -68,7 +68,7 @@
     const banner = make('section', { id: 'cookie-banner', class: 'cookie-banner', role: 'region', 'aria-labelledby': 'cookie-title' });
     const copy = make('div', { class: 'cookie-copy' });
     const text = make('p');
-    text.append(document.createTextNode('Um cookie lembra sua escolha. Seus favoritos ficam neste navegador. '), make('a', { href: new URL('privacy.html', root).href }, 'Privacidade'));
+    text.append(document.createTextNode('Usamos armazenamento local, sessão de conta e anúncios de terceiros. Este botão registra a leitura do aviso. '), make('a', { href: new URL('privacy.html', root).href }, 'Privacidade'));
     copy.append(make('h2', { id: 'cookie-title' }, 'Cookies e privacidade'), text);
     const actions = make('div', { class: 'cookie-actions' });
     const configure = make('button', { type: 'button', class: 'cookie-button secondary' }, 'Configurar'); configure.onclick = openSettings;

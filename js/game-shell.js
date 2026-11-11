@@ -21,7 +21,7 @@
   /* ── Block external navigation from iframes (postMessage) ── */
   window.addEventListener('message', (e) => {
     if (!e.data) return;
-    const raw = typeof e.data === 'string' ? e.data : JSON.stringify(e.data);
+    const raw = typeof e.data === 'string' ? e.data.slice(0,256) : String(e.data.type || e.data.action || '').slice(0,256);
     if (/navigate|redirect|location\.href/i.test(raw)) {
       e.stopImmediatePropagation();
     }
@@ -51,6 +51,8 @@
   /* ── Inject anti-ad payload into same-origin iframes ── */
   const ANTI_AD_SCRIPT = `
 (function() {
+  if (window.PlaynovaGameShellGuard) return;
+  window.PlaynovaGameShellGuard = true;
   // Block popups
   window.open = function() { return null; };
   // Block top navigation
@@ -61,11 +63,16 @@
   window.PokiSDK = {
     init: () => Promise.resolve(),
     gameLoadingStart: () => {},
+    gameLoadingStarted: () => {},
+    gameLoadingProgress: () => {},
     gameLoadingFinished: () => {},
+    gameInteractive: () => {},
+    setDebug: () => {},
+    muteAd: () => {},
     gameplayStart: () => {},
     gameplayStop: () => {},
     commercialBreak: (fn) => { if(typeof fn === 'function') fn(); return Promise.resolve(); },
-    rewardedBreak: (fn) => { if(typeof fn === 'function') fn(true); return Promise.resolve(true); },
+    rewardedBreak: (fn) => { if(typeof fn === 'function') fn(false); return Promise.resolve(false); },
     happyTime: () => {},
     shareableURL: () => Promise.resolve(location.href),
     getURLParam: () => null,

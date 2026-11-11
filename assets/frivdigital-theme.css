@@ -2,7 +2,7 @@
    FRIV DIGITAL — THEME OVERRIDE V3 (Clean Divisions & Vibrant Arcade Pop)
    ========================================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700;800&family=Rubik:wght@500;700;900&display=swap');
+/* System fonts avoid a render-blocking dependency on Google Fonts. */
 
 :root {
   --friv-purple-dark: #0f021c;

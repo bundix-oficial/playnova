@@ -1,10 +1,14 @@
 /**
  * FRIV DIGITAL — Auth System (js/auth.js)
  * Login, Register, Guest mode, Avatar upload
- * Uses localStorage as the "database" (no backend required yet)
+ * Shared accounts use the same-origin Pages API. Local accounts stay explicitly local.
  */
 (function () {
   'use strict';
+  const rules = window.FrivAccountRules;
+  const api = window.FrivAccountAPI;
+  const makeId = () => crypto.randomUUID();
+  let temporaryUsers = [], temporarySession = null, storageFailed = false;
 
   /* =====================================================
      1. UTILITIES
@@ -16,25 +20,45 @@
   }
 
   function getUsers() {
-    try { return JSON.parse(localStorage.getItem('friv_users') || '[]'); } catch { return []; }
+    if (storageFailed) return temporaryUsers;
+    try {
+      const value = JSON.parse(localStorage.getItem('friv_users') || '[]');
+      if (!Array.isArray(value)) return [];
+      const users = value.filter(u => u && typeof u.nick === 'string' && typeof u.passwordHash === 'string');
+      let changed = false;
+      for (const user of users) if (!user.id) { user.id = makeId(); changed = true; }
+      if (changed) saveUsers(users);
+      return users;
+    } catch { return []; }
   }
   function saveUsers(users) {
-    localStorage.setItem('friv_users', JSON.stringify(users));
+    temporaryUsers = users;
+    try { localStorage.setItem('friv_users', JSON.stringify(users)); } catch { storageFailed = true; }
   }
 
   function getSession() {
+    if (storageFailed) return temporarySession;
     try {
       const s = JSON.parse(localStorage.getItem('friv_session') || 'null');
       if (!s) return null;
       if (s.expiry && Date.now() > s.expiry) { localStorage.removeItem('friv_session'); return null; }
+      if (typeof s.nick !== 'string') return null;
+      if (!s.id) {
+        s.id = (!s.isGuest && getUsers().find(u => u.nick.toLowerCase() === s.nick.toLowerCase())?.id) || makeId();
+        s.scope = 'local';
+        saveSession(s);
+      }
+      s.avatarData = rules.avatar(s.avatarData);
       return s;
     } catch { return null; }
   }
   function saveSession(session) {
-    localStorage.setItem('friv_session', JSON.stringify(session));
+    temporarySession = session;
+    try { localStorage.setItem('friv_session', JSON.stringify(session)); } catch { storageFailed = true; }
   }
   function clearSession() {
-    localStorage.removeItem('friv_session');
+    temporarySession = null;
+    try { localStorage.removeItem('friv_session'); } catch { storageFailed = true; }
   }
 
   /* =====================================================
@@ -78,6 +102,8 @@
   }
 
   function renderAvatarImg(el, avatarData, nick, extraClass) {
+    avatarData = rules.avatar(avatarData);
+    nick = escHtml(nick);
     if (avatarData) {
       el.style.background = 'transparent';
       el.innerHTML = `<img src="${avatarData}" alt="${nick}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" class="${extraClass || ''}">`;
@@ -102,6 +128,7 @@
       <button class="auth-tab-btn active" data-tab="login">Entrar</button>
       <button class="auth-tab-btn" data-tab="register">Criar Conta</button>
     </div>
+    <p id="auth-mode-note" role="status" style="margin:8px 0;font-size:13px">Verificando contas online…</p>
 
     <!-- Login Form -->
     <div class="auth-form active" id="auth-form-login">
@@ -455,7 +482,12 @@
     }
 
     if (sairBtn) {
-      sairBtn.addEventListener('click', function () {
+      sairBtn.addEventListener('click', async function () {
+        const previous = getSession();
+        if (previous?.scope === 'global') {
+          try { await api.request('auth/logout', {}); }
+          catch { showErr('login-nick-err', 'Não foi possível encerrar a sessão online. Tente novamente.'); openModal(); return; }
+        }
         clearSession();
         buildHeaderWidget();
         window.dispatchEvent(new CustomEvent('friv:logout'));
@@ -463,26 +495,31 @@
     }
 
     if (fileInput) {
-      fileInput.addEventListener('change', function () {
+      fileInput.onchange = function () {
         const file = fileInput.files[0];
         if (!file) return;
-        resizeImage(file, 100, function (dataUrl) {
+        resizeImage(file, 100, async function (dataUrl) {
           // Update session
           const session = getSession();
           if (!session) return;
+          if (session.scope === 'global') {
+            try { await api.request('auth/avatar', { avatarData: dataUrl }); }
+            catch (error) { showErr('login-nick-err', error.message); openModal(); return; }
+            if (getSession()?.id !== session.id) return;
+          }
           session.avatarData = dataUrl;
           saveSession(session);
 
           // Update in users array too
           const users = getUsers();
-          const idx = users.findIndex(u => u.nick.toLowerCase() === session.nick.toLowerCase());
+          const idx = users.findIndex(u => session.scope !== 'global' && u.id === session.id);
           if (idx !== -1) { users[idx].avatarData = dataUrl; saveUsers(users); }
 
           buildHeaderWidget();
           window.dispatchEvent(new CustomEvent('friv:avatarUpdated', { detail: { avatarData: dataUrl } }));
         });
         fileInput.value = '';
-      });
+      };
     }
   }
 
@@ -553,6 +590,13 @@
     if (!nick) { showErr('login-nick-err', 'Informe o nick.'); valid = false; }
     if (!pass) { showErr('login-pass-err', 'Informe a senha.'); valid = false; }
     if (!valid) return;
+    if ((await api.status()).online) {
+      try {
+        const data = await api.request('auth/login', { nick, password: pass });
+        finishOnlineLogin(data.user);
+      } catch (error) { showErr('login-nick-err', error.message); }
+      return;
+    }
 
     const users = getUsers();
     const user = users.find(u => u.nick.toLowerCase() === nick.toLowerCase());
@@ -562,6 +606,8 @@
     if (hash !== user.passwordHash) { showErr('login-pass-err', 'Senha incorreta.'); return; }
 
     const session = {
+      id: user.id,
+      scope: 'local',
       nick: user.nick,
       avatarData: user.avatarData || null,
       token: Math.random().toString(36).slice(2),
@@ -581,11 +627,20 @@
     const pass2 = document.getElementById('reg-pass2').value;
 
     let valid = true;
+    const checked = rules.nickname(nick);
+    if (!checked.ok) { showErr('reg-nick-err', checked.message); valid = false; }
     if (!nick || nick.length < 2) { showErr('reg-nick-err', 'Nick deve ter ao menos 2 caracteres.'); valid = false; }
     if (nick.length > 20) { showErr('reg-nick-err', 'Nick deve ter no máximo 20 caracteres.'); valid = false; }
-    if (!pass || pass.length < 4) { showErr('reg-pass-err', 'Senha deve ter ao menos 4 caracteres.'); valid = false; }
+    if (!pass || pass.length < 8) { showErr('reg-pass-err', 'Senha deve ter ao menos 8 caracteres.'); valid = false; }
     if (pass !== pass2) { showErr('reg-pass2-err', 'As senhas não coincidem.'); valid = false; }
     if (!valid) return;
+    if ((await api.status()).online) {
+      try {
+        const data = await api.request('auth/register', { nick: checked.nick, password: pass });
+        finishOnlineLogin(data.user);
+      } catch (error) { showErr('reg-nick-err', error.message); }
+      return;
+    }
 
     const users = getUsers();
     if (users.find(u => u.nick.toLowerCase() === nick.toLowerCase())) {
@@ -594,11 +649,13 @@
     }
 
     const passwordHash = await sha256(pass);
-    const newUser = { nick, passwordHash, avatarData: null, createdAt: Date.now() };
+    const newUser = { id: makeId(), nick: checked.nick, passwordHash, avatarData: null, createdAt: Date.now() };
     users.push(newUser);
     saveUsers(users);
 
     const session = {
+      id: newUser.id,
+      scope: 'local',
       nick,
       avatarData: null,
       token: Math.random().toString(36).slice(2),
@@ -614,6 +671,8 @@
   function handleGuest() {
     const nick = 'Visitante' + Math.floor(1000 + Math.random() * 9000);
     const session = {
+      id: makeId(),
+      scope: 'local',
       nick,
       avatarData: null,
       token: null,
@@ -630,10 +689,27 @@
      6. INIT
      ===================================================== */
 
-  function init() {
+  function finishOnlineLogin(user) {
+    const session = { ...user, scope: 'global', isGuest: false, expiry: Date.now() + 30 * 86400000 };
+    saveSession(session); closeModal(); buildHeaderWidget();
+    window.dispatchEvent(new CustomEvent('friv:login', { detail: session }));
+  }
+
+  async function init() {
     buildModal();
     buildMemoryCardModal();
     buildHeaderWidget();
+    const status = await api.status();
+    const note = document.getElementById('auth-mode-note');
+    if (note) note.textContent = status.online ? 'Conta online: use o mesmo login em qualquer computador. Contas antigas deste navegador precisam de cadastro online.' : 'Modo local: contas e pontos ficam somente neste navegador. O placar online aguarda ativação.';
+    if (status.online) {
+      try {
+        const data = await api.request('auth/me');
+        finishOnlineLogin(data.user);
+      } catch (error) {
+        if (getSession()?.scope === 'global' && error.status === 401) { clearSession(); buildHeaderWidget(); window.dispatchEvent(new CustomEvent('friv:logout')); }
+      }
+    }
   }
 
   if (document.readyState === 'loading') {
@@ -658,6 +734,8 @@
       let s = getSession();
       if (!s) {
         s = {
+          id: makeId(),
+          scope: 'local',
           nick: 'Visitante' + Math.floor(100 + Math.random() * 900),
           avatarData: null,
           token: null,

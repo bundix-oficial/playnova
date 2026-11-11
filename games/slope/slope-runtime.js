@@ -1,154 +1,57 @@
-// Register the existing local Unity framework without executing a blob: script.
-// The site's CSP intentionally does not permit blob: in script-src.
-(function () {
+/* Exact current-match capture. No polling, old-record imports or telemetry parsing. */
+(() => {
   'use strict';
-
-  var container = document.getElementById('gameContainer');
-  var error = document.getElementById('slope-error');
-
-  function fail(message) {
-    container.dataset.ready = 'false';
-    error.textContent = message;
-    error.hidden = false;
-  }
-
-  /* =========================================================
-     SLOPE AUTOMATIC SCORE DETECTOR & DISPATCHER
-     ========================================================= */
-  var bestReportedScore = 0;
-
-  var MAX_SLOPE_SCORE = 3000;
-
-  function notifyParentScore(score) {
-    score = parseInt(score, 10);
-    if (!score || isNaN(score) || score <= 0 || score > MAX_SLOPE_SCORE) return;
-    if (score <= bestReportedScore) return; // avoid duplicate notifications
-    bestReportedScore = score;
-    try {
-      window.parent.postMessage({ type: 'SLOPE_SCORE', score: score }, '*');
-      console.log('[FRIV DIGITAL] Score do Slope capturado automaticamente:', score);
-    } catch (e) {}
-  }
-
-  // 1. Intercepta requisições HTTP do Unity (ID.net / Playtomic / APIs)
-  try {
-    var origXhrOpen = XMLHttpRequest.prototype.open;
-    var origXhrSend = XMLHttpRequest.prototype.send;
-    XMLHttpRequest.prototype.open = function (method, url) {
-      this._slopeUrl = url;
-      this._slopeMethod = method;
-      return origXhrOpen.apply(this, arguments);
-    };
-    XMLHttpRequest.prototype.send = function (body) {
-      try {
-        if (body) {
-          var str = '';
-          if (typeof body === 'string') {
-            str = body;
-          } else if (body instanceof ArrayBuffer || (body && body.buffer instanceof ArrayBuffer)) {
-            var u8 = body instanceof Uint8Array ? body : new Uint8Array(body.buffer || body);
-            str = new TextDecoder('utf-8').decode(u8);
-          }
-          if (str) {
-            var m = str.match(/["']?(?:score|points|value|highscore)["']?\s*[:=]\s*["']?(\d+)["']?/i);
-            if (m) notifyParentScore(m[1]);
-          }
-        }
-        if (this._slopeUrl) {
-          var urlMatch = this._slopeUrl.match(/[?&](?:score|points|value|highscore)=(\d+)/i);
-          if (urlMatch) notifyParentScore(urlMatch[1]);
-        }
-      } catch (err) {}
-      return origXhrSend.apply(this, arguments);
-    };
-  } catch (e) {}
-
-  // 2. Intercepta PlayerPrefs salvos no Virtual File System (FS / IndexedDB)
-  var slopeFS = null;
-  function scanFSPrefs(fs) {
-    if (!fs) return;
-    try {
-      function walk(dir) {
-        var items = fs.readdir(dir);
-        for (var i = 0; i < items.length; i++) {
-          var item = items[i];
-          if (item === '.' || item === '..') continue;
-          var full = (dir === '/' ? '' : dir) + '/' + item;
-          try {
-            var stat = fs.stat(full);
-            if (fs.isDir(stat.mode)) {
-              walk(full);
-            } else {
-              var bytes = fs.readFile(full);
-              if (bytes && bytes.length > 0) {
-                var str = new TextDecoder('utf-8').decode(bytes);
-                // Procura tags de PlayerPrefs oficiais do Unity: <pref name="HighScore" type="int">123</pref>
-                var m = str.match(/name="[^"]*(?:high|score|best)[^"]*"[^>]*>(\d+)</i);
-                if (m) {
-                  var s = parseInt(m[1], 10);
-                  if (s > 0 && s <= MAX_SLOPE_SCORE) notifyParentScore(s);
-                }
-              }
-            }
-          } catch (err) {}
-        }
-      }
-      walk('/idbfs');
-    } catch (e) {}
-  }
-
-  // 3. Stubs de ID.net / Ads para capturar no Game Over
-  window.IDNet = {
-    init: function () {},
-    submit_score: function (d) {
-      var s = typeof d === 'object' ? (d.score || d.points || d.value) : d;
-      notifyParentScore(s);
-    },
-    sendScore: function (s) { notifyParentScore(s); }
-  };
-  window.ShowAd = function () { if (slopeFS) scanFSPrefs(slopeFS); };
-  window.LoadAd = function () { if (slopeFS) scanFSPrefs(slopeFS); };
-
-  // Varredura periódica a cada 2.5s para capturar o score assim que a partida terminar
-  setInterval(function () {
-    if (slopeFS) scanFSPrefs(slopeFS);
-  }, 2500);
-
-  if (!window.UnityLoader || typeof UnityLoader.playnovaSlopeFramework !== 'function') {
-    fail('Não foi possível carregar os arquivos do Slope. Atualize a página para tentar novamente.');
-    return;
-  }
-
-  UnityLoader.processWasmFrameworkJob = function (module, job) {
-    UnityLoader.playnovaSlopeFramework(module);
-    job.complete();
-
-    // Vincula o Virtual File System (FS)
-    try {
-      if (module.FS) {
-        slopeFS = module.FS;
-        if (module.FS.syncfs) {
-          var origSyncfs = module.FS.syncfs;
-          module.FS.syncfs = function (populate, callback) {
-            if (!populate) {
-              // Salvando dados da partida para o IndexedDB
-              setTimeout(function () {
-                scanFSPrefs(module.FS);
-              }, 60);
-            }
-            return origSyncfs.apply(this, arguments);
-          };
-        }
-      }
-    } catch (e) {}
-  };
-
-  window.gameInstance = UnityLoader.instantiate('gameContainer', 'build/slope.json', {
-    onProgress: function (instance, progress) {
-      if (progress === 1) container.dataset.ready = 'true';
-    },
-    onError: function (message) {
-      fail('O Slope não conseguiu iniciar: ' + message);
-    }
+  const container=document.getElementById('gameContainer'), error=document.getElementById('slope-error');
+  let channel='',active=false,candidate=null,ready=false,lastProgress=performance.now();
+  const send=(type,data={})=>{if(channel)parent.postMessage({type,channel,...data},location.origin);};
+  function fail(message) { container.dataset.ready='false';error.textContent=message;error.hidden=false; }
+  window.addEventListener('message',event=>{
+    if(event.source!==parent || event.origin!==location.origin || event.data?.type!=='FRIV_SLOPE_BIND' || typeof event.data.channel!=='string')return;
+    if(channel===event.data.channel)return;
+    channel=event.data.channel;active=false;candidate=null;
   });
+  function begin() { if(!active&&ready&&channel){active=true;candidate=null;send('FRIV_SLOPE_START');} }
+  window.addEventListener('pointerdown',begin,{capture:true});
+  window.addEventListener('keydown',begin,{capture:true});
+  const originalOpen=XMLHttpRequest.prototype.open,originalSend=XMLHttpRequest.prototype.send;
+  const requests=new WeakMap();
+  XMLHttpRequest.prototype.open=function(method,url){
+    try{requests.set(this,{method:String(method).toUpperCase(),url:new URL(url,location.href)});}catch{}
+    return originalOpen.apply(this,arguments);
+  };
+  XMLHttpRequest.prototype.send=function(body){
+    const request=requests.get(this);
+    if(request?.method==='POST'&&request.url.origin==='https://playtomic.id.net'&&request.url.pathname==='/v1'){
+      try{
+        const value=JSON.parse(typeof body==='string'?body:new TextDecoder().decode(body));
+        if(value.table==='SLOPE LEADERBOARD'&&value.appid==='55961e5ee694aa0ae90003e8'&&value.section==='leaderboards'&&value.action==='list'){
+          if(active&&candidate&&performance.now()-candidate.at<12000&&candidate.score>0&&candidate.score<=3000){
+            send('FRIV_SLOPE_FINISH',{score:candidate.score});active=false;candidate=null;
+          }
+        }
+      }catch{}
+    }
+    // Network restrictions continue to block the game's external telemetry.
+    return originalSend.apply(this,arguments);
+  };
+  if(!window.UnityLoader||typeof UnityLoader.playnovaSlopeFramework!=='function'){fail('Arquivos do Slope indisponíveis. Atualize a página.');return;}
+  const canvas=document.createElement('canvas');
+  if(!canvas.getContext('webgl2')&&!canvas.getContext('webgl')){fail('Este navegador não disponibiliza WebGL. Verifique o suporte gráfico do aparelho com o responsável pelo computador.');return;}
+  UnityLoader.processWasmFrameworkJob=function(module,job){
+    module.playnovaOnPrefsWrite=function(score){if(active&&Number.isSafeInteger(score))candidate={score,at:performance.now()};};
+    UnityLoader.playnovaSlopeFramework(module);job.complete();
+  };
+  const options={
+    onProgress(instance,progress){
+      lastProgress=performance.now();
+      if(progress===1){ready=true;container.dataset.ready='true';error.hidden=true;}
+    },
+    onError(message){fail('O Slope não conseguiu iniciar: '+message);}
+  };
+  window.gameInstance=UnityLoader.instantiate('gameContainer','build/slope.json',options);
+  parent.postMessage({type:'FRIV_SLOPE_READY'},location.origin);
+  const watchdog=setInterval(()=>{
+    if(ready){clearInterval(watchdog);return;}
+    if(performance.now()-lastProgress>90000){fail('O motor do Slope parou de responder. Pode faltar memória ou suporte gráfico. Atualize a página para tentar novamente.');clearInterval(watchdog);}
+  },10000);
 })();

@@ -10,5 +10,8 @@ window.RufflePlayer.config = {
   backgroundExecutionMode: 'none',
   showSwfDownload: false,
   contextMenu: 'on',
-  quality: 'high'
+  quality: (() => {
+    try { return window.parent.FrivPerformance?.light ? 'low' : 'high'; }
+    catch { return 'high'; }
+  })()
 };

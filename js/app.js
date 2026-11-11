@@ -2192,46 +2192,6 @@ const GAMES_DATA = [
     "recent": true,
     "description": "Fangame de Scald: use comandos para vigiar câmeras, explorar e se esconder.",
     "cover": "assets/covers/reviewed/fnaf-security-console.jpg"
-  },
-  {
-    "id": "gta-san-andreas",
-    "title": "GTA: San Andreas (2D Demake)",
-    "category": "acao",
-    "platform": "console",
-    "recent": true,
-    "popular": true,
-    "description": "Demake 2D em Los Santos: ande pela cidade, dirija carros, fuja da policia e explore o mapa.",
-    "cover": "assets/covers/gta-san-andreas.jpg"
-  },
-  {
-    "id": "crash-bandicoot",
-    "title": "Crash Bandicoot",
-    "category": "classico",
-    "platform": "console",
-    "recent": true,
-    "popular": true,
-    "description": "O clássico do PlayStation: corra pela ilha, gire contra inimigos, destrua caixas e colete Wumpas.",
-    "cover": "assets/covers/crash-bandicoot.jpg"
-  },
-  {
-    "id": "crazy-taxi",
-    "title": "Crazy Taxi",
-    "category": "arcade",
-    "platform": "arcade",
-    "recent": true,
-    "popular": true,
-    "description": "O clássico de Dreamcast e fliperama: pegue passageiros, faça manobras insanas e ganhe dinheiro rápido.",
-    "cover": "assets/covers/crazy-taxi.jpg"
-  },
-  {
-    "id": "basket-random",
-    "title": "Basket Random",
-    "category": "classico",
-    "platform": "html5",
-    "recent": true,
-    "popular": true,
-    "description": "Basquete ragdoll com física maluca! Pule e balance os braços para fazer cestas em quadras aleatórias.",
-    "cover": "assets/covers/basket-random.jpg"
   }
 ];
 const labels={todos:'Todos os jogos',recentes:'Novos jogos',populares:'Em alta',favoritos:'Meus favoritos',arcade:'Arcade',puzzle:'Puzzle',classico:'Clássicos',acao:'Ação',retro:'Retrô',leves:'Jogos leves',mobile:'Mobile → PC',console:'Console Port',flash:'Estilo Flash',terror:'Terror',fnaf:'FNAF — jogos de fãs'};
@@ -2266,6 +2226,8 @@ const ROOT_URL = new URL('../', document.currentScript.src);
 let currentCat='todos', searchQ='', currentControl='', currentCollection='', currentSort='recommended';
 let favorites=library.favorites(), recentPlayed=library.recents();
 const normalize=text=>String(text).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const searchIndex=new Map(GAMES_DATA.map(g=>[g.id,normalize(`${g.title} ${g.description} ${labels[g.category]||''}`)]));
+const cardCache=new Map();
 const esc=value=>String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const feature=g=>(window.PlaynovaGameFeatures||window.FrivDigitalGameFeatures)?.[g.id]||{};
 const isAvailable=id=>(window.PlaynovaGameAvailability||window.FrivDigitalGameAvailability)?.[id]?.status==='available';
@@ -2274,10 +2236,11 @@ const gameRoute=id=>`games/${encodeURIComponent(id)}/index.html`;
 function recordRecent(id){if(isAvailable(id))library.record(id);}
 function filterGames(){
   const collection=library.collections().find(c=>c.id===currentCollection);
+  const query=normalize(searchQ.trim());
   const result=GAMES_DATA.filter(g=>{
     const category=currentCat==='todos'||(currentCat==='fnaf'?Boolean(g.fnaf):currentCat==='favoritos'?favorites.includes(g.id):currentCat==='recentes'?g.recent:currentCat==='populares'?g.popular:currentCat==='leves'?!HEAVY_GAMES.has(g.id):['mobile','console','flash'].includes(currentCat)?g.platform===currentCat:g.category===currentCat);
     const f=feature(g); const controls=!currentControl||(currentControl==='two'?(f.players||1)>=2:currentControl==='gamepad'?f.controls?.gamepad:currentControl==='touch'?f.controls?.touch:f.controls?.keyboard);
-    return category&&controls&&(!onlyAvailable||isAvailable(g.id))&&(!collection||collection.games.includes(g.id))&&normalize(`${g.title} ${g.description} ${labels[g.category]||''}`).includes(normalize(searchQ.trim()));
+    return category&&controls&&(!onlyAvailable||isAvailable(g.id))&&(!collection||collection.games.includes(g.id))&&searchIndex.get(g.id).includes(query);
   });
   if(currentSort==='name')result.sort((a,b)=>a.title.localeCompare(b.title,'pt-BR'));
   if(currentSort==='recent')result.sort((a,b)=>(recentPlayed.includes(a.id)?recentPlayed.indexOf(a.id):999)-(recentPlayed.includes(b.id)?recentPlayed.indexOf(b.id):999));
@@ -2307,7 +2270,7 @@ function syncCollectionOptions(){
 function controlPills(g){const f=feature(g);const pills=[];if((f.players||1)>=2)pills.push('2 jogadores');if(f.controls?.gamepad)pills.push('Controle');if(f.controls?.touch)pills.push('Toque');return pills.slice(0,2).map(v=>`<span class="control-pill">${v}</span>`).join('');}
 function renderAll(focusFavorite){
   favorites=library.favorites();recentPlayed=library.recents();syncCollectionOptions();
-  const grid=document.getElementById('games-grid'),games=filterGames();grid.replaceChildren();
+  const grid=document.getElementById('games-grid'),games=filterGames(),fragment=document.createDocumentFragment();
   const filtered=Boolean(searchQ.trim()||currentControl||currentCollection||currentCat!=='todos'||onlyAvailable);
   const collection=library.collections().find(c=>c.id===currentCollection);
   document.getElementById('grid-title').textContent=searchQ.trim()?'Resultado da busca':collection?.name||labels[currentCat]||'Todos os jogos';
@@ -2318,6 +2281,12 @@ function renderAll(focusFavorite){
   document.getElementById('filter-note').hidden=!currentControl;
   renderRecentPlayed();
   for(const g of games){
+    const cached=cardCache.get(g.id);
+    if(cached){
+      const fav=favorites.includes(g.id),button=cached.querySelector('.btn-favorite');
+      button.classList.toggle('active',fav);button.setAttribute('aria-pressed',String(fav));button.setAttribute('aria-label',`${fav?'Remover':'Adicionar'} ${g.title} ${fav?'dos':'aos'} favoritos`);
+      fragment.append(cached);continue;
+    }
     const card=document.createElement('article');card.dataset.gameId=g.id;
     card.className='game-card';const fav=favorites.includes(g.id);
     const badge='';
@@ -2333,12 +2302,13 @@ function renderAll(focusFavorite){
       card.querySelector('.game-thumb-link').append(status);
       const overlay=card.querySelector('.play-overlay');overlay.textContent=state?.status==='issues'?'Tentar jogar':'Ver status';
     }
-    bindCoverFallback(card.querySelector('img'),g.title);grid.append(card);
+    bindCoverFallback(card.querySelector('img'),g.title);cardCache.set(g.id,card);fragment.append(card);
   }
   if(!games.length){
     const empty=document.createElement('div');empty.className='empty-state';
-    empty.innerHTML='<h2>Nenhum jogo nesta seleção</h2><p>Experimente outra busca, escolha uma lista diferente ou limpe os filtros.</p><button type="button">Limpar filtros</button>';empty.querySelector('button').onclick=resetFilters;grid.append(empty);
+    empty.innerHTML='<h2>Nenhum jogo nesta seleção</h2><p>Experimente outra busca, escolha uma lista diferente ou limpe os filtros.</p><button type="button">Limpar filtros</button>';empty.querySelector('button').onclick=resetFilters;fragment.append(empty);
   }
+  grid.replaceChildren(fragment);
   if(typeof focusFavorite==='string')document.querySelector(`[data-id="${CSS.escape(focusFavorite)}"]`)?.focus();
 }
 function selectCategory(cat){currentCat=cat;document.querySelectorAll('[data-cat]').forEach(button=>{const active=button.dataset.cat===cat;button.classList.toggle('active',active);button.setAttribute('aria-pressed',active);});renderAll();}

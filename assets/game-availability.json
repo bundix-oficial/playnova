@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "total": 224,
-  "available": 221,
+  "total": 220,
+  "available": 217,
   "launchEnabled": 217,
   "games": {
     "pacman": {
@@ -1100,26 +1100,6 @@
       "quickCheck": "passed"
     },
     "fnaf-security-console": {
-      "status": "available",
-      "reason": "",
-      "quickCheck": "passed"
-    },
-    "gta-san-andreas": {
-      "status": "available",
-      "reason": "",
-      "quickCheck": "passed"
-    },
-    "crash-bandicoot": {
-      "status": "available",
-      "reason": "",
-      "quickCheck": "passed"
-    },
-    "crazy-taxi": {
-      "status": "available",
-      "reason": "",
-      "quickCheck": "passed"
-    },
-    "basket-random": {
       "status": "available",
       "reason": "",
       "quickCheck": "passed"

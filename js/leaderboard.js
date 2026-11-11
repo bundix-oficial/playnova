@@ -1,289 +1,76 @@
-/**
- * FRIV DIGITAL — Slope Olympic Leaderboard (js/leaderboard.js)
- * Weekly Olympic Podium [ 2º Prata ] [ 👑 1º Ouro ] [ 3º Bronze ]
- * Lower Table: Ranks 4 to 10 (#4, #5, #6, #7, #8, #9, #10) always visible!
- * Auto-captures match score on Game Over (for logged in AND guest players).
- * Zero fake users: truly real & clean weekly leaderboard!
- */
-(function () {
+/* Slope scores: exact game events, account-bound runs, explicit local/online scopes. */
+(() => {
   'use strict';
-
-  // Chave limpa e definitiva v4 (zera o score anterior automaticamente)
-  const SCORES_KEY = 'friv_slope_scores_v4';
-  const MAX_SCORE = 3000; // Limite realista do Slope 3D (evita offsets de memória ou bugs)
-  const TOP_N = 10;
-
-  // Lista de nicks testes antigos para banir e garantir que NUNCA apareçam
-  const BANNED_TEST_NICKS = [
-    'davi (criador)',
-    'samuel vip',
-    'slopemaster',
-    'cyberball',
-    'astro3d',
-    'pedro',
-    'ana'
-  ];
-
-  /* =====================================================
-     1. STORAGE & LIMPEZA DE LEGADOS
-     ===================================================== */
-
-  // Limpa imediatamente qualquer resquício de versões anteriores ou scores bugados
-  try {
-    localStorage.removeItem('friv_slope_scores');
-    localStorage.removeItem('friv_slope_scores_v1');
-    localStorage.removeItem('friv_slope_scores_v2');
-    localStorage.removeItem('friv_slope_scores_v3');
-  } catch (e) {}
-
-  function getWeekStart() {
-    const now = new Date();
-    const day = now.getDay(); // 0 = Domingo
-    const diff = (day === 0) ? 6 : day - 1; // Segunda-feira
-    const mon = new Date(now);
-    mon.setHours(0, 0, 0, 0);
-    mon.setDate(mon.getDate() - diff);
-    return mon.getTime();
-  }
-
-  function getAllScores() {
+  const rules = window.FrivAccountRules, api = window.FrivAccountAPI;
+  const key = 'friv_slope_scores_v5';
+  const frame = document.getElementById('game-frame');
+  const container = document.getElementById('slope-leaderboard');
+  if (!frame || !container) return;
+  let online = false, rows = [], run = null, channel = crypto.randomUUID(), boundId = null, hasBound = false;
+  let notice = '', filter = '', scope = 'local', refreshing = false;
+  let creatingGuest = false;
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const session = () => window.FrivAuth?.getSession();
+  function localScores() {
     try {
-      const stored = localStorage.getItem(SCORES_KEY);
-      if (!stored) return [];
-      let list = JSON.parse(stored);
-      if (!Array.isArray(list)) return [];
-
-      // Filtra estritamente: nicks proibidos, scores irreais (> 3000 ou 55961) e dados inválidos
-      return list.filter(item => {
-        if (!item || !item.nick || typeof item.score !== 'number') return false;
-        if (item.score <= 0 || item.score > MAX_SCORE || item.score === 55961) return false;
-        const clean = item.nick.toLowerCase().trim();
-        return !BANNED_TEST_NICKS.includes(clean);
-      });
-    } catch (e) {
-      return [];
+      const list = JSON.parse(localStorage.getItem(key) || '[]');
+      return Array.isArray(list) ? list.filter(s => s && typeof s.userId === 'string' && Number.isSafeInteger(s.score) && s.score > 0 && s.score <= rules.maxScore && rules.nickname(s.nick).ok) : [];
+    } catch { return []; }
+  }
+  function weekly() {
+    const best = new Map();
+    for (const s of localScores().filter(s => s.weekStart === rules.weekStart())) {
+      if (!best.has(s.userId) || s.score > best.get(s.userId).score) best.set(s.userId, s);
     }
+    return [...best.values()].sort((a,b) => b.score-a.score || a.timestamp-b.timestamp).slice(0,10);
   }
-
-  function saveAllScores(arr) {
-    try {
-      localStorage.setItem(SCORES_KEY, JSON.stringify(arr));
-    } catch (e) {}
+  function image(entry, size) {
+    const src = rules.avatar(entry.avatarData) || window.FrivAuth.generateLetterAvatar(entry.nick, size);
+    return `<img src="${esc(src)}" alt="" width="${size}" height="${size}">`;
   }
+  function render() {
+    const user = session(), scores = scope === 'global' ? rows : weekly();
+    const shown = filter ? scores.filter(s => s.nick.toLocaleLowerCase('pt-BR').includes(filter.toLocaleLowerCase('pt-BR'))) : scores;
+    const podium = [1,0,2].map(i => {
+      const entry = scores[i], place = ['first','second','third'][i];
+      const medal = ['🥇','🥈','🥉'][i];
+      const crown = (i === 0 && entry) ? '<div class="podium-crown">👑</div>' : '';
+      return `<div class="podium-item podium-${place}${entry?'':' empty'}">${crown}<div class="podium-medal">${medal}</div><div class="podium-avatar${entry?'':' empty-slot'}">${entry ? image(entry,60) : '?'}</div><div class="podium-nick${entry?'':' empty'}">${entry?esc(entry.nick):`${i+1}º Lugar Vago`}</div><div class="podium-score${entry?'':' empty'}">${entry?entry.score.toLocaleString('pt-BR')+' pts':'— pts'}</div><div class="podium-block"><span class="podium-rank-num">${i+1}</span></div></div>`;
+    }).join('');
 
-  function resetAllScores() {
-    try {
-      localStorage.removeItem(SCORES_KEY);
-      localStorage.removeItem('friv_slope_scores_v3');
-    } catch (e) {}
-    lastRegisteredScore = 0;
-    const container = document.getElementById('slope-leaderboard');
-    if (container) renderLeaderboard(container);
-    showBanner('🧹 Placar 100% zerado com sucesso! Todos os recordes foram limpos.');
-  }
-
-  function getWeeklyScores() {
-    const weekStart = getWeekStart();
-    const all = getAllScores();
-    // Somente scores da semana atual
-    const thisWeek = all.filter(s => s.weekStart === weekStart);
-
-    // Mantém o melhor score por nick
-    const best = {};
-    thisWeek.forEach(s => {
-      const key = s.nick.toLowerCase().trim();
-      if (!best[key] || s.score > best[key].score) {
-        best[key] = s;
+    let tableContent = '';
+    if (filter) {
+      tableContent = shown.length > 0 ? shown.map(s => {
+        const rank = scores.indexOf(s) + 1;
+        const isMe = s.userId === user?.id;
+        return `<div class="lb-row${isMe ? ' my-score' : ''}"><span class="lb-rank">#${rank}</span><div class="lb-avatar">${image(s,38)}</div><span class="lb-nick">${esc(s.nick)}${isMe ? ' <span style="font-size:11px;color:#ffdd00;font-weight:800;margin-left:4px;">(VOCÊ)</span>' : ''}</span><span class="lb-score">${s.score.toLocaleString('pt-BR')} pts</span></div>`;
+      }).join('') : '<p class="lb-empty-notice">Nenhum jogador encontrado para essa busca.</p>';
+    } else {
+      const tableRows = [];
+      for (let rank = 4; rank <= 10; rank++) {
+        const s = scores[rank - 1] || null;
+        if (s) {
+          const isMe = s.userId === user?.id;
+          tableRows.push(`<div class="lb-row${isMe ? ' my-score' : ''}"><span class="lb-rank">#${rank}</span><div class="lb-avatar">${image(s,38)}</div><span class="lb-nick">${esc(s.nick)}${isMe ? ' <span style="font-size:11px;color:#ffdd00;font-weight:800;margin-left:4px;">(VOCÊ)</span>' : ''}</span><span class="lb-score">${s.score.toLocaleString('pt-BR')} pts</span></div>`);
+        } else {
+          tableRows.push(`<div class="lb-row empty-row"><span class="lb-rank">#${rank}</span><div class="lb-avatar empty-slot">?</div><span class="lb-nick empty">${rank}º Lugar Vago</span><span class="lb-score empty">— pts</span></div>`);
+        }
       }
-    });
-
-    return Object.values(best).sort((a, b) => b.score - a.score).slice(0, TOP_N);
-  }
-
-  /* =====================================================
-     2. SUBMISSÃO DE SCORE (LOGADO OU VISITANTE/GUEST)
-     ===================================================== */
-
-  function submitScore(nick, avatarData, score, isAuto) {
-    if (typeof score !== 'number' || isNaN(score) || score <= 0) {
-      return { ok: false, msg: 'Pontuação inválida.' };
-    }
-    if (score > MAX_SCORE) {
-      return { ok: false, msg: `Pontuação máxima realista: ${MAX_SCORE.toLocaleString('pt-BR')} pts.` };
+      tableContent = tableRows.join('');
     }
 
-    const cleanNick = (nick || 'Visitante').trim();
-    const entry = {
-      nick: cleanNick,
-      avatarData: avatarData || null,
-      score: Math.floor(score),
-      weekStart: getWeekStart(),
-      timestamp: Date.now()
-    };
-
-    const all = getAllScores();
-    all.push(entry);
-
-    // Mantém histórico das últimas 2 semanas
-    const twoWeeksAgo = getWeekStart() - 14 * 24 * 60 * 60 * 1000;
-    const trimmed = all.filter(s => s.weekStart >= twoWeeksAgo);
-    saveAllScores(trimmed);
-
-    return { ok: true, msg: 'Pontuação salva no ranking! 🏆' };
-  }
-
-  /* =====================================================
-     3. AVATARES
-     ===================================================== */
-
-  function getLetterAvatar(nick, size) {
-    if (window.FrivAuth && window.FrivAuth.generateLetterAvatar) {
-      return window.FrivAuth.generateLetterAvatar(nick, size);
-    }
-    const c = document.createElement('canvas');
-    c.width = c.height = size;
-    const ctx = c.getContext('2d');
-    ctx.fillStyle = '#7c3aed';
-    ctx.fillRect(0, 0, size, size);
-    ctx.fillStyle = '#fff';
-    ctx.font = `bold ${Math.floor(size * 0.45)}px system-ui`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText((nick[0] || '?').toUpperCase(), size / 2, size / 2 + 2);
-    return c.toDataURL('image/png');
-  }
-
-  function avatarImgTag(entry, size) {
-    const src = entry.avatarData || getLetterAvatar(entry.nick, size);
-    return `<img src="${src}" alt="${escHtml(entry.nick)}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;display:block;">`;
-  }
-
-  function escHtml(s) {
-    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  /* =====================================================
-     4. RENDERIZAÇÃO DO PÓDIO OLÍMPICO & TABELA (4º AO 10º)
-     ===================================================== */
-
-  function renderLeaderboard(container) {
-    if (!container) return;
-    const scores = getWeeklyScores();
-    const session = window.FrivAuth ? window.FrivAuth.getSession() : null;
-    const myNick = session ? session.nick : null;
-
-    const p1 = scores[0] || null; // 1º Lugar (Ouro)
-    const p2 = scores[1] || null; // 2º Lugar (Prata)
-    const p3 = scores[2] || null; // 3º Lugar (Bronze)
-
-    // 1º Lugar (Centro com Coroa 👑)
-    const p1Html = p1 ? `
-      <div class="podium-item podium-first">
-        <div class="podium-crown" title="Campeão da Semana">👑</div>
-        <div class="podium-medal">🥇</div>
-        <div class="podium-avatar">${avatarImgTag(p1, 70)}</div>
-        <div class="podium-nick" title="${escHtml(p1.nick)}">${escHtml(p1.nick)}</div>
-        <div class="podium-score">${p1.score.toLocaleString('pt-BR')} pts</div>
-        <div class="podium-block"><span class="podium-rank-num">1</span></div>
-      </div>
-    ` : `
-      <div class="podium-item podium-first empty">
-        <div class="podium-crown" title="Coroa do Campeão">👑</div>
-        <div class="podium-medal">🥇</div>
-        <div class="podium-avatar empty-slot">?</div>
-        <div class="podium-nick empty">1º Lugar Vago</div>
-        <div class="podium-score empty">— pts</div>
-        <div class="podium-block"><span class="podium-rank-num">1</span></div>
-      </div>
-    `;
-
-    // 2º Lugar (Esquerda - Prata)
-    const p2Html = p2 ? `
-      <div class="podium-item podium-second">
-        <div class="podium-medal">🥈</div>
-        <div class="podium-avatar">${avatarImgTag(p2, 58)}</div>
-        <div class="podium-nick" title="${escHtml(p2.nick)}">${escHtml(p2.nick)}</div>
-        <div class="podium-score">${p2.score.toLocaleString('pt-BR')} pts</div>
-        <div class="podium-block"><span class="podium-rank-num">2</span></div>
-      </div>
-    ` : `
-      <div class="podium-item podium-second empty">
-        <div class="podium-medal">🥈</div>
-        <div class="podium-avatar empty-slot">?</div>
-        <div class="podium-nick empty">2º Lugar Vago</div>
-        <div class="podium-score empty">— pts</div>
-        <div class="podium-block"><span class="podium-rank-num">2</span></div>
-      </div>
-    `;
-
-    // 3º Lugar (Direita - Bronze)
-    const p3Html = p3 ? `
-      <div class="podium-item podium-third">
-        <div class="podium-medal">🥉</div>
-        <div class="podium-avatar">${avatarImgTag(p3, 54)}</div>
-        <div class="podium-nick" title="${escHtml(p3.nick)}">${escHtml(p3.nick)}</div>
-        <div class="podium-score">${p3.score.toLocaleString('pt-BR')} pts</div>
-        <div class="podium-block"><span class="podium-rank-num">3</span></div>
-      </div>
-    ` : `
-      <div class="podium-item podium-third empty">
-        <div class="podium-medal">🥉</div>
-        <div class="podium-avatar empty-slot">?</div>
-        <div class="podium-nick empty">3º Lugar Vago</div>
-        <div class="podium-score empty">— pts</div>
-        <div class="podium-block"><span class="podium-rank-num">3</span></div>
-      </div>
-    `;
-
-    // Pódio Visual Estilo Olimpíadas: [ 2º Prata ] [ 👑 1º Ouro ] [ 3º Bronze ]
-    const podiumHtml = `
-      <div class="leaderboard-podium">
-        ${p2Html}
-        ${p1Html}
-        ${p3Html}
-      </div>
-    `;
-
-    // Tabela dos demais jogadores (4º ao 10º Lugar — SEMPRE EXIBE AS 7 POSIÇÕES #4 A #10)
-    const tableRows = [];
-    for (let rank = 4; rank <= 10; rank++) {
-      const e = scores[rank - 1] || null;
-      if (e) {
-        const isMe = myNick && e.nick.toLowerCase() === myNick.toLowerCase();
-        tableRows.push(`
-          <div class="lb-row${isMe ? ' my-score' : ''}">
-            <span class="lb-rank">#${rank}</span>
-            <div class="lb-avatar">${avatarImgTag(e, 38)}</div>
-            <span class="lb-nick">${escHtml(e.nick)}${isMe ? ' <span style="font-size:11px;color:#ffdd00;font-weight:800;margin-left:4px;">(VOCÊ)</span>' : ''}</span>
-            <span class="lb-score">${e.score.toLocaleString('pt-BR')} pts</span>
-          </div>
-        `);
-      } else {
-        tableRows.push(`
-          <div class="lb-row empty-row">
-            <span class="lb-rank">#${rank}</span>
-            <div class="lb-avatar empty-slot">?</div>
-            <span class="lb-nick empty">${rank}º Lugar Vago</span>
-            <span class="lb-score empty">— pts</span>
-          </div>
-        `);
-      }
-    }
-
-    const tableHtml = `
+    container.innerHTML = `<div class="leaderboard-header"><h2 class="leaderboard-title">🏆 Slope — ranking semanal</h2><span>Segunda-feira · horário de Brasília</span></div>
+      <p id="lb-status" role="status">${esc(notice || (online ? 'Placar online disponível.' : 'Modo local: pontos visíveis apenas neste navegador. O placar online aguarda ativação.'))}</p>
+      <div class="lb-submit-row"><label>Placar <select id="lb-scope">${online?'<option value="global">Online — todos os computadores</option>':''}<option value="local">Neste navegador</option></select></label><label>Buscar jogador <input id="lb-name-filter" maxlength="20" placeholder="Nome do jogador" value="${esc(filter)}"></label><button id="lb-refresh" type="button">Atualizar</button></div>
+      ${filter?'':`<div class="leaderboard-podium">${podium}</div>`}
       <div class="leaderboard-table">
         <div class="lb-table-header">
           <span class="lb-th-rank">Posição</span>
           <span class="lb-th-player">Jogador</span>
           <span class="lb-th-score">Pontuação</span>
         </div>
-        ${tableRows.join('')}
+        ${tableContent}
       </div>
-    `;
-
-    // Área 100% automática & Anti-Trapaça (sem digitação manual)
-    const currentNickDisplay = session ? session.nick : 'Visitante';
-    const autoLiveHtml = `
       <div class="lb-anti-cheat-card">
         <div class="lb-shield-icon">🛡️</div>
         <div class="lb-shield-info">
@@ -292,178 +79,95 @@
         </div>
         <div class="lb-live-pulse"><span class="pulse-dot"></span>Ao vivo</div>
       </div>
-      ${(!session || session.isGuest) ? `
-        <div class="lb-guest-invite">
-          <span>👤 Jogando como <strong>${escHtml(currentNickDisplay)}</strong>. Quer colocar sua própria foto de perfil no topo?</span>
-          <button class="lb-guest-btn" id="lb-guest-login-btn">Entrar / Criar Conta</button>
-        </div>
-      ` : `
-        <div class="lb-guest-invite" style="border-color:rgba(16,185,129,0.4);background:rgba(16,185,129,0.08);color:#a7f3d0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-          <span>✅ Conectado como <strong>${escHtml(session.nick)}</strong> — Seus recordes são creditados com sua foto!</span>
-          <button id="lb-reset-btn" class="lb-reset-btn" title="Zerar todos os recordes do placar">🗑️ Zerar Placar</button>
-        </div>
-      `}
-    `;
-
-    container.innerHTML = `
-      <div class="leaderboard-header">
-        <h2 class="leaderboard-title">🏆 Ranking Slope 3D — Semana Atual</h2>
-        <div class="lb-header-actions">
-          <span class="leaderboard-reset-note">🔄 Reseta toda segunda-feira</span>
-          <button id="lb-reset-btn-top" class="lb-reset-mini-btn" title="Zerar placar e reiniciar recordes">🗑️ Zerar</button>
-        </div>
+      <div class="lb-guest-invite">
+        <span>${user && user.scope === 'global' ? `✅ Conectado como <strong>${esc(user.nick)}</strong> — Seus recordes sobem no ranking online!` : user ? `👤 Jogando como <strong>${esc(user.nick)}</strong> (local). Crie sua conta online para subir no ranking global!` : '👤 Jogando como Visitante. Crie sua conta para salvar seu recorde no placar online!'}</span>
+        <button type="button" class="lb-guest-btn" id="lb-login">${user && user.scope === 'global' ? 'Minha Conta' : 'Entrar / Criar Conta'}</button>
       </div>
-      <div id="lb-live-banner" class="lb-live-banner" style="display:none;"></div>
-      ${podiumHtml}
-      ${tableHtml}
-      ${autoLiveHtml}
-    `;
-
-    // Botão de login / registro no convite
-    const guestLoginBtn = document.getElementById('lb-guest-login-btn');
-    if (guestLoginBtn) {
-      guestLoginBtn.addEventListener('click', function () {
-        if (window.FrivAuth && window.FrivAuth.openModal) {
-          window.FrivAuth.openModal();
-        }
-      });
-    }
-
-    // Botões de Zerar Placar
-    const resetBtn1 = document.getElementById('lb-reset-btn');
-    const resetBtn2 = document.getElementById('lb-reset-btn-top');
-    function onResetClick() {
-      if (confirm('Deseja realmente ZERAR todos os recordes do placar agora?')) {
-        resetAllScores();
-      }
-    }
-    if (resetBtn1) resetBtn1.addEventListener('click', onResetClick);
-    if (resetBtn2) resetBtn2.addEventListener('click', onResetClick);
+      <p class="pn-game-note">Registramos a pontuação da partida concluída. Recordes antigos não são atribuídos à conta atual. Pontos capturados pelo navegador não são uma garantia contra trapaças.</p>`;
+    container.querySelector('#lb-scope').value = scope;
+    container.querySelector('#lb-scope').onchange = event => { scope = event.target.value; render(); };
+    container.querySelector('#lb-name-filter').oninput = event => {
+      const pos = event.target.selectionStart; filter = event.target.value; render();
+      const input = container.querySelector('#lb-name-filter'); input.focus(); input.setSelectionRange(pos,pos);
+    };
+    container.querySelector('#lb-refresh').onclick = () => refresh(true);
+    container.querySelector('#lb-login').onclick = () => window.FrivAuth.openModal();
   }
-
-  function showBanner(text) {
-    const banner = document.getElementById('lb-live-banner');
-    if (!banner) return;
-    banner.innerHTML = text;
-    banner.style.display = 'block';
-    banner.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
-    banner.style.color = '#ffffff';
-    banner.style.padding = '12px 18px';
-    banner.style.borderRadius = '12px';
-    banner.style.fontWeight = '800';
-    banner.style.textAlign = 'center';
-    banner.style.marginBottom = '16px';
-    banner.style.boxShadow = '0 4px 18px rgba(16, 185, 129, 0.4)';
-    clearTimeout(banner._bannerTimer);
-    banner._bannerTimer = setTimeout(() => {
-      if (banner) banner.style.display = 'none';
-    }, 6000);
-  }
-
-  /* =====================================================
-     5. CAPTURA AUTOMÁTICA DE SCORE (GAME OVER NO IFRAME OU INDEXEDDB)
-     ===================================================== */
-
-  let lastRegisteredScore = 0;
-
-  function handleAutoScore(score) {
-    score = Number(score);
-    if (!score || isNaN(score) || score <= 0 || score > MAX_SCORE) return;
-    if (score === lastRegisteredScore) return;
-    lastRegisteredScore = score;
-
-    // Obtém sessão do usuário (logado ou visitante)
-    let session = window.FrivAuth ? window.FrivAuth.getSession() : null;
-    if (!session) {
-      session = window.FrivAuth && window.FrivAuth.createGuestSession ? window.FrivAuth.createGuestSession() : { nick: 'Visitante' + Math.floor(100 + Math.random()*900) };
-    }
-
-    // Salva pontuação automaticamente
-    const result = submitScore(session.nick, session.avatarData, score, true);
-    if (result.ok) {
-      const container = document.getElementById('slope-leaderboard');
-      if (container) {
-        renderLeaderboard(container);
-        showBanner(`🔥 Partida finalizada! ${score.toLocaleString('pt-BR')} pontos adicionados automaticamente ao pódio para ${escHtml(session.nick)}!`);
-      }
-    }
-  }
-
-  // 1. Ouve mensagens diretas do iframe
-  window.addEventListener('message', function (e) {
-    if (!e.data || e.data.type !== 'SLOPE_SCORE') return;
-    handleAutoScore(e.data.score);
-  });
-
-  // 2. Monitoramento autônomo do banco IndexedDB do Slope
-  function checkOriginIndexedDB() {
+  async function refresh(explicit = false) {
+    if (refreshing) return;
+    refreshing = true;
     try {
-      if (!window.indexedDB) return;
-      const req = indexedDB.open('/idbfs', 21);
-      req.onsuccess = function (e) {
-        const db = e.target.result;
-        if (!db.objectStoreNames.contains('FILE_DATA')) return;
-        const tx = db.transaction(['FILE_DATA'], 'readonly');
-        const store = tx.objectStore('FILE_DATA');
-        const cursorReq = store.openCursor();
-        cursorReq.onsuccess = function (evt) {
-          const cursor = evt.target.result;
-          if (cursor) {
-            const val = cursor.value;
-            if (val && val.contents) {
-              try {
-                const str = new TextDecoder('utf-8').decode(val.contents);
-                const m = str.match(/name="[^"]*(?:high|score|best)[^"]*"[^>]*>(\d+)</i);
-                if (m) {
-                  const s = parseInt(m[1], 10);
-                  if (s > 0 && s <= MAX_SCORE) {
-                    handleAutoScore(s);
-                  }
-                }
-              } catch (err) {}
-            }
-            cursor.continue();
-          }
-        };
-      };
-    } catch (e) {}
+      if (explicit && !online && (await api.status(true)).online) { online = true; scope = 'global'; }
+      if (online) {
+        const data = await api.request('scores/leaderboard');
+        rows = (data.leaderboard || []).filter(s => rules.nickname(s.nick).ok && Number.isSafeInteger(s.score) && s.score > 0 && s.score <= rules.maxScore);
+        if (explicit) notice = 'Placar atualizado.';
+      }
+    } catch { notice = 'Não foi possível atualizar o placar online. Tente novamente; nenhum ponto antigo será reenviado.'; }
+    finally { refreshing = false; render(); }
   }
-
-  // Varredura a cada 2.5s enquanto o jogador estiver na tela do Slope
-  setInterval(checkOriginIndexedDB, 2500);
-
-  /* =====================================================
-     6. REATIVIDADE DE AUTENTICAÇÃO
-     ===================================================== */
-
-  window.addEventListener('friv:login', function () {
-    const container = document.getElementById('slope-leaderboard');
-    if (container) renderLeaderboard(container);
-  });
-  window.addEventListener('friv:logout', function () {
-    const container = document.getElementById('slope-leaderboard');
-    if (container) renderLeaderboard(container);
-  });
-  window.addEventListener('friv:avatarUpdated', function () {
-    const container = document.getElementById('slope-leaderboard');
-    if (container) renderLeaderboard(container);
-  });
-
-  /* =====================================================
-     7. INICIALIZAÇÃO
-     ===================================================== */
-
-  function init() {
-    const container = document.getElementById('slope-leaderboard');
-    if (container) renderLeaderboard(container);
+  function bind(force = false) {
+    const user = session();
+    if (!force && hasBound && boundId === (user?.id || null)) return;
+    hasBound = true;
+    boundId = user?.id || null; run = null; channel = crypto.randomUUID();
+    frame.contentWindow?.postMessage({ type:'FRIV_SLOPE_BIND', channel }, location.origin);
   }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
+  function identityChanged() {
+    if (creatingGuest) return;
+    const id = session()?.id || null;
+    if (boundId !== null && id !== boundId) {
+      // A match started by a previous user must never finish under the next account.
+      frame.src = frame.src;
+      notice = 'Conta alterada. O jogo foi reiniciado para separar as partidas.';
+    }
+    bind(); refresh();
   }
-
-  // API Pública
-  window.FrivLeaderboard = { submitScore, getWeeklyScores, renderLeaderboard, resetAll: resetAllScores };
+  window.addEventListener('message', async event => {
+    if (event.origin !== location.origin || event.source !== frame.contentWindow || !event.data || typeof event.data !== 'object') return;
+    const data = event.data;
+    if (data.type === 'FRIV_SLOPE_READY') { bind(true); return; }
+    if (data.channel !== channel) return;
+    if (data.type === 'FRIV_SLOPE_START') {
+      if (run && !run.finished) return;
+      creatingGuest = true;
+      const user = session() || window.FrivAuth.createGuestSession();
+      creatingGuest = false; boundId = user.id;
+      const current = { id: crypto.randomUUID(), user: {...user}, finished:false };
+      run = current;
+      current.remote = online && user.scope === 'global' ? api.request('scores/run', {}).then(x=>x.runId) : Promise.resolve(null);
+      // Keep a rejected start promise handled even if the game never finishes.
+      current.remote.catch(() => {});
+      return;
+    }
+    if (data.type !== 'FRIV_SLOPE_FINISH' || !run || run.finished || run.user.id !== session()?.id) return;
+    if (!Number.isSafeInteger(data.score) || data.score < 1 || data.score > rules.maxScore) return;
+    const finished = run; finished.finished = true;
+    try {
+      const runId = await finished.remote;
+      if (finished.user.id !== session()?.id) return;
+      if (online && finished.user.scope === 'global') {
+        await api.request('scores/submit', { runId, score:data.score });
+        notice = `${data.score} pontos registrados para ${finished.user.nick}.`;
+        scope = 'global';
+      } else {
+        const list = localScores().filter(s=>s.weekStart >= rules.weekStart()-14*86400000);
+        list.push({ userId:finished.user.id, nick:finished.user.nick, avatarData:finished.user.avatarData, score:data.score, weekStart:rules.weekStart(), timestamp:Date.now(), runId:finished.id });
+        localStorage.setItem(key, JSON.stringify(list.slice(-1000)));
+        notice = `${data.score} pontos salvos neste navegador para ${finished.user.nick}.`;
+        scope = 'local';
+      }
+    } catch (error) { notice = 'A partida terminou, mas o placar não conseguiu salvar: ' + error.message; }
+    refresh();
+  });
+  frame.addEventListener('load', () => bind(true));
+  for (const name of ['friv:login','friv:logout']) window.addEventListener(name, identityChanged);
+  window.addEventListener('friv:avatarUpdated', () => refresh());
+  window.addEventListener('storage', event => { if (event.key === 'friv_session') identityChanged(); else if (event.key === key) render(); });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) refresh(); });
+  setInterval(() => { if (!document.hidden && online) refresh(); }, 30000);
+  window.FrivLeaderboard = { getWeeklyScores:weekly, refresh, renderLeaderboard:render };
+  if (!session()) window.FrivAuth.createGuestSession();
+  render();
+  api.status().then(status => { online = status.online; scope = online?'global':'local'; bind(); refresh(); });
 })();

@@ -1,0 +1,35 @@
+/* Keep off-screen catalog items out of layout/paint work where supported. */
+.game-card { content-visibility: auto; contain-intrinsic-size: auto 180px; }
+html[data-performance="light"] .game-card,
+html[data-performance="light"] .game-card *,
+html[data-performance="light"] .main-header,
+html[data-performance="light"] .logo,
+html[data-performance="light"] .header-avatar { animation: none !important; transition: none !important; filter: none !important; box-shadow: none !important; backdrop-filter: none !important; }
+html[data-performance="light"] { scroll-behavior: auto; }
+html[data-performance="light"] .game-card:hover { transform: none !important; }
+@media (max-width: 560px) {
+  .ad-multi-row { min-width: 0; }
+  .ad-mobile { min-width: 0 !important; width: min(320px,100%) !important; padding: 0 !important; overflow: hidden; }
+}
+.friv-touch-controls { width: 100%; max-width: 900px; margin: 10px auto; padding: 8px; box-sizing: border-box; }
+.friv-touch-controls summary { cursor: pointer; padding: 10px; font-weight: 700; }
+.friv-touch-pad { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; padding-top: 10px; }
+.friv-touch-pad button { touch-action: none; user-select: none; -webkit-user-select: none; min-width: 48px; min-height: 48px; padding: 10px 14px; border: 1px solid #a855f7; border-radius: 10px; background: #260747; color: white; font: 700 16px system-ui; }
+.friv-touch-pad button[aria-pressed="true"] { background: #ffdd00; color: #18042e; }
+.friv-touch-controls p { font: 13px system-ui; margin: 8px 0; }
+.friv-touch-controls select { min-height: 40px; max-width: 100%; }
+#lb-name-filter, #lb-scope { min-height: 40px; max-width: 100%; }
+#lb-status { margin: 12px 0; line-height: 1.5; }
+.podium-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+@media (max-width: 640px) {
+  .game-bar { flex-wrap: wrap; gap: 8px; }
+  .game-main { padding: 8px !important; min-width: 0; }
+  .game-main #game-frame { max-width: 100%; min-width: 0; height: min(70svh,600px); }
+  .game-main .game-play-area { min-width: 0; }
+  #header-auth-area { flex-wrap: wrap; max-width: 100%; }
+  .lb-submit-row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .leaderboard-header { flex-wrap: wrap; gap: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .game-card, .game-card * { animation: none !important; transition: none !important; }
+}

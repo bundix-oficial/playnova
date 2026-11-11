@@ -1,4 +1,12 @@
-# Verificação local — 02/11/2026
+# Verificação local
+
+## Atualização de 11/11/2026 — página inicial e acesso na escola
+
+O proprietário confirmou que os scripts de anúncios da página inicial foram colocados intencionalmente para monetização e pediu sua preservação. A remoção temporária dos quatro scripts e as restrições adicionadas nesta revisão foram desfeitas. A página inicial permite recursos HTTPS externos para essas integrações. Os registros históricos abaixo sobre ausência de publicidade não descrevem mais essa página. Os destinos efetivamente usados pelos anúncios ainda não foram auditados nesta revisão; não há certificação de ausência de malware ou de reputação pública do domínio.
+
+O print do proprietário mostra bloqueio Check Point UserCheck na categoria Games. A liberação depende da administração da rede da escola. Não foi confirmado um alerta do navegador contra o domínio por esse print. Consulte `USO-NA-ESCOLA.md`. As alterações são locais até que uma publicação seja concluída e verificada.
+
+## Histórico — 02/11/2026
 
 O Microsoft Defender concluiu a varredura das cópias dos jogos sem novas detecções no intervalo consultado. A inspeção estática dos 205 conjuntos preparados não encontrou os padrões críticos procurados de executáveis nativos disfarçados, mineradores conhecidos ou chaves privadas. Esses exames não garantem ausência de malware ou falhas.
 

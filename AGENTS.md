@@ -20,3 +20,7 @@ Estas instruções foram solicitadas pelo usuário e valem para as próximas alt
 - Consentimento posterior: permitir conexoes necessarias dos proprios jogos. Liberar apenas destinos especificos identificados; manter publicidade e rastreamento bloqueados. Nao presumir que liberar um iframe externo permita controlar sua publicidade.
 
 - Instrução posterior: retirar o diretório de lojas de FNAF. Procurar e incluir fangames/ports web de fãs que realmente rodem no portal, com origem e avisos preservados. A preferência anterior por links oficiais de lojas foi substituída.
+
+- Instrução posterior de 11/11/2026: o proprietário confirmou que adicionou os scripts de anúncios da página inicial para monetização e pediu que sejam mantidos. Esta exceção substitui a proibição anterior de anúncios para essas integrações do portal. Não remover esses scripts automaticamente em revisões ou otimizações; preservar as demais restrições dos jogos. Não afirmar que o print do bloqueio escolar comprova malware ou que anúncios sejam a causa: ele mostra Check Point UserCheck na categoria Games.
+
+- Instrução posterior de 11/11/2026: retirar as quatro recriações de baixa qualidade identificadas como GTA San Andreas (`gta-san-andreas`), Crash Bandicoot (`crash-bandicoot`), Crazy Taxi (`crazy-taxi`) e Basket Random (`basket-random`). Não restaurar cartões, capas, favoritos, rotas jogáveis ou arquivos no pacote. As cópias e o inventário estão somente em `private-download-review/removed-generated-games-2026-11-11/`.

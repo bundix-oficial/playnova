@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "total": 224,
+  "total": 220,
   "games": [
     {
       "id": "pacman",
@@ -3444,78 +3444,6 @@
         },
         "players": 1,
         "source": "games/fnaf-security-console/index.html"
-      },
-      "availability": {
-        "status": "available",
-        "reason": "",
-        "quickCheck": "passed"
-      }
-    },
-    {
-      "id": "gta-san-andreas",
-      "title": "GTA: San Andreas (2D Demake)",
-      "category": "acao",
-      "cover": "assets/covers/gta-san-andreas.jpg",
-      "features": {
-        "controls": {
-          "keyboard": true,
-          "touch": true
-        },
-        "source": "games/gta-san-andreas/index.html"
-      },
-      "availability": {
-        "status": "available",
-        "reason": "",
-        "quickCheck": "passed"
-      }
-    },
-    {
-      "id": "crash-bandicoot",
-      "title": "Crash Bandicoot",
-      "category": "classico",
-      "cover": "assets/covers/crash-bandicoot.jpg",
-      "features": {
-        "controls": {
-          "keyboard": true,
-          "touch": true
-        },
-        "source": "games/crash-bandicoot/index.html"
-      },
-      "availability": {
-        "status": "available",
-        "reason": "",
-        "quickCheck": "passed"
-      }
-    },
-    {
-      "id": "crazy-taxi",
-      "title": "Crazy Taxi",
-      "category": "arcade",
-      "cover": "assets/covers/crazy-taxi.jpg",
-      "features": {
-        "controls": {
-          "keyboard": true,
-          "touch": true
-        },
-        "source": "games/crazy-taxi/index.html"
-      },
-      "availability": {
-        "status": "available",
-        "reason": "",
-        "quickCheck": "passed"
-      }
-    },
-    {
-      "id": "basket-random",
-      "title": "Basket Random",
-      "category": "classico",
-      "cover": "assets/covers/basket-random.jpg",
-      "features": {
-        "controls": {
-          "keyboard": true,
-          "touch": true
-        },
-        "source": "games/basket-random/index.html"
       },
       "availability": {
         "status": "available",

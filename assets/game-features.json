@@ -1027,33 +1027,5 @@
     },
     "players": 1,
     "source": "games/fnaf-security-console/index.html"
-  },
-  "gta-san-andreas": {
-    "controls": {
-      "keyboard": true,
-      "touch": true
-    },
-    "source": "games/gta-san-andreas/index.html"
-  },
-  "crash-bandicoot": {
-    "controls": {
-      "keyboard": true,
-      "touch": true
-    },
-    "source": "games/crash-bandicoot/index.html"
-  },
-  "crazy-taxi": {
-    "controls": {
-      "keyboard": true,
-      "touch": true
-    },
-    "source": "games/crazy-taxi/index.html"
-  },
-  "basket-random": {
-    "controls": {
-      "keyboard": true,
-      "touch": true
-    },
-    "source": "games/basket-random/index.html"
   }
 }
